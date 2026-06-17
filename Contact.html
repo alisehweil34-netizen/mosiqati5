@@ -1,0 +1,690 @@
+
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+
+<head>
+
+<meta charset="utf-8"/>
+
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+<title>تواصل معنا – موسيقاتي</title>
+
+<link href="style.css" rel="stylesheet"/>
+
+<style>
+    /* ===================================
+       تنسيقات خاصة بصفحة التواصل
+    =================================== */
+
+    /* --- شبكة الأسئلة الشائعة --- */
+    
+    .faq-item {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    
+    .faq-q {
+      width: 100%;
+      text-align: right;
+      padding: 18px 20px;
+      background: var(--color-card);
+      border: none;
+      color: var(--color-white);
+      font-family: var(--font-arabic);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background var(--transition);
+    }
+
+    
+    .faq-q:hover { background: #222; }
+
+    
+    .faq-q .faq-icon {
+      color: var(--color-gold);
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    
+    .faq-q.open .faq-icon { transform: rotate(45deg); }
+
+    
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      background: #141414;
+      color: var(--color-gray);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      transition: max-height 0.4s ease, padding 0.3s;
+      padding: 0 20px;
+    }
+
+    
+    .faq-a.open { max-height: 200px; padding: 15px 20px; }
+
+    /* --- صف وسائل التواصل --- */
+    .social-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px;
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      color: var(--color-white);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      transition: all var(--transition);
+    }
+
+    .social-btn:hover {
+      background: var(--color-gold);
+      color: var(--color-black);
+      border-color: var(--color-gold);
+    }
+
+    /* --- تقييم النجوم --- */
+    .rating-row { display: flex; gap: 8px; margin-top: 5px; }
+
+    .star-btn {
+      background: none;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      width: 40px;
+      height: 40px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--color-gray);
+      transition: all 0.2s;
+    }
+
+    .star-btn:hover,
+    .star-btn.active {
+      background: rgba(201,168,76,0.15);
+      border-color: var(--color-gold);
+      color: var(--color-gold);
+    }
+
+    
+    /* --- Toast رسالة نجاح --- */
+    
+    .success-toast {
+      display: none;
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-gold);
+      color: var(--color-black);
+      padding: 14px 35px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 30px rgba(201,168,76,0.4);
+      z-index: 999;
+      animation: slideUp 0.4s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* --- بطاقة الخريطة --- */
+    .map-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--color-gray);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: border-color var(--transition);
+      margin-top: 15px;
+    }
+
+    .map-card:hover { border-color: var(--color-gold-dark); }
+    .map-card .pin { font-size: 2.5rem; }
+
+    /* --- صفين في النموذج --- */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+  
+  </style>
+
+</head>
+
+<body>
+
+<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">
+    🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع
+  
+  </div>
+
+<nav class="navbar">
+
+<a class="navbar-logo" href="home.html"><img alt="موسيقاتي" class="navbar-logo-img" src="assets/logo.png"/></a>
+
+<ul class="navbar-links" id="nav-links">
+
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
+
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
+
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
+
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
+
+<li><a data-ar="من نحن" data-en="About Us" href="about.html">من نحن</a></li>
+
+<li><a class="active" data-ar="تواصل معنا" data-en="Contact Us" href="Contact.html">تواصل معنا</a></li>
+
+<li><a data-ar="الاعدادات" data-en="Settings" href="settings.html">الاعدادات </a></li>
+
+</ul>
+
+<button aria-label="فتح القائمة" class="hamburger" id="hamburger">
+
+<span></span><span></span><span></span>
+
+</button>
+
+
+
+</nav>
+
+<div class="page-hero">
+
+<div class="hero-badge">📬 نحن هنا من أجلك</div>
+
+<h1>تواصل <span style="color: var(--color-gold);">معنا</span></h1>
+
+<p>فريقنا جاهز للإجابة على جميع استفساراتك عن الآلات الموسيقية وخدماتنا</p>
+
+</div>
+
+<section>
+
+<div class="contact-grid">
+
+<div class="contact-info">
+
+<h2>معلومات <span style="color: var(--color-gold);">التواصل</span></h2>
+
+<div class="contact-item">
+
+<div class="contact-icon">📍</div>
+
+<div>
+
+<div class="contact-detail-title">عنواننا</div>
+
+<div class="contact-detail-value">شارع الرابية، مجمع النغم التجاري<br/>عمّان، الأردن 11190</div>
+
+</div>
+
+</div>
+
+<div class="contact-item">
+
+<div class="contact-icon">📞</div>
+
+<div>
+
+<div class="contact-detail-title">اتصل بنا</div>
+
+<div class="contact-detail-value">
+
+<a href="tel:+96265001234" style="color: inherit;">+962 6 500 1234</a><br/>
+
+<a href="tel:+96279001234" style="color: inherit;">+962 79 000 1234</a> (واتساب)
+            
+            </div>
+
+</div>
+
+</div>
+
+<div class="contact-item">
+
+<div class="contact-icon">✉️</div>
+
+<div>
+
+<div class="contact-detail-title">البريد الإلكتروني</div>
+
+<div class="contact-detail-value">
+
+<a href="mailto:hello@mosiqati.jo" style="color: inherit;">hello@mosiqati.jo</a><br/>
+
+<a href="mailto:support@mosiqati.jo" style="color: inherit;">support@mosiqati.jo</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="contact-item">
+
+<div class="contact-icon">🕐</div>
+
+<div>
+
+<div class="contact-detail-title">ساعات العمل</div>
+
+<div class="contact-detail-value">السبت – الخميس: 10:00 ص – 9:00 م<br/>الجمعة: 2:00 م – 9:00 م</div>
+
+</div>
+
+</div>
+
+<div class="map-card">
+
+<span class="pin">📌</span>
+
+<span>شارع الرابية، عمّان</span>
+<small style="color: var(--color-gold); font-size: 0.75rem;">اضغط لفتح الخريطة</small>
+
+</div>
+
+<div class="social-row">
+
+<a class="social-btn" href="#">📘 فيسبوك</a>
+
+<a class="social-btn" href="#">📸 إنستغرام</a>
+
+<a class="social-btn" href="#">🎵 تيكتوك</a>
+
+</div>
+
+</div>
+
+<div class="contact-form">
+
+<h2>أرسل لنا <span style="color: var(--color-gold);">رسالة</span></h2>
+
+<p style="color: var(--color-gray); margin-bottom: 25px; font-size: 0.9rem;">سيتم الرد خلال 24 ساعة عمل</p>
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label data-ar="الاسم الأول" data-en="First Name">الاسم الأول</label>
+
+<input id="fname" placeholder="محمد" type="text"/>
+
+</div>
+
+<div class="form-group">
+
+<label data-ar="الاسم الأخير" data-en="Last Name">الاسم الأخير</label>
+
+<input id="lname" placeholder="الأحمد" type="text"/>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label data-ar="البريد الإلكتروني" data-en="Email Address">البريد الإلكتروني</label>
+
+<input id="email" placeholder="example@email.com" type="email"/>
+
+</div>
+
+<div class="form-group">
+
+<label data-ar="رقم الهاتف" data-en="Phone Number">رقم الهاتف</label>
+
+<input id="phone" placeholder="+962 7X XXX XXXX" type="tel"/>
+
+</div>
+
+<div class="form-group">
+
+<label data-ar="موضوع الرسالة" data-en="Subject">موضوع الرسالة</label>
+
+<select id="subject">
+
+<option value="">اختر الموضوع...</option>
+
+<option>استفسار عن منتج</option>
+
+<option>طلب شراء</option>
+
+<option>خدمة ما بعد البيع</option>
+
+<option>الضمان والإصلاح</option>
+
+<option>شراكة تجارية</option>
+
+<option>شكوى</option>
+
+<option>أخرى</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label data-ar="رسالتك" data-en="Your Message">رسالتك</label>
+
+<textarea id="message" placeholder="اكتب رسالتك هنا..."></textarea>
+
+</div>
+
+<div class="form-group">
+
+<label>تقييم تجربتك مع الموقع</label>
+
+<div class="rating-row" id="ratingRow">
+
+<button class="star-btn" data-val="1">⭐</button>
+
+<button class="star-btn" data-val="2">⭐</button>
+
+<button class="star-btn" data-val="3">⭐</button>
+
+<button class="star-btn" data-val="4">⭐</button>
+
+<button class="star-btn" data-val="5">⭐</button>
+
+</div>
+
+</div>
+
+<button class="btn btn-gold" data-ar="📨 إرسال الرسالة" data-en="📨 Send Message" onclick="submitForm()" style="width: 100%; margin-top: 10px;">
+          📨 إرسال الرسالة
+        
+        </button>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section-dark">
+
+<h2 class="section-title">الأسئلة <span style="color: var(--color-white);">الشائعة</span></h2>
+
+<div class="gold-divider"></div>
+
+<div style="max-width: 800px; margin: 0 auto;">
+
+<div class="faq-item">
+
+<button class="faq-q" onclick="toggleFaq(this)">
+          هل يوجد ضمان على الآلات الموسيقية؟
+          
+          <span class="faq-icon">+</span>
+
+</button>
+
+<div class="faq-a">نعم، جميع الآلات الموسيقية لدينا تأتي بضمان رسمي لمدة سنة كاملة ضد عيوب الصنع، وبعض الماركات تصل إلى سنتين. كما نقدم خدمة الإصلاح المجاني خلال فترة الضمان.</div>
+
+</div>
+
+<div class="faq-item">
+
+<button class="faq-q" onclick="toggleFaq(this)">
+          هل يمكنني تجربة الآلة قبل الشراء؟
+          
+          <span class="faq-icon">+</span>
+
+</button>
+
+<div class="faq-a">بالتأكيد! ندعوك لزيارة متجرنا في عمّان حيث يمكنك تجربة أي آلة موسيقية لدينا تحت إشراف أحد خبرائنا. لا حاجة لموعد مسبق.</div>
+
+</div>
+
+<div class="faq-item">
+
+<button class="faq-q" onclick="toggleFaq(this)">
+          هل تتوفر خدمة التوصيل؟
+          
+          <span class="faq-icon">+</span>
+
+</button>
+
+<div class="faq-a">نعم، نوصل لجميع محافظات الأردن. التوصيل مجاني للطلبات التي تتجاوز 100 دينار أردني. يستغرق التوصيل 2-5 أيام عمل حسب المنطقة.</div>
+
+</div>
+
+<div class="faq-item">
+
+<button class="faq-q" onclick="toggleFaq(this)">
+          ما هي طرق الدفع المتاحة؟
+          
+          <span class="faq-icon">+</span>
+
+</button>
+
+<div class="faq-a">نقبل الدفع نقداً، بطاقات الائتمان والخصم (Visa, Mastercard)، والتحويل البنكي. كما نوفر خطط تقسيط بدون فوائد مع بعض البنوك الأردنية.</div>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+<div class="footer-grid">
+
+<div>
+
+<div class="footer-brand-name">MOSIQATI</div>
+
+<p class="footer-brand-desc" data-ar="متجرك الموسيقي الأول في الأردن منذ عام 2014." data-en="Jordan's #1 music store since 2014.">متجرك الموسيقي الأول في الأردن منذ عام 2014.</p>
+
+<div class="social-links">
+
+<div class="social-link" title="فيسبوك">📘</div>
+
+<div class="social-link" title="إنستغرام">📷</div>
+
+<div class="social-link" title="يوتيوب">▶️</div>
+
+<div class="social-link" title="واتساب">💬</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
+
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
+
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
+
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="الفئات" data-en="Categories">الفئات</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="قيثارات" data-en="Guitars" href="store.html">قيثارات</a></li>
+
+<li><a data-ar="بيانو" data-en="Piano" href="store.html">بيانو</a></li>
+
+<li><a data-ar="عود" data-en="Oud" href="store.html">عود</a></li>
+
+<li><a data-ar="معدات استوديو" data-en="Studio Gear" href="store.html">معدات استوديو</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</div>
+
+<ul class="footer-links">
+
+<li><a href="#">📍 الشميساني، عمان</a></li>
+
+<li><a href="#">📞 +962 79 000 0000</a></li>
+
+<li><a href="#">✉️ info@mosiqati.jo</a></li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+<p data-ar="© 2024 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2024 MOSIQATI - All Rights Reserved">© 2024 موسيقاتي - جميع الحقوق محفوظة</p>
+
+<div class="footer-bottom-links">
+
+<a data-ar="سياسة الخصوصية" data-en="Privacy Policy" href="#">سياسة الخصوصية</a>
+
+<a data-ar="شروط الاستخدام" data-en="Terms of Use" href="#">شروط الاستخدام</a>
+
+</div>
+
+</div>
+
+</footer>
+
+<div class="success-toast" id="toast">✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="script.js"></script>
+<script>
+    // نجوم التقييم
+    let selectedRating = 0;
+    document.querySelectorAll('.star-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedRating = +btn.dataset.val;
+        document.querySelectorAll('.star-btn').forEach((b, i) => {
+          b.classList.toggle('active', i < selectedRating);
+        });
+      });
+    });
+
+    // إرسال النموذج
+    function submitForm() {
+      const fields = ['fname', 'email', 'subject', 'message'];
+      let valid = true;
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.style.borderColor = '#e74c3c';
+          valid = false;
+        } else {
+          el.style.borderColor = '';
+        }
+      });
+      if (!valid) { alert('يرجى ملء جميع الحقول المطلوبة'); return; }
+
+      // التحقق من صحة البريد الإلكتروني
+      const emailEl = document.getElementById('email');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailEl.value.trim())) {
+        emailEl.style.borderColor = '#e74c3c';
+        alert('⚠️ يرجى إدخال بريد إلكتروني صحيح (مثال: name@domain.com)');
+        return;
+      }
+
+      
+      const toast = document.getElementById('toast');
+      
+      toast.style.display = 'block';
+      
+      setTimeout(() => toast.style.display = 'none', 4000);
+
+      ['fname','lname','email','phone','message'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('subject').selectedIndex = 0;
+      selectedRating = 0;
+      document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('active'));
+    }
+
+    // الأسئلة الشائعة
+    function toggleFaq(btn) {
+      const answer = btn.nextElementSibling;
+      const isOpen = btn.classList.contains('open');
+      
+      document.querySelectorAll('.faq-q').forEach(q => {
+        q.classList.remove('open');
+        q.nextElementSibling.classList.remove('open');
+      });
+      if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+    }
+  
+  </script>
+
+<button class="cart-float" onclick="window.location='cart.html'">
+  🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
+</button>
+<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+<script>
+  document.getElementById('musicToggle').addEventListener('click', function(){
+    var bg = getBgAudio();
+    if (_bgPlaying) {
+      bg.pause();
+      _bgPlaying = false;
+      this.textContent = '🎵';
+      this.classList.remove('playing');
+    } else {
+      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
+      _bgPlaying = true;
+      _bgStarted = true;
+      this.textContent = '🔇';
+      this.classList.add('playing');
+    }
+  });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>موسيقاتي — إنشاء حساب</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: #0d0d0d;
+      min-height: 100vh;
+    }
+
+    .page-wrapper {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* الجانب الأيمن - الديكور */
+    .side-decor {
+      flex: 1;
+      background: linear-gradient(160deg, #111 0%, #1a1408 50%, #111 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      border-left: 1px solid #2a2416;
+    }
+
+    .side-decor::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 65%);
+    }
+
+    .decor-quote { position: relative; z-index: 1; text-align: center; color: #555; }
+    .decor-quote .quote-mark { font-size: 5rem; color: #c9a84c22; line-height: 1; display: block; margin-bottom: -1rem; }
+    .decor-quote p { font-size: 1.15rem; line-height: 1.9; color: #888; max-width: 320px; font-style: italic; }
+    .decor-quote .author { margin-top: 1.2rem; font-size: 0.85rem; color: #c9a84c88; letter-spacing: 2px; font-style: normal; text-transform: uppercase; }
+    .decor-line { width: 40px; height: 1px; background: #c9a84c44; margin: 1.2rem auto; }
+
+    /* الجانب الأيسر - الفورم */
+    .login-side {
+      width: 480px;
+      min-width: 380px;
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .login-side::after {
+      content: '';
+      position: absolute;
+      top: 15%; bottom: 15%; right: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, #c9a84c33, transparent);
+    }
+
+    .logo-area { text-align: center; margin-bottom: 2rem; }
+
+    .logo-img-wrap {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      border: 1px solid #c9a84c33;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+      background: #111;
+      box-shadow: 0 0 30px rgba(201,168,76,0.1);
+    }
+
+    .logo-img-wrap img { width: 48px; height: 48px; object-fit: contain; }
+    .logo-name { font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: 1px; }
+    .logo-name span { color: #c9a84c; }
+    .logo-tagline { font-size: 0.75rem; color: #555; letter-spacing: 3px; text-transform: uppercase; margin-top: 0.4rem; }
+
+    .gold-sep { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; width: 100%; }
+    .gold-sep span { flex: 1; height: 1px; background: #1e1e1e; }
+    .gold-sep i { width: 6px; height: 6px; border-radius: 50%; background: #c9a84c; display: block; }
+
+    .login-box { width: 100%; }
+
+    .login-heading { text-align: center; margin-bottom: 1.5rem; }
+    .login-heading h1 { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+    .login-heading p { font-size: 0.85rem; color: #555; }
+
+    .field { margin-bottom: 1rem; }
+
+    .field label { display: block; font-size: 0.78rem; font-weight: 600; color: #888; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+
+    .field input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      direction: ltr;
+      text-align: right;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .field input::placeholder { color: #333; direction: ltr; text-align: left; }
+    .field input:focus { border-color: #c9a84c; box-shadow: 0 0 0 3px rgba(201,168,76,0.08); background: #131313; }
+    .field input.error   { border-color: #e05555 !important; box-shadow: 0 0 0 3px rgba(224,85,85,0.1) !important; }
+    .field input.success { border-color: #4caf73 !important; box-shadow: 0 0 0 3px rgba(76,175,115,0.08) !important; }
+
+    .field-msg { font-size: 0.73rem; margin-top: 0.35rem; min-height: 1rem; display: none; }
+    .field-msg.show { display: block; }
+    .field-msg.err { color: #e05555; }
+    .field-msg.ok  { color: #4caf73; }
+
+    /* شريط قوة كلمة المرور */
+    .strength-bar {
+      display: none;
+      margin-top: 0.5rem;
+      gap: 4px;
+    }
+    .strength-bar.show { display: flex; }
+    .strength-bar .seg {
+      flex: 1; height: 4px; border-radius: 2px;
+      background: #222;
+      transition: background 0.3s;
+    }
+    .strength-label { font-size: 0.7rem; margin-top: 0.3rem; }
+
+    /* متطلبات كلمة المرور */
+    .pass-rules {
+      display: none;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      margin-top: 0.5rem;
+      gap: 0.4rem;
+      flex-direction: column;
+    }
+    .pass-rules.show { display: flex; }
+    .pass-rules .rule {
+      font-size: 0.74rem;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+    .pass-rules .rule.met { color: #4caf73; }
+    .pass-rules .rule .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #333;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .pass-rules .rule.met .dot { background: #4caf73; }
+
+    /* رسالة تنبيه عامة */
+    .alert-box {
+      display: none;
+      background: rgba(224,85,85,0.1);
+      border: 1px solid #e0555544;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.82rem;
+      color: #e07777;
+      text-align: center;
+    }
+    .alert-box.show { display: block; }
+    .alert-box.success-box { background: rgba(76,175,115,0.1); border-color: #4caf7344; color: #4caf73; }
+
+    .btn-enter {
+      display: block; width: 100%; padding: 0.9rem; margin-top: 1.3rem;
+      background: #c9a84c; color: #0a0a0a; border: none; border-radius: 8px;
+      font-size: 1rem; font-weight: 700; font-family: inherit; letter-spacing: 1px;
+      cursor: pointer; text-align: center; text-decoration: none;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
+    }
+    .btn-enter:hover { background: #d4b55a; box-shadow: 0 6px 20px rgba(201,168,76,0.3); transform: translateY(-1px); }
+    .btn-enter:active { transform: translateY(0); }
+
+    .form-foot { text-align: center; margin-top: 1.5rem; font-size: 0.82rem; color: #444; }
+    .form-foot a { color: #c9a84c; text-decoration: none; font-weight: 600; margin-right: 0.3rem; }
+    .form-foot a:hover { color: #d4b55a; }
+
+    .copy { position: relative; margin-top: 2rem; font-size: 0.72rem; color: #333; letter-spacing: 1px; text-align: center; }
+
+    @media (max-width: 768px) {
+      .side-decor { display: none; }
+      .login-side { width: 100%; min-width: unset; padding: 2.5rem 1.5rem; }
+      .login-side::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- الجانب الديكوري -->
+    <div class="side-decor">
+      <div class="decor-quote">
+        <span class="quote-mark">"</span>
+        <p>الموسيقى لغةٌ تتحدّث إلى الروح، وتعبّر عمّا يعجز الكلامُ عن وصفه</p>
+        <div class="decor-line"></div>
+        <span class="author">موسيقاتي</span>
+      </div>
+    </div>
+
+    <!-- جانب إنشاء الحساب -->
+    <div class="login-side">
+
+      <div class="logo-area">
+        <div class="logo-img-wrap">
+          <img src="assets/logo.png" alt="موسيقاتي">
+        </div>
+        <div class="logo-name">موسيقا<span>تي</span></div>
+        <div class="logo-tagline">متجر الآلات الموسيقية</div>
+      </div>
+
+      <div class="gold-sep"><span></span><i></i><span></span></div>
+
+      <div class="login-box">
+        <div class="login-heading">
+          <h1>إنشاء حساب جديد</h1>
+          <p>أدخل بياناتك لإنشاء حسابك</p>
+        </div>
+
+        <div class="alert-box" id="alertBox"></div>
+
+        <!-- الاسم الكامل -->
+        <div class="field">
+          <label>الاسم الكامل</label>
+          <input type="text" id="regName" placeholder="محمد أحمد" oninput="validateName()">
+          <div class="field-msg" id="nameMsg"></div>
+        </div>
+
+        <!-- البريد الإلكتروني -->
+        <div class="field">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="regEmail" placeholder="example@email.com" oninput="validateEmail()">
+          <div class="field-msg" id="emailMsg"></div>
+        </div>
+
+        <!-- رقم الهاتف -->
+        <div class="field">
+          <label>رقم الهاتف</label>
+          <input type="tel" id="regPhone" placeholder="07XXXXXXXX" oninput="validatePhone()">
+          <div class="field-msg" id="phoneMsg"></div>
+        </div>
+
+        <!-- كلمة المرور -->
+        <div class="field">
+          <label>كلمة المرور</label>
+          <input type="password" id="regPass" placeholder="••••••••" oninput="validatePass()">
+          <!-- شريط القوة -->
+          <div class="strength-bar" id="strengthBar">
+            <div class="seg" id="s1"></div>
+            <div class="seg" id="s2"></div>
+            <div class="seg" id="s3"></div>
+            <div class="seg" id="s4"></div>
+          </div>
+          <div class="strength-label field-msg show" id="strengthLabel" style="color:#555;display:none"></div>
+          <!-- متطلبات -->
+          <div class="pass-rules" id="passRules">
+            <div class="rule" id="r-len"><div class="dot"></div> 8 أحرف على الأقل</div>
+            <div class="rule" id="r-upper"><div class="dot"></div> حرف كبير واحد على الأقل (A-Z)</div>
+            <div class="rule" id="r-num"><div class="dot"></div> رقم واحد على الأقل (0-9)</div>
+            <div class="rule" id="r-special"><div class="dot"></div> رمز خاص واحد على الأقل (!@#$...)</div>
+          </div>
+          <div class="field-msg" id="passMsg"></div>
+        </div>
+
+        <!-- تأكيد كلمة المرور -->
+        <div class="field">
+          <label>تأكيد كلمة المرور</label>
+          <input type="password" id="regPass2" placeholder="••••••••" oninput="validatePass2()">
+          <div class="field-msg" id="pass2Msg"></div>
+        </div>
+
+        <button class="btn-enter" onclick="submitRegister()">إنشاء الحساب</button>
+
+        <div class="form-foot">
+          لديك حساب بالفعل؟ <a href="index.html">سجّل الدخول</a>
+        </div>
+      </div>
+
+      <div class="copy">© 2025 موسيقاتي — جميع الحقوق محفوظة</div>
+    </div>
+
+  </div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="script.js"></script>
+<script>
+    /* ── أدوات مساعدة ── */
+    function setField(inputId, msgId, isOk, msg) {
+      const inp = document.getElementById(inputId);
+      const msg_el = document.getElementById(msgId);
+      inp.classList.toggle('error',   !isOk);
+      inp.classList.toggle('success',  isOk);
+      msg_el.textContent = msg;
+      msg_el.className = 'field-msg show ' + (isOk ? 'ok' : 'err');
+    }
+
+    function clearFieldUI(inputId, msgId) {
+      const inp = document.getElementById(inputId);
+      const msg_el = document.getElementById(msgId);
+      inp.classList.remove('error','success');
+      msg_el.className = 'field-msg';
+      msg_el.textContent = '';
+    }
+
+    function showAlert(msg, isSuccess) {
+      const box = document.getElementById('alertBox');
+      box.textContent = msg;
+      box.className = 'alert-box show' + (isSuccess ? ' success-box' : '');
+    }
+
+    /* ── الاسم الكامل ── */
+    function validateName() {
+      const v = document.getElementById('regName').value.trim();
+      if (!v) { clearFieldUI('regName','nameMsg'); return false; }
+      if (v.length < 3) {
+        setField('regName','nameMsg', false, 'الاسم يجب أن يكون 3 أحرف على الأقل');
+        return false;
+      }
+      if (!/^[\u0600-\u06FFa-zA-Z\s]+$/.test(v)) {
+        setField('regName','nameMsg', false, 'الاسم يجب أن يحتوي على أحرف فقط (عربية أو إنجليزية)');
+        return false;
+      }
+      if (v.split(/\s+/).filter(Boolean).length < 2) {
+        setField('regName','nameMsg', false, 'يرجى إدخال الاسم الكامل (الاسم والكنية)');
+        return false;
+      }
+      setField('regName','nameMsg', true, 'الاسم صحيح ✓');
+      return true;
+    }
+
+    /* ── البريد الإلكتروني ── */
+    function validateEmail() {
+      const v = document.getElementById('regEmail').value.trim();
+      if (!v) { clearFieldUI('regEmail','emailMsg'); return false; }
+      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+      setField('regEmail','emailMsg', ok, ok ? 'بريد إلكتروني صحيح ✓' : 'صيغة البريد الإلكتروني غير صحيحة');
+      return ok;
+    }
+
+    /* ── رقم الهاتف ── */
+    function validatePhone() {
+      const v = document.getElementById('regPhone').value.trim();
+      if (!v) { clearFieldUI('regPhone','phoneMsg'); return false; }
+      const ok = /^(\+?[0-9]{7,15})$/.test(v.replace(/\s/g,''));
+      setField('regPhone','phoneMsg', ok, ok ? 'رقم الهاتف صحيح ✓' : 'رقم الهاتف غير صحيح (7-15 رقمًا)');
+      return ok;
+    }
+
+    /* ── كلمة المرور ── */
+    function checkRules(v) {
+      return {
+        len:     v.length >= 8,
+        upper:   /[A-Z]/.test(v),
+        num:     /[0-9]/.test(v),
+        special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(v)
+      };
+    }
+
+    function validatePass() {
+      const v = document.getElementById('regPass').value;
+      const bar   = document.getElementById('strengthBar');
+      const label = document.getElementById('strengthLabel');
+      const rules = document.getElementById('passRules');
+
+      if (!v) {
+        clearFieldUI('regPass','passMsg');
+        bar.className = 'strength-bar';
+        label.style.display = 'none';
+        rules.className = 'pass-rules';
+        return false;
+      }
+
+      bar.className = 'strength-bar show';
+      label.style.display = 'block';
+      rules.className = 'pass-rules show';
+
+      const r = checkRules(v);
+      document.getElementById('r-len').classList.toggle('met', r.len);
+      document.getElementById('r-upper').classList.toggle('met', r.upper);
+      document.getElementById('r-num').classList.toggle('met', r.num);
+      document.getElementById('r-special').classList.toggle('met', r.special);
+
+      const score = [r.len, r.upper, r.num, r.special].filter(Boolean).length;
+      const colors = ['#e05555','#e07733','#c9a84c','#4caf73'];
+      const labels = ['ضعيفة جداً','ضعيفة','متوسطة','قوية'];
+      const segs   = ['s1','s2','s3','s4'];
+
+      segs.forEach((id, i) => {
+        document.getElementById(id).style.background = i < score ? colors[score-1] : '#222';
+      });
+      label.textContent = 'قوة كلمة المرور: ' + labels[score-1];
+      label.style.color  = colors[score-1];
+
+      const allMet = r.len && r.upper && r.num && r.special;
+      if (allMet) {
+        setField('regPass','passMsg', true, 'كلمة المرور قوية ✓');
+      } else {
+        document.getElementById('passMsg').className = 'field-msg';
+        document.getElementById('regPass').classList.remove('success');
+        document.getElementById('regPass').classList.add('error');
+      }
+
+      // إعادة التحقق من التأكيد إن كان مملوءاً
+      if (document.getElementById('regPass2').value) validatePass2();
+      return allMet;
+    }
+
+    /* ── تأكيد كلمة المرور ── */
+    function validatePass2() {
+      const v1 = document.getElementById('regPass').value;
+      const v2 = document.getElementById('regPass2').value;
+      if (!v2) { clearFieldUI('regPass2','pass2Msg'); return false; }
+      const ok = v1 === v2;
+      setField('regPass2','pass2Msg', ok, ok ? 'كلمات المرور متطابقة ✓' : 'كلمات المرور غير متطابقة');
+      return ok;
+    }
+
+    /* ── إرسال النموذج ── */
+    async function submitRegister() {
+      document.getElementById('alertBox').className = 'alert-box';
+
+      const nameOk  = validateName();
+      const emailOk = validateEmail();
+      const phoneOk = validatePhone();
+      const passOk  = validatePass();
+      const pass2Ok = validatePass2();
+
+      if (!nameOk || !emailOk || !phoneOk || !passOk || !pass2Ok) {
+        showAlert('يرجى تعبئة جميع الحقول بشكل صحيح قبل المتابعة');
+        playSound('error');
+        const firstErr = document.querySelector('.field input.error');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      const btn = document.querySelector('.btn-enter');
+      btn.disabled = true;
+      btn.textContent = 'جارٍ الحفظ...';
+
+      const fullName = document.getElementById('regName').value.trim();
+      const email    = document.getElementById('regEmail').value.trim();
+      const phone    = document.getElementById('regPhone').value.trim();
+      const password = document.getElementById('regPass').value;
+
+      if (!db) {
+        showAlert('تعذّر الاتصال بـ Firebase، تأكد من تحميل مكتبة Firebase في الصفحة');
+        btn.disabled = false;
+        btn.textContent = 'إنشاء الحساب';
+        return;
+      }
+
+      try {
+        // التحقق من عدم تكرار البريد الإلكتروني
+        const existing = await db.ref('users').orderByChild('email').equalTo(email).once('value');
+
+        if (existing.exists()) {
+          showAlert('⚠️ البريد الإلكتروني مسجل مسبقاً');
+          btn.disabled = false;
+          btn.textContent = 'إنشاء الحساب';
+          return;
+        }
+
+        // تشفير كلمة المرور قبل الحفظ (SHA-256)
+        const encoder   = new TextEncoder();
+        const hashBuf   = await crypto.subtle.digest('SHA-256', encoder.encode(password));
+        const hashArr   = Array.from(new Uint8Array(hashBuf));
+        const hashedPass = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        await db.ref('users').push({
+          full_name : fullName,
+          email     : email,
+          phone     : phone,
+          password  : hashedPass,
+          createdAt : new Date().toISOString()
+        });
+
+        showAlert('✅ تم إنشاء الحساب بنجاح', true);
+        setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+
+      } catch (err) {
+        console.error(err);
+        showAlert('تعذّر الاتصال بـ Firebase، حاول مجدداً');
+        btn.disabled = false;
+        btn.textContent = 'إنشاء الحساب';
+      }
+    }
+  </script>
+
+<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+<script>
+  document.getElementById('musicToggle').addEventListener('click', function(){
+    var bg = getBgAudio();
+    if (_bgPlaying) {
+      bg.pause();
+      _bgPlaying = false;
+      this.textContent = '🎵';
+      this.classList.remove('playing');
+    } else {
+      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
+      _bgPlaying = true;
+      _bgStarted = true;
+      this.textContent = '🔇';
+      this.classList.add('playing');
+    }
+  });
+</script>
+</body>
+</html>

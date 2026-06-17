@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>موسيقاتي — تسجيل الدخول</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: #0d0d0d;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-side {
+      width: 440px;
+      background: #0f0f0f;
+      border: 1px solid #1e1e1e;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2.5rem;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+    }
+
+    .login-side::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 15%;
+      left: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+      border-radius: 2px;
+    }
+
+    .logo-area { text-align: center; margin-bottom: 2.2rem; }
+
+    .logo-img-wrap {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      border: 1px solid #c9a84c33;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      background: #111;
+      box-shadow: 0 0 30px rgba(201,168,76,0.1);
+    }
+
+    .logo-img-wrap img { width: 48px; height: 48px; object-fit: contain; }
+
+    .logo-name { font-size: 1.6rem; font-weight: 800; color: #fff; }
+    .logo-name span { color: #c9a84c; }
+    .logo-tagline { font-size: 0.75rem; color: #555; letter-spacing: 3px; text-transform: uppercase; margin-top: 0.4rem; }
+
+    .gold-sep { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.8rem; width: 100%; }
+    .gold-sep span { flex: 1; height: 1px; background: #1e1e1e; }
+    .gold-sep i { width: 6px; height: 6px; border-radius: 50%; background: #c9a84c; display: block; }
+
+    .login-box { width: 100%; }
+
+    .login-heading { text-align: center; margin-bottom: 1.8rem; }
+    .login-heading h1 { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+    .login-heading p { font-size: 0.83rem; color: #555; }
+
+    .field { margin-bottom: 1.2rem; position: relative; }
+
+    .field label { display: block; font-size: 0.78rem; font-weight: 600; color: #888; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+
+    .field input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      direction: ltr;
+      text-align: right;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .field input::placeholder { color: #333; direction: ltr; text-align: left; }
+
+    .field input:focus { border-color: #c9a84c; box-shadow: 0 0 0 3px rgba(201,168,76,0.08); background: #131313; }
+
+    .field input.error { border-color: #e05555 !important; box-shadow: 0 0 0 3px rgba(224,85,85,0.1) !important; }
+    .field input.success { border-color: #4caf73 !important; box-shadow: 0 0 0 3px rgba(76,175,115,0.08) !important; }
+
+    .field-msg {
+      font-size: 0.73rem;
+      margin-top: 0.4rem;
+      min-height: 1rem;
+      display: none;
+    }
+    .field-msg.show { display: block; }
+    .field-msg.err { color: #e05555; }
+    .field-msg.ok  { color: #4caf73; }
+
+    .forgot { text-align: left; margin-top: 0.4rem; }
+    .forgot a { font-size: 0.75rem; color: #c9a84c88; text-decoration: none; transition: color 0.2s; }
+    .forgot a:hover { color: #c9a84c; }
+
+    /* رسالة خطأ عامة */
+    .alert-box {
+      display: none;
+      background: rgba(224,85,85,0.1);
+      border: 1px solid #e0555544;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.82rem;
+      color: #e07777;
+      text-align: center;
+    }
+    .alert-box.show { display: block; }
+    .alert-box.success-box {
+      background: rgba(76,175,115,0.1);
+      border-color: #4caf7344;
+      color: #4caf73;
+    }
+
+    .btn-enter {
+      display: block; width: 100%; padding: 0.9rem; margin-top: 1.5rem;
+      background: #c9a84c; color: #0a0a0a; border: none; border-radius: 8px;
+      font-size: 1rem; font-weight: 700; font-family: inherit; letter-spacing: 1px;
+      cursor: pointer; text-align: center; text-decoration: none;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
+    }
+    .btn-enter:hover { background: #d4b55a; box-shadow: 0 6px 20px rgba(201,168,76,0.3); transform: translateY(-1px); }
+    .btn-enter:active { transform: translateY(0); }
+    .btn-enter:disabled { background: #555; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .form-foot { text-align: center; margin-top: 1.5rem; font-size: 0.82rem; color: #444; }
+    .form-foot a { color: #c9a84c; text-decoration: none; font-weight: 600; margin-right: 0.3rem; }
+    .form-foot a:hover { color: #d4b55a; }
+
+    .copy { margin-top: 2rem; font-size: 0.7rem; color: #2a2a2a; letter-spacing: 1px; text-align: center; }
+
+    @media (max-width: 500px) {
+      .login-side { width: 95%; padding: 2rem 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-side">
+
+    <div class="logo-area">
+      <div class="logo-img-wrap">
+        <img src="assets/logo.png" alt="موسيقاتي">
+      </div>
+      <div class="logo-name">موسيقا<span>تي</span></div>
+      <div class="logo-tagline">متجر الآلات الموسيقية</div>
+    </div>
+
+    <div class="gold-sep"><span></span><i></i><span></span></div>
+
+    <div class="login-box">
+      <div class="login-heading">
+        <h1>تسجيل الدخول</h1>
+        <p>أدخل بياناتك للمتابعة</p>
+      </div>
+
+      <div class="alert-box" id="alertBox"></div>
+
+      <div class="field">
+        <label>البريد الإلكتروني</label>
+        <input type="email" id="loginEmail" placeholder="example@email.com" oninput="validateLoginEmail()">
+        <div class="field-msg" id="emailMsg"></div>
+      </div>
+
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input type="password" id="loginPass" placeholder="••••••••" oninput="validateLoginPass()">
+        <div class="field-msg" id="passMsg"></div>
+        <div class="forgot"><a href="#">نسيت كلمة المرور؟</a></div>
+      </div>
+
+      <button class="btn-enter" onclick="submitLogin()">دخول</button>
+
+      <div class="form-foot">
+        ليس لديك حساب؟ <a href="register.html">سجّل الآن</a>
+      </div>
+    </div>
+
+    <div class="copy">© 2025 موسيقاتي — جميع الحقوق محفوظة</div>
+
+  </div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="script.js"></script>
+<script>
+    function setFieldState(inputId, msgId, isOk, msg) {
+      const input = document.getElementById(inputId);
+      const msgEl = document.getElementById(msgId);
+      input.classList.toggle('error', !isOk);
+      input.classList.toggle('success', isOk);
+      msgEl.textContent = msg;
+      msgEl.className = 'field-msg show ' + (isOk ? 'ok' : 'err');
+    }
+
+    function clearField(inputId, msgId) {
+      const input = document.getElementById(inputId);
+      const msgEl = document.getElementById(msgId);
+      input.classList.remove('error', 'success');
+      msgEl.className = 'field-msg';
+      msgEl.textContent = '';
+    }
+
+    function validateLoginEmail() {
+      const val = document.getElementById('loginEmail').value.trim();
+      if (!val) { clearField('loginEmail','emailMsg'); return false; }
+      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+      setFieldState('loginEmail','emailMsg', ok, ok ? 'بريد إلكتروني صحيح ✓' : 'صيغة البريد الإلكتروني غير صحيحة');
+      return ok;
+    }
+
+    function validateLoginPass() {
+      const val = document.getElementById('loginPass').value;
+      if (!val) { clearField('loginPass','passMsg'); return false; }
+      const ok = val.length >= 6;
+      setFieldState('loginPass','passMsg', ok, ok ? 'كلمة المرور مقبولة ✓' : 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+      return ok;
+    }
+
+    function showAlert(msg, isSuccess) {
+      const box = document.getElementById('alertBox');
+      box.textContent = msg;
+      box.className = 'alert-box show' + (isSuccess ? ' success-box' : '');
+    }
+
+    function hideAlert() {
+      document.getElementById('alertBox').className = 'alert-box';
+    }
+
+    function submitLogin() {
+      hideAlert();
+      const emailOk = validateLoginEmail();
+      const passOk  = validateLoginPass();
+
+      const emailVal = document.getElementById('loginEmail').value.trim();
+      const passVal  = document.getElementById('loginPass').value;
+
+      if (!emailVal && !passVal) {
+        showAlert('يرجى ملء جميع الحقول المطلوبة');
+        playSound('error');
+        return;
+      }
+      if (!emailOk || !passOk) {
+        showAlert('يرجى تصحيح الأخطاء الموجودة قبل المتابعة');
+        playSound('error');
+        return;
+      }
+
+      // كل شيء صحيح → انتقل للصفحة الرئيسية
+      window.location.href = 'home.html';
+    }
+  </script>
+
+<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+<script>
+  document.getElementById('musicToggle').addEventListener('click', function(){
+    var bg = getBgAudio();
+    if (_bgPlaying) {
+      bg.pause();
+      _bgPlaying = false;
+      this.textContent = '🎵';
+      this.classList.remove('playing');
+    } else {
+      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
+      _bgPlaying = true;
+      _bgStarted = true;
+      this.textContent = '🔇';
+      this.classList.add('playing');
+    }
+  });
+</script>
+</body>
+</html>

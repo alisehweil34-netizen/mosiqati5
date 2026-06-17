@@ -1,0 +1,1135 @@
+
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+
+<head>
+
+<meta charset="utf-8"/>
+
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+<title>من نحن - موسيقاتي</title>
+
+<link href="style.css" rel="stylesheet"/>
+
+<style>
+    /* ===================================
+       تنسيقات خاصة بصفحة من نحن
+    =================================== */
+
+    /* --- الخط الزمني --- */
+    
+    .timeline {
+      position: relative;
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 10px 0;
+    }
+
+    /* الخط العمودي الرأسي */
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      right: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--color-gold), var(--color-gold-dark));
+    }
+
+    
+    .timeline-item {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 35px;
+      padding-right: 55px;
+      position: relative;
+    }
+
+    /* النقطة الذهبية على الخط */
+    
+    .timeline-dot {
+      position: absolute;
+      right: 10px;
+      top: 5px;
+      width: 22px;
+      height: 22px;
+      background: var(--color-gold);
+      border-radius: 50%;
+      border: 3px solid var(--color-black);
+      flex-shrink: 0;
+    }
+
+    
+    .timeline-year {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--color-gold);
+      min-width: 55px;
+      font-family: 'Playfair Display', serif;
+      flex-shrink: 0;
+    }
+
+    
+    .timeline-content {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      flex: 1;
+      transition: border-color var(--transition);
+    }
+
+    
+    .timeline-content:hover {
+      border-color: var(--color-gold-dark);
+    }
+
+    
+    .timeline-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-white);
+      margin-bottom: 6px;
+    }
+
+    
+    .timeline-text {
+      font-size: 0.88rem;
+      color: var(--color-gray);
+      line-height: 1.6;
+    }
+
+    /* --- شريط الجوائز --- */
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .award-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 25px 20px;
+      text-align: center;
+      transition: all var(--transition);
+    }
+
+    .award-card:hover {
+      border-color: var(--color-gold-dark);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(201,168,76,0.1);
+    }
+
+    .award-icon {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .award-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      margin-bottom: 5px;
+    }
+
+    .award-year {
+      font-size: 0.8rem;
+      color: var(--color-gray);
+    }
+
+    /* --- شركاء النجاح --- */
+    .partners-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .partner-badge {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 12px 22px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-gray);
+      transition: all var(--transition);
+    }
+
+    .partner-badge:hover {
+      border-color: var(--color-gold-dark);
+      color: var(--color-gold);
+    }
+
+    /* --- بطاقة اقتباس --- */
+    .quote-box {
+      background: var(--color-card);
+      border-right: 4px solid var(--color-gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 25px 30px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .quote-text {
+      font-size: 1.15rem;
+      color: var(--color-white);
+      line-height: 1.8;
+      font-style: italic;
+      margin-bottom: 12px;
+    }
+
+    .quote-author {
+      font-size: 0.9rem;
+      color: var(--color-gold);
+      font-weight: 700;
+    }
+
+    /* --- معلومات الموقع --- */
+    .location-box {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 30px;
+      display: flex;
+      gap: 25px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .location-icon {
+      font-size: 3rem;
+      flex-shrink: 0;
+    }
+
+    .location-details h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      margin-bottom: 10px;
+    }
+
+    .location-details p {
+      color: var(--color-gray);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 5px;
+    }
+
+    /* --- عداد تفصيلي --- */
+    .detailed-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--color-border);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .d-stat {
+      background: var(--color-card);
+      padding: 28px 20px;
+      text-align: center;
+    }
+
+    .d-stat-num {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--color-gold);
+      font-family: 'Playfair Display', serif;
+      line-height: 1;
+    }
+
+    
+    .d-stat-label {
+      font-size: 0.82rem;
+      color: var(--color-gray);
+      margin-top: 7px;
+    }
+
+    .d-stat-icon {
+      font-size: 1.5rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* --- شريط القيم --- */
+    .core-values {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .core-value-item {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      padding: 20px;
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      transition: all var(--transition);
+    }
+
+    .core-value-item:hover {
+      border-color: var(--color-gold-dark);
+    }
+
+    
+    .core-value-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    
+    .core-value-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      margin-bottom: 5px;
+    }
+
+    
+    .core-value-text {
+      font-size: 0.85rem;
+      color: var(--color-gray);
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      
+      .timeline::before { right: 12px; }
+      
+      .timeline-item { padding-right: 42px; }
+      
+      .timeline-dot { right: 3px; }
+      .awards-grid { grid-template-columns: 1fr 1fr; }
+    }
+  
+  </style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<a class="navbar-logo" href="home.html"><img alt="موسيقاتي" class="navbar-logo-img" src="assets/logo.png"/></a>
+
+<ul class="navbar-links" id="nav-links">
+
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
+
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
+
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
+
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
+
+<li><a class="active" data-ar="من نحن" data-en="About Us" href="about.html">من نحن</a></li>
+
+<li><a data-ar="تواصل معنا" data-en="Contact Us" href="contact.html">تواصل معنا</a></li>
+
+<li><a data-ar="الاعدادات" data-en="Settings" href="settings.html">الاعدادات </a></li>
+
+</ul>
+
+<button aria-label="فتح القائمة" class="hamburger" id="hamburger">
+
+<span></span><span></span><span></span>
+
+</button>
+
+
+
+</nav>
+
+<div class="page-hero">
+
+<h1 data-ar="🎵 من نحن" data-en="🎵 About Us">🎵 من نحن</h1>
+
+<p data-ar="قصتنا، رؤيتنا، وشغفنا بالموسيقى منذ عام 2014" data-en="قصتنا، رؤيتنا، وشغفنا بMusic منذ عام 2014">قصتنا، رؤيتنا، وشغفنا بالموسيقى منذ عام 2014</p>
+
+</div>
+
+<section>
+
+<div class="about-grid">
+
+<div class="about-text">
+
+<h2>قصة موسيقاتي</h2>
+<p data-ar="بدأت رحلة موسيقاتي عام 2014 حين قرر المؤسس أحمد الزيادي تحويل شغفه
+          بالموسيقى إلى مشروع حقيقي. انطلق المتجر من غرفة صغيرة في منطقة وسط
+          البلد بعمان، بثلاثة أنواع فقط من الآلات ورف واحد." data-en="بدأت رحلة موسيقاتي عام 2014 حين قرر المؤسس أحمد الزيادي تحويل شغفه
+          بالموسيقى إلى مشروع حقيقي. انطلق Store من غرفة صغيرة في منطقة وسط
+          البلد بعمان، بثلاثة أنواع فقط من الآلات ورف واحد.">
+          بدأت رحلة موسيقاتي عام 2014 حين قرر المؤسس أحمد الزيادي تحويل شغفه
+          بالموسيقى إلى مشروع حقيقي. انطلق المتجر من غرفة صغيرة في منطقة وسط
+          البلد بعمان، بثلاثة أنواع فقط من الآلات ورف واحد.
+        
+        </p>
+<p data-ar="في غضون سنتين، نما المتجر ليشغل محلاً كاملاً في شارع الرينبو بالشميساني،
+          وانضم إليه فريق من الموسيقيين الشباب الذين يؤمنون بنفس الرسالة:
+          جعل الموسيقى في متناول كل أردني." data-en="في غضون سنتين، نما Store ليشغل محلاً كاملاً في شارع الرينبو بالشميساني،
+          وانضم إليه فريق من الموسيقيين الشباب الذين يؤمنون بنفس الرسالة:
+          جعل الموسيقى في متناول كل أردني.">
+          في غضون سنتين، نما المتجر ليشغل محلاً كاملاً في شارع الرينبو بالشميساني،
+          وانضم إليه فريق من الموسيقيين الشباب الذين يؤمنون بنفس الرسالة:
+          جعل الموسيقى في متناول كل أردني.
+        
+        </p>
+
+<p data-ar="اليوم نفخر بكوننا المرجع الأول للآلات الموسيقية في الأردن، بأكثر من500 منتجو2000 عميل سعيدموزعين على جميع محافظات المملكة." data-en="اليوم نفخر بكوننا المرجع الأول للآلات الموسيقية في الأردن، بأكثر من500 منتجو2000 Happy Customersموزعين على جميع محافظات المملكة.">
+          اليوم نفخر بكوننا المرجع الأول للآلات الموسيقية في الأردن، بأكثر من
+          
+          <strong style="color:var(--color-gold)">500 منتج</strong> و
+          
+          <strong style="color:var(--color-gold)">2000 عميل سعيد</strong>
+          موزعين على جميع محافظات المملكة.
+        
+        </p>
+
+<a class="btn btn-gold" href="store.html" style="margin-top:12px;">تسوق الآن ←</a>
+
+</div>
+
+<div aria-label="آلات موسيقية" class="about-visual" role="img">🎵</div>
+
+</div>
+
+</section>
+
+<section class="section-dark" style="padding:50px 5%;">
+
+<div class="quote-box">
+<p class="quote-text" data-ar='"الموسيقى ليست ترفاً — هي لغة تجمع الناس وتعبّر عمّا يعجز الكلام عن قوله.
+         أردنا أن نبني مكاناً يشعر فيه كل موسيقي، مبتدئاً أو محترفاً، بأنه في بيته."' data-en='"Music ليست ترفاً — هي لغة تجمع الناس وتعبّر عمّا يعجز الكلام عن قوله.
+         أردنا أن نبني مكاناً يشعر فيه كل موسيقي، مبتدئاً أو محترفاً، بأنه في بيته."'>
+        "الموسيقى ليست ترفاً — هي لغة تجمع الناس وتعبّر عمّا يعجز الكلام عن قوله.
+         أردنا أن نبني مكاناً يشعر فيه كل موسيقي، مبتدئاً أو محترفاً، بأنه في بيته."
+      
+      </p>
+
+<div class="quote-author">— أحمد الزيادي، مؤسس موسيقاتي</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="section-title">رحلتنا عبر السنين</h2>
+
+<p class="section-subtitle" data-ar="من غرفة صغيرة إلى المتجر الأول في الأردن" data-en="من غرفة صغيرة إلى Store الأول في الأردن">من غرفة صغيرة إلى المتجر الأول في الأردن</p>
+
+<div class="gold-divider"></div>
+
+<div class="timeline">
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div class="timeline-year">2014</div>
+
+<div class="timeline-content">
+
+<div class="timeline-title">🚀 تأسيس موسيقاتي</div>
+
+<p class="timeline-text" data-ar="افتتاح أول متجر في وسط البلد بعمان بمساحة 20 متراً مربعاً
+            وتشكيلة محدودة من القيثارات والكيبورد. بداية متواضعة لحلم كبير." data-en="افتتاح أول متجر في وسط البلد بعمان بمساحة 20 متراً مربعاً
+            وتشكيلة محدودة من الGuitars والكيبورد. بداية متواضعة لحلم كبير.">
+            افتتاح أول متجر في وسط البلد بعمان بمساحة 20 متراً مربعاً
+            وتشكيلة محدودة من القيثارات والكيبورد. بداية متواضعة لحلم كبير.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div class="timeline-year">2016</div>
+
+<div class="timeline-content">
+
+<div class="timeline-title">📈 التوسع الأول</div>
+
+<p class="timeline-text">
+            الانتقال إلى محل أكبر في الشميساني وإضافة قسمَي العود والدرمز.
+            وصول عدد العملاء إلى 300 عميل وتوظيف أول 3 موظفين متخصصين.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div class="timeline-year">2018</div>
+
+<div class="timeline-content">
+
+<div class="timeline-title">🌐 إطلاق الموقع الإلكتروني</div>
+
+<p class="timeline-text" data-ar="إطلاق موقع موسيقاتي الإلكتروني ليصل المتجر إلى عملاء من جميع
+            محافظات الأردن. تجاوز المبيعات الأونلاين توقعاتنا بنسبة 200%." data-en="إطلاق موقع موسيقاتي الإلكتروني ليصل Store إلى عملاء من جميع
+            محافظات الأردن. تجاوز المبيعات الأونلاين توقعاتنا بنسبة 200%.">
+            إطلاق موقع موسيقاتي الإلكتروني ليصل المتجر إلى عملاء من جميع
+            محافظات الأردن. تجاوز المبيعات الأونلاين توقعاتنا بنسبة 200%.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div class="timeline-year">2020</div>
+
+<div class="timeline-content">
+
+<div class="timeline-title">🎓 إطلاق أكاديمية موسيقاتي</div>
+
+<p class="timeline-text" data-ar="افتتاح قسم تعليمي بالمتجر يقدم دروساً للقيثارة والبيانو والعود
+            للمبتدئين. تخرّج أكثر من 150 طالباً في السنة الأولى." data-en="افتتاح قسم تعليمي بStore يقدم دروساً للقيثارة والبيانو والعود
+            للمبتدئين. تخرّج أكثر من 150 طالباً في السنة الأولى.">
+            افتتاح قسم تعليمي بالمتجر يقدم دروساً للقيثارة والبيانو والعود
+            للمبتدئين. تخرّج أكثر من 150 طالباً في السنة الأولى.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div class="timeline-year">2022</div>
+
+<div class="timeline-content">
+
+<div class="timeline-title">🏆 جائزة أفضل متجر موسيقي</div>
+
+<p class="timeline-text">
+            حصول موسيقاتي على جائزة "أفضل متجر متخصص" من غرفة تجارة عمان،
+            واعتراف رسمي بمكانتنا في السوق الأردني.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div class="timeline-year">2024</div>
+
+<div class="timeline-content">
+
+<div class="timeline-title">✨ عشر سنوات من الموسيقى</div>
+
+<p class="timeline-text" data-ar="نحتفل بعشر سنوات من الشغف والنجاح مع أكثر من 2000 عميل وفي،
+            وتشكيلة تضم 500+ منتج موسيقي من 50+ ماركة عالمية." data-en="نحتفل بعشر سنوات من الشغف والنجاح مع أكثر من 2000 عميل وفي،
+            وتشكيلة تضم 500+ Music Products من 50+ ماركة عالمية.">
+            نحتفل بعشر سنوات من الشغف والنجاح مع أكثر من 2000 عميل وفي،
+            وتشكيلة تضم 500+ منتج موسيقي من 50+ ماركة عالمية.
+          
+          </p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section-dark">
+
+<h2 class="section-title">أرقامنا تتحدث</h2>
+
+<div class="gold-divider"></div>
+
+<div class="detailed-stats">
+
+<div class="d-stat">
+
+<span class="d-stat-icon">📅</span>
+
+<div class="d-stat-num counter-number" data-suffix="+" data-target="10">10+</div>
+
+<div class="d-stat-label">سنوات في السوق الأردني</div>
+
+</div>
+
+<div class="d-stat">
+
+<span class="d-stat-icon">😊</span>
+
+<div class="d-stat-num counter-number" data-suffix="+" data-target="2000">2000+</div>
+
+<div class="d-stat-label" data-ar="عميل راضٍ في الأردن" data-en="Happy Customers في الأردن">عميل راضٍ في الأردن</div>
+
+</div>
+
+<div class="d-stat">
+
+<span class="d-stat-icon">🎸</span>
+
+<div class="d-stat-num counter-number" data-suffix="+" data-target="500">500+</div>
+
+<div class="d-stat-label" data-ar="منتج موسيقي متوفر" data-en="Music Products متوفر">منتج موسيقي متوفر</div>
+
+</div>
+
+<div class="d-stat">
+
+<span class="d-stat-icon">🌍</span>
+
+<div class="d-stat-num counter-number" data-suffix="+" data-target="50">50+</div>
+
+<div class="d-stat-label" data-ar="ماركة عالمية معتمدة" data-en="Global Brands معتمدة">ماركة عالمية معتمدة</div>
+
+</div>
+
+<div class="d-stat">
+
+<span class="d-stat-icon">👨‍💼</span>
+
+<div class="d-stat-num counter-number" data-suffix="" data-target="12">12</div>
+
+<div class="d-stat-label">موظف ومستشار متخصص</div>
+
+</div>
+
+<div class="d-stat">
+
+<span class="d-stat-icon">🎓</span>
+
+<div class="d-stat-num counter-number" data-suffix="+" data-target="400">400+</div>
+
+<div class="d-stat-label">طالب تخرّج من أكاديميتنا</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="section-title" data-ar="رؤيتنا، رسالتنا، قيمنا" data-en="رؤيتنا، رسالتنا، Our Values">رؤيتنا، رسالتنا، قيمنا</h2>
+
+<div class="gold-divider"></div>
+
+<div class="core-values">
+
+<div class="core-value-item">
+
+<span class="core-value-icon">🔭</span>
+
+<div>
+
+<div class="core-value-title">رؤيتنا</div>
+
+<p class="core-value-text" data-ar="أن نكون المرجع الأول والأكثر ثقةً للآلات الموسيقية في الأردن
+            والمنطقة العربية، ونُسهم في بناء جيل يُعبّر عن نفسه بالموسيقى." data-en="أن نكون المرجع الأول والأكثر ثقةً للآلات الموسيقية في الأردن
+            والمنطقة العربية، ونُسهم في بناء جيل يُعبّر عن نفسه بMusic.">
+            أن نكون المرجع الأول والأكثر ثقةً للآلات الموسيقية في الأردن
+            والمنطقة العربية، ونُسهم في بناء جيل يُعبّر عن نفسه بالموسيقى.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="core-value-item">
+
+<span class="core-value-icon">📜</span>
+
+<div>
+
+<div class="core-value-title">رسالتنا</div>
+
+<p class="core-value-text" data-ar="تقديم أفضل الآلات الموسيقية بأسعار عادلة ومنافسة، مع دعم فني
+            واستشاري متخصص يضمن رضا كل عميل من أول زيارة حتى ما بعد الشراء." data-en="تقديم أفضل الآلات الموسيقية بأسعار عادلة ومنافسة، مع Technical Support
+            واستشاري متخصص يضمن رضا كل عميل من أول زيارة حتى ما بعد الشراء.">
+            تقديم أفضل الآلات الموسيقية بأسعار عادلة ومنافسة، مع دعم فني
+            واستشاري متخصص يضمن رضا كل عميل من أول زيارة حتى ما بعد الشراء.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="core-value-item">
+
+<span class="core-value-icon">💎</span>
+
+<div>
+
+<div class="core-value-title">الجودة أولاً</div>
+
+<p class="core-value-text">
+            لا نبيع أي منتج إلا بعد فحصه والتأكد من مطابقته للمعايير العالمية.
+            كل آلة نعرضها حصلت على موافقة خبرائنا الموسيقيين أولاً.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="core-value-item">
+
+<span class="core-value-icon">🤝</span>
+
+<div>
+
+<div class="core-value-title">الأمانة والشفافية</div>
+
+<p class="core-value-text">
+            نؤمن بالصدق مع عملائنا. نُرشدك لما يناسب مستواك وميزانيتك
+            حتى لو كان ذلك يعني اقتراح منتج بسعر أقل.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="core-value-item">
+
+<span class="core-value-icon">🌱</span>
+
+<div>
+
+<div class="core-value-title">دعم المجتمع الموسيقي</div>
+
+<p class="core-value-text">
+            نرعى الموسيقيين الشباب الأردنيين ونوفر منصة لهم للتعبير عن
+            مواهبهم من خلال فعالياتنا الموسيقية الدورية.
+          
+          </p>
+
+</div>
+
+</div>
+
+<div class="core-value-item">
+
+<span class="core-value-icon">♻️</span>
+
+<div>
+
+<div class="core-value-title">المسؤولية الاجتماعية</div>
+
+<p class="core-value-text">
+            نتبرع سنوياً بآلات موسيقية للمدارس الحكومية، ونقدم خصومات خاصة
+            لطلاب المعاهد الموسيقية وذوي الاحتياجات الخاصة.
+          
+          </p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section-dark">
+
+<h2 class="section-title">فريقنا المتميز</h2>
+
+<p class="section-subtitle">كل عضو في فريقنا هو موسيقي شغوف قبل أن يكون موظفاً</p>
+
+<div class="gold-divider"></div>
+
+<div class="team-grid">
+
+<div class="team-card">
+
+<div aria-label="أحمد الزيادي" class="team-avatar" role="img">👨</div>
+
+<div class="team-name">أحمد الزيادي</div>
+
+<div class="team-role">المؤسس والمدير التنفيذي</div>
+
+<p style="color:var(--color-gray);font-size:0.8rem;margin-top:8px;line-height:1.5;">
+          عازف قيثارة منذ 20 عاماً، حاصل على دبلوم في إدارة الأعمال من الجامعة الأردنية.
+        
+        </p>
+
+</div>
+
+<div class="team-card">
+
+<div aria-label="سارة المصري" class="team-avatar" role="img">👩</div>
+
+<div class="team-name">سارة المصري</div>
+
+<div class="team-role">مستشارة الآلات الموسيقية</div>
+
+<p data-ar="عازفة بيانو محترفة ومدرّسة موسيقى، خبرة 8 سنوات في التدريس والاستشارة." data-en="عازفة Piano محترفة ومدرّسة موسيقى، خبرة 8 سنوات في التدريس والاستشارة." style="color:var(--color-gray);font-size:0.8rem;margin-top:8px;line-height:1.5;">
+          عازفة بيانو محترفة ومدرّسة موسيقى، خبرة 8 سنوات في التدريس والاستشارة.
+        
+        </p>
+
+</div>
+
+<div class="team-card">
+
+<div aria-label="محمد الخالد" class="team-avatar" role="img">👨</div>
+
+<div class="team-name">محمد الخالد</div>
+
+<div class="team-role">خبير الصوتيات والاستوديو</div>
+
+<p style="color:var(--color-gray);font-size:0.8rem;margin-top:8px;line-height:1.5;">
+          مهندس صوت معتمد، عمل في أكثر من 30 مشروع تسجيل موسيقي محلي وعربي.
+        
+        </p>
+
+</div>
+
+<div class="team-card">
+
+<div aria-label="رنا العمر" class="team-avatar" role="img">👩</div>
+
+<div class="team-name">رنا العمر</div>
+
+<div class="team-role">مديرة خدمة العملاء</div>
+
+<p style="color:var(--color-gray);font-size:0.8rem;margin-top:8px;line-height:1.5;">
+          متخصصة في تجربة العملاء، وعازفة عود هاوية تفهم احتياجات الموسيقيين جيداً.
+        
+        </p>
+
+</div>
+
+<div class="team-card">
+
+<div aria-label="يوسف نصار" class="team-avatar" role="img">👨</div>
+
+<div class="team-name">يوسف نصار</div>
+
+<div class="team-role">مدير المستودع واللوجستيك</div>
+
+<p style="color:var(--color-gray);font-size:0.8rem;margin-top:8px;line-height:1.5;">
+          يضمن وصول كل طلب سليماً وفي الوقت المحدد. يعزف الدرمز في وقت فراغه.
+        
+        </p>
+
+</div>
+
+<div class="team-card">
+
+<div aria-label="لمى حداد" class="team-avatar" role="img">👩</div>
+
+<div class="team-name">لمى حداد</div>
+
+<div class="team-role">مسؤولة التسويق الرقمي</div>
+
+<p style="color:var(--color-gray);font-size:0.8rem;margin-top:8px;line-height:1.5;">
+          تُدير حسابات موسيقاتي على وسائل التواصل وتنظّم الفعاليات الموسيقية الشهرية.
+        
+        </p>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="section-title">جوائزنا وإنجازاتنا</h2>
+
+<p class="section-subtitle">اعتراف رسمي بجودة خدماتنا</p>
+
+<div class="gold-divider"></div>
+
+<div class="awards-grid">
+
+<div class="award-card">
+
+<span aria-label="جائزة" class="award-icon" role="img">🏆</span>
+
+<div class="award-title">أفضل متجر متخصص</div>
+
+<div class="award-year">غرفة تجارة عمان — 2022</div>
+
+</div>
+
+<div class="award-card">
+
+<span aria-label="شهادة" class="award-icon" role="img">🎖️</span>
+
+<div class="award-title">شريك معتمد لماركة Yamaha</div>
+
+<div class="award-year">Yamaha Middle East — 2019</div>
+
+</div>
+
+<div class="award-card">
+
+<span aria-label="جائزة" class="award-icon" role="img">🥇</span>
+
+<div class="award-title">الأكثر تقييماً في الأردن</div>
+
+<div class="award-year">Google Maps — تقييم 4.9 ★ — 2023</div>
+
+</div>
+
+<div class="award-card">
+
+<span aria-label="شهادة" class="award-icon" role="img">📜</span>
+
+<div class="award-title">شهادة ISO في خدمة العملاء</div>
+
+<div class="award-year">معهد الجودة الأردني — 2021</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section-dark">
+
+<h2 class="section-title">شركاؤنا العالميون</h2>
+
+<p class="section-subtitle">نعتمد أفضل الماركات الموسيقية العالمية</p>
+
+<div class="gold-divider"></div>
+
+<div class="partners-row">
+
+<div class="partner-badge">🎸 Yamaha</div>
+
+<div class="partner-badge">🎹 Roland</div>
+
+<div class="partner-badge">🎙️ Shure</div>
+
+<div class="partner-badge">🎧 Audio-Technica</div>
+
+<div class="partner-badge">🥁 Pearl Drums</div>
+
+<div class="partner-badge">🎸 Fender</div>
+
+<div class="partner-badge">🎹 Casio</div>
+
+<div class="partner-badge">🔊 Behringer</div>
+
+<div class="partner-badge">🎙️ AKG</div>
+
+<div class="partner-badge">🎸 Gibson</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="section-title">موقعنا</h2>
+
+<div class="gold-divider"></div>
+
+<div class="location-box">
+
+<div aria-label="موقع" class="location-icon" role="img">📍</div>
+
+<div class="location-details">
+
+<h3>متجر موسيقاتي الرئيسي — عمان</h3>
+
+<p>📍 شارع الرينبو، منطقة الشميساني، عمان — الأردن</p>
+
+<p>🕐 أوقات العمل: السبت – الخميس، من 10:00 صباحاً حتى 9:00 مساءً</p>
+
+<p>📞 هاتف: <strong style="color:var(--color-white)">+962 79 000 0000</strong></p>
+
+<p>📧 البريد: <strong style="color:var(--color-white)">info@mosiqati.jo</strong></p>
+
+<p data-ar="🅿️ مواقف سيارات مجانية أمام المتجر" data-en="🅿️ مواقف سيارات مجانية أمام Store">🅿️ مواقف سيارات مجانية أمام المتجر</p>
+
+<br/>
+
+<a class="btn btn-gold" data-ar="تواصل معنا للاستفسار ←" data-en="Contact Us للاستفسار ←" href="contact.html">تواصل معنا للاستفسار ←</a>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section-dark" style="text-align:center;">
+
+<h2 class="section-title">انضم إلى عائلة موسيقاتي</h2>
+
+<div class="gold-divider"></div>
+
+<p style="color:var(--color-gray);max-width:500px;margin:0 auto 30px;line-height:1.8;">
+      سواء كنت مبتدئاً يبدأ رحلته الموسيقية، أو محترفاً يبحث عن أفضل المعدات —
+      موسيقاتي هو بيتك الموسيقي في الأردن.
+    
+    </p>
+
+<div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;">
+
+<a class="btn btn-gold" data-ar="🎸 تصفح المتجر" data-en="🎸 تصفح Store" href="store.html">🎸 تصفح المتجر</a>
+
+<a class="btn btn-outline" href="contact.html">📞 تحدث مع خبير</a>
+
+</div>
+
+</section>
+
+<footer>
+
+<div class="footer-grid">
+
+<div>
+
+<div class="footer-brand-name">MOSIQATI</div>
+
+<p class="footer-brand-desc" data-ar="متجرك الموسيقي الأول في الأردن منذ عام 2014." data-en="Jordan's #1 music store since 2014.">متجرك الموسيقي الأول في الأردن منذ عام 2014.</p>
+
+<div class="social-links">
+
+<div class="social-link" title="فيسبوك">📘</div>
+
+<div class="social-link" title="إنستغرام">📷</div>
+
+<div class="social-link" title="يوتيوب">▶️</div>
+
+<div class="social-link" title="واتساب"></div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
+
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
+
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
+
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="الفئات" data-en="Categories">الفئات</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="قيثارات" data-en="Guitars" href="store.html">قيثارات</a></li>
+
+<li><a data-ar="بيانو" data-en="Piano" href="store.html">بيانو</a></li>
+
+<li><a data-ar="عود" data-en="Oud" href="store.html">عود</a></li>
+
+<li><a data-ar="معدات استوديو" data-en="Studio Gear" href="store.html">معدات استوديو</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</div>
+
+<ul class="footer-links">
+
+<li><a href="#"> الشميساني، عمان</a></li>
+
+<li><a href="#"> +962 79 000 0000</a></li>
+
+<li><a href="#"> info@mosiqati.jo</a></li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+<p data-ar="© 2024 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2024 MOSIQATI - All Rights Reserved">© 2024 موسيقاتي - جميع الحقوق محفوظة</p>
+
+<div class="footer-bottom-links">
+
+<a data-ar="سياسة الخصوصية" data-en="Privacy Policy" href="#">سياسة الخصوصية</a>
+
+<a data-ar="شروط الاستخدام" data-en="Terms of Use" href="#">شروط الاستخدام</a>
+
+</div>
+
+</div>
+
+</footer>
+
+
+<button class="cart-float" onclick="window.location='cart.html'">
+  🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
+</button>
+<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="script.js"></script>
+<script>
+  document.getElementById('musicToggle').addEventListener('click', function(){
+    var bg = getBgAudio();
+    if (_bgPlaying) {
+      bg.pause();
+      _bgPlaying = false;
+      this.textContent = '🎵';
+      this.classList.remove('playing');
+    } else {
+      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
+      _bgPlaying = true;
+      _bgStarted = true;
+      this.textContent = '🔇';
+      this.classList.add('playing');
+    }
+  });
+</script>
+</body>
+
+</html>

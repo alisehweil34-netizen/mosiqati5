@@ -1,0 +1,1163 @@
+
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+
+<head>
+
+<meta charset="utf-8"/>
+
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+<title>الإعدادات - موسيقاتي</title>
+
+<link href="style.css" rel="stylesheet"/>
+
+<style>
+    /* ===================================
+       تنسيقات خاصة بصفحة الإعدادات
+    =================================== */
+
+    
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 30px;
+      padding: 40px 5% 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* --- القائمة الجانبية --- */
+    
+    .settings-sidebar {
+      position: sticky;
+      top: 90px;
+      height: fit-content;
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 10px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-gray);
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(201,168,76,0.08);
+      color: var(--color-white);
+    }
+
+    .sidebar-item.active {
+      background: rgba(201,168,76,0.12);
+      color: var(--color-gold);
+      border-right: 3px solid var(--color-gold);
+    }
+
+    .sidebar-item .icon { font-size: 1.1rem; }
+
+    /* --- بطاقات الإعدادات --- */
+    
+    .settings-content { display: flex; flex-direction: column; gap: 25px; }
+
+    .settings-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 30px;
+      transition: border-color var(--transition);
+    }
+
+    .settings-card:hover { border-color: rgba(201,168,76,0.25); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 25px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .card-header-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .card-header-text h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-white);
+      margin-bottom: 2px;
+    }
+
+    .card-header-text p {
+      font-size: 0.8rem;
+      color: var(--color-gray);
+    }
+
+    /* --- صف الإعداد --- */
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      gap: 20px;
+    }
+
+    .setting-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .setting-row:first-child { padding-top: 0; }
+
+    .setting-label { font-size: 0.9rem; font-weight: 600; color: var(--color-white); }
+    .setting-desc  { font-size: 0.78rem; color: var(--color-gray); margin-top: 2px; }
+
+    /* --- حجم الخط - Slider --- */
+    
+    .font-slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 200px;
+    }
+
+    .font-size-display {
+      min-width: 38px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 6px;
+      padding: 3px 8px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 4px;
+      border-radius: 4px;
+      background: var(--color-border);
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--color-gold);
+      cursor: pointer;
+      transition: transform 0.2s;
+      box-shadow: 0 2px 8px rgba(201,168,76,0.4);
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+    /* --- خيارات الألوان --- */
+    .theme-options {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .theme-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-btn:hover { transform: scale(1.1); }
+
+    .theme-btn.active {
+      border-color: var(--color-gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.25);
+    }
+
+    .theme-btn::after {
+      content: '✓';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: white;
+      opacity: 0;
+      background: rgba(0,0,0,0.3);
+      transition: opacity 0.2s;
+    }
+
+    .theme-btn.active::after { opacity: 1; }
+
+    /* --- خيارات الخلفية --- */
+    .bg-options {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .bg-btn {
+      width: 60px;
+      height: 42px;
+      border-radius: 8px;
+      border: 2px solid var(--color-border);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--color-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-arabic);
+    }
+
+    .bg-btn:hover { border-color: var(--color-gold-dark); transform: scale(1.05); }
+
+    .bg-btn.active {
+      border-color: var(--color-gold);
+      color: var(--color-gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.2);
+    }
+
+    /* --- خيارات اللغة --- */
+    .lang-options {
+      display: flex;
+      gap: 10px;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: var(--color-dark);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      color: var(--color-gray);
+      font-family: var(--font-arabic);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .lang-btn:hover { border-color: var(--color-gold-dark); color: var(--color-white); }
+
+    .lang-btn.active {
+      background: rgba(201,168,76,0.12);
+      border-color: var(--color-gold);
+      color: var(--color-gold);
+    }
+
+    .lang-flag { font-size: 1.1rem; }
+
+    /* --- Toggle Switch --- */
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input { display: none; }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--color-border);
+      border-radius: 13px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      top: 3px;
+      right: 3px;
+      transition: transform 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .toggle-switch input:checked + .toggle-track { background: var(--color-gold); }
+    .toggle-switch input:checked + .toggle-track::after { transform: translateX(-22px); }
+
+    /* --- معاينة الخط --- */
+    .font-preview {
+      margin-top: 15px;
+      background: rgba(201,168,76,0.05);
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 8px;
+      padding: 15px 20px;
+      color: var(--color-gray);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      transition: font-size 0.3s;
+    }
+
+    /* --- زر الحفظ والإعادة --- */
+    .settings-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+
+    .btn-reset {
+      padding: 10px 22px;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      color: var(--color-gray);
+      font-family: var(--font-arabic);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-reset:hover { border-color: var(--color-gold-dark); color: var(--color-white); }
+
+    
+    /* --- Toast --- */
+    
+    .save-toast {
+      display: none;
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-gold);
+      color: var(--color-black);
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 8px 30px rgba(201,168,76,0.4);
+      z-index: 999;
+      animation: slideUp 0.4s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* --- بطاقة المعاينة --- */
+    
+    .preview-card {
+      background: var(--color-dark);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 15px;
+    }
+
+    
+    .preview-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      margin-bottom: 6px;
+    }
+
+    
+    .preview-card-text {
+      font-size: 0.85rem;
+      color: var(--color-gray);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      
+      .settings-layout {
+        grid-template-columns: 1fr;
+        padding: 20px 4% 60px;
+      }
+      
+      .settings-sidebar {
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 8px;
+      }
+      .sidebar-item { flex: 1; min-width: 100px; justify-content: center; font-size: 0.8rem; }
+      .sidebar-item .icon { font-size: 1rem; }
+      
+      .font-slider-wrap { min-width: 150px; }
+      .settings-actions { justify-content: stretch; }
+      .settings-actions .btn, .settings-actions .btn-reset { flex: 1; text-align: center; }
+    }
+  
+  </style>
+
+</head>
+
+<body>
+
+<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week" id="top-bar-text">
+    🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع
+  
+  </div>
+
+<nav class="navbar">
+
+<a class="navbar-logo" href="home.html"><img alt="موسيقاتي" class="navbar-logo-img" src="assets/logo.png"/></a>
+
+<ul class="navbar-links" id="nav-links">
+
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html" id="nav-home">الرئيسية</a></li>
+
+<li><a data-ar="المتجر" data-en="Store" href="store.html" id="nav-store">المتجر</a></li>
+
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html" id="nav-gifts">الهدايا</a></li>
+
+<li><a data-ar="العروض" data-en="Offers" href="offers.html" id="nav-offers">العروض</a></li>
+
+<li><a data-ar="من نحن" data-en="About Us" href="about.html" id="nav-about">من نحن</a></li>
+
+<li><a data-ar="تواصل معنا" data-en="Contact Us" href="Contact.html" id="nav-contact">تواصل معنا</a></li>
+
+<li><a class="active" data-ar="الإعدادات" data-en="Settings" href="setting.html" id="nav-settings">الإعدادات</a></li>
+
+</ul>
+
+<button class="hamburger" id="hamburger">
+
+<span></span><span></span><span></span>
+
+</button>
+
+
+
+</nav>
+
+<div class="page-hero">
+
+<h1>⚙️ <span id="page-title-text">الإعدادات</span></h1>
+
+<p data-ar="خصّص تجربتك على الموقع كما تريد" data-en="Customize your website experience as you like" id="page-subtitle-text">خصّص تجربتك على الموقع كما تريد</p>
+
+</div>
+
+<div class="settings-layout">
+
+<aside class="settings-sidebar">
+
+<a class="sidebar-item active" href="#font-section" onclick="setActive(this)"><span class="icon">🔤</span> <span class="lbl" data-ar="حجم الخط" data-en="Font Size">حجم الخط</span></a>
+
+<a class="sidebar-item" href="#color-section" onclick="setActive(this)"><span class="icon">🎨</span> <span class="lbl" data-ar="الألوان" data-en="Colors">الألوان</span></a>
+
+<a class="sidebar-item" href="#bg-section" onclick="setActive(this)"><span class="icon">🖼️</span> <span class="lbl" data-ar="الخلفية" data-en="Background">الخلفية</span></a>
+
+<a class="sidebar-item" href="#lang-section" onclick="setActive(this)"><span class="icon">🌐</span> <span class="lbl" data-ar="اللغة" data-en="Language">اللغة</span></a>
+
+<a class="sidebar-item" href="#display-section" onclick="setActive(this)"><span class="icon">✨</span> <span class="lbl" data-ar="العرض" data-en="Display">العرض</span></a>
+</aside>
+
+<div class="settings-content">
+
+<div class="settings-card" id="font-section">
+
+<div class="card-header">
+
+<div class="card-header-icon">🔤</div>
+
+<div class="card-header-text">
+
+<h3 data-ar="حجم الخط" data-en="Font Size">حجم الخط</h3>
+
+<p data-ar="تحكم في حجم النصوص على الموقع" data-en="Control the text size across the site">تحكم في حجم النصوص على الموقع</p>
+
+</div>
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<div class="setting-label" data-ar="حجم الخط الأساسي" data-en="Base Font Size">حجم الخط الأساسي</div>
+
+<div class="setting-desc" data-ar="يؤثر على جميع نصوص الموقع" data-en="Affects all text across the site">يؤثر على جميع نصوص الموقع</div>
+
+</div>
+
+<div class="font-slider-wrap">
+
+<span style="font-size:0.8rem; color:var(--color-gray)">أ</span>
+
+<input id="font-slider" max="22" min="12" oninput="changeFontSize(this.value)" type="range" value="16"/>
+
+<span style="font-size:1.1rem; color:var(--color-gray)">أ</span>
+
+<span class="font-size-display" id="font-size-val">16px</span>
+
+</div>
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<div class="setting-label" data-ar="أحجام جاهزة" data-en="Preset Sizes">أحجام جاهزة</div>
+
+</div>
+
+<div style="display:flex; gap:8px;">
+
+<button class="btn btn-outline" data-ar="صغير" data-en="Small" onclick="setFontPreset(13)" style="padding:6px 14px; font-size:0.8rem;">صغير</button>
+
+<button class="btn btn-gold" data-ar="متوسط" data-en="Medium" onclick="setFontPreset(16)" style="padding:6px 14px; font-size:0.8rem;">متوسط</button>
+
+<button class="btn btn-outline" data-ar="كبير" data-en="Large" onclick="setFontPreset(19)" style="padding:6px 14px; font-size:0.8rem;">كبير</button>
+
+</div>
+
+</div>
+
+<div class="font-preview" id="font-preview">
+          🎵 مرحباً بك في موسيقاتي — متجر الآلات الموسيقية الأول في الأردن. هذا مثال على حجم الخط الحالي في الموقع.
+        
+        </div>
+
+</div>
+
+<div class="settings-card" id="color-section">
+
+<div class="card-header">
+
+<div class="card-header-icon">🎨</div>
+
+<div class="card-header-text">
+
+<h3 data-ar="لون التمييز" data-en="Accent Color">لون التمييز</h3>
+
+<p data-ar="اختر اللون الذهبي المناسب لك" data-en="Choose your preferred accent color">اختر اللون الذهبي المناسب لك</p>
+
+</div>
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<div class="setting-label" data-ar="اللون الرئيسي" data-en="Primary Color">اللون الرئيسي</div>
+
+<div class="setting-desc" data-ar="يظهر في الأزرار والعناوين والتفاصيل" data-en="Appears in buttons, headings, and details">يظهر في الأزرار والعناوين والتفاصيل</div>
+
+</div>
+
+<div class="theme-options">
+
+<button class="theme-btn active" onclick="setAccent(this,'#c9a84c','#e8c96a','#a07830')" style="background: linear-gradient(135deg,#c9a84c,#e8c96a);" title="ذهبي"></button>
+
+<button class="theme-btn" onclick="setAccent(this,'#e05252','#ff7070','#b03030')" style="background: linear-gradient(135deg,#e05252,#ff7070);" title="أحمر"></button>
+
+<button class="theme-btn" onclick="setAccent(this,'#4a9eff','#7ec8ff','#2a7acc')" style="background: linear-gradient(135deg,#4a9eff,#7ec8ff);" title="أزرق"></button>
+
+<button class="theme-btn" onclick="setAccent(this,'#43d98c','#7ff5be','#25a566')" style="background: linear-gradient(135deg,#43d98c,#7ff5be);" title="أخضر"></button>
+
+<button class="theme-btn" onclick="setAccent(this,'#b56cff','#d4a8ff','#8840d4')" style="background: linear-gradient(135deg,#b56cff,#d4a8ff);" title="بنفسجي"></button>
+
+<button class="theme-btn" onclick="setAccent(this,'#ff9f45','#ffcc80','#cc6a00')" style="background: linear-gradient(135deg,#ff9f45,#ffcc80);" title="برتقالي"></button>
+
+</div>
+
+</div>
+
+<div class="preview-card">
+
+<div class="preview-card-title" id="color-preview-title">🎸 معاينة اللون</div>
+
+<div class="preview-card-text" data-ar="هذه معاينة للون المختار — سيظهر هكذا في الأزرار والعناوين والتفاصيل الذهبية في الموقع." data-en="This is a preview of the selected color — it will appear like this in buttons, headings, and accent details.">
+            هذه معاينة للون المختار — سيظهر هكذا في الأزرار والعناوين والتفاصيل الذهبية في الموقع.
+          
+          </div>
+
+<button class="btn btn-gold" data-ar="زر تجريبي" data-en="Sample Button" style="margin-top:12px; padding:8px 20px; font-size:0.85rem;">زر تجريبي</button>
+
+</div>
+
+</div>
+
+<div class="settings-card" id="bg-section">
+
+<div class="card-header">
+
+<div class="card-header-icon">🖼️</div>
+
+<div class="card-header-text">
+
+<h3 data-ar="لون الخلفية" data-en="Background Color">لون الخلفية</h3>
+
+<p data-ar="غيّر خلفية الموقع" data-en="Change the site background">غيّر خلفية الموقع</p>
+
+</div>
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<div class="setting-label" data-ar="اختر الخلفية" data-en="Choose Background">اختر الخلفية</div>
+
+<div class="setting-desc" data-ar="سيتم تطبيق الخلفية على جميع الصفحات" data-en="Will be applied across all pages">سيتم تطبيق الخلفية على جميع الصفحات</div>
+
+</div>
+
+<div class="bg-options">
+
+<button class="bg-btn active" data-ar="أسود" data-en="Black" onclick="setBg(this,'#0a0a0a','#111111','#1a1a1a')" style="background:#0a0a0a; color:#888;">أسود</button>
+
+<button class="bg-btn" data-ar="ليلي" data-en="Night" onclick="setBg(this,'#0d1117','#161b22','#21262d')" style="background:#0d1117; color:#888;">ليلي</button>
+
+<button class="bg-btn" data-ar="نيلي" data-en="Navy" onclick="setBg(this,'#0a0a1a','#12121f','#1c1c2e')" style="background:#0a0a1a; color:#888;">نيلي</button>
+
+<button class="bg-btn" data-ar="بني" data-en="Brown" onclick="setBg(this,'#1a0a00','#220d00','#2a1200')" style="background:#1a0a00; color:#888;">بني</button>
+
+<button class="bg-btn" data-ar="رمادي" data-en="Gray" onclick="setBg(this,'#1f1f1f','#282828','#333333')" style="background:#1f1f1f; color:#888;">رمادي</button>
+
+</div>
+
+</div>
+
+<div id="bg-preview-box" style="margin-top:15px; border-radius:10px; overflow:hidden; border: 1px solid var(--color-border);">
+
+<div id="bg-preview-inner" style="background:#0a0a0a; padding:20px; display:flex; gap:15px; align-items:center;">
+
+<div style="width:50px;height:50px;border-radius:10px;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🎸</div>
+
+<div>
+
+<div data-ar="معاينة الخلفية" data-en="Background Preview" id="bg-preview-title" style="font-weight:700;margin-bottom:4px;">معاينة الخلفية</div>
+
+<div data-ar="هكذا تبدو الخلفية مع المحتوى" data-en="This is how the background looks with content" id="bg-preview-text" style="font-size:0.8rem;color:#888;">هكذا تبدو الخلفية مع المحتوى</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="settings-card" id="lang-section">
+
+<div class="card-header">
+
+<div class="card-header-icon">🌐</div>
+
+<div class="card-header-text">
+
+<h3 data-ar="اللغة" data-en="Language">اللغة</h3>
+
+<p data-ar="اختر لغة عرض الموقع" data-en="Choose the site display language">اختر لغة عرض الموقع</p>
+
+</div>
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<div class="setting-label" data-ar="لغة الواجهة" data-en="Interface Language">لغة الواجهة</div>
+
+<div class="setting-desc" data-ar="تؤثر على النصوص والقوائم" data-en="Affects texts and menus">تؤثر على النصوص والقوائم</div>
+
+</div>
+
+<div class="lang-options">
+
+<button class="lang-btn active" id="lang-ar" onclick="setLang('ar')">
+
+<span class="lang-flag">🇯🇴</span> العربية
+            
+            </button>
+
+<button class="lang-btn" id="lang-en" onclick="setLang('en')">
+
+<span class="lang-flag">🇬🇧</span> English
+            
+            </button>
+
+</div>
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<div class="setting-label" data-ar="اتجاه الكتابة" data-en="Text Direction">اتجاه الكتابة</div>
+
+<div class="setting-desc" data-ar="يتغير تلقائياً مع اللغة" data-en="Changes automatically with language">يتغير تلقائياً مع اللغة</div>
+
+</div>
+
+<div style="display:flex;align-items:center;gap:10px;">
+
+<span id="dir-label" style="font-size:0.85rem;color:var(--color-gold);font-weight:600;">يمين إلى يسار ←</span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="settings-card" id="display-section">
+
+<div class="card-header">
+
+<div class="card-header-icon">✨</div>
+
+<div class="card-header-text">
+
+<h3 data-ar="خيارات العرض" data-en="Display Options">خيارات العرض</h3>
+
+<p data-ar="تحكم في مظهر الموقع وحركاته" data-en="Control site appearance and animations">تحكم في مظهر الموقع وحركاته</p>
+
+</div>
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<div class="setting-label" data-ar="الحركات والتأثيرات" data-en="Animations &amp; Effects">الحركات والتأثيرات</div>
+
+<div class="setting-desc" data-ar="تفعيل/إيقاف تأثيرات الحركة" data-en="Enable/disable motion effects">تفعيل/إيقاف تأثيرات الحركة</div>
+
+</div>
+
+<label class="toggle-switch">
+
+<input checked="" id="toggle-anim" onchange="toggleAnimations(this.checked)" type="checkbox"/>
+
+<div class="toggle-track"></div>
+
+</label>
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<div class="setting-label" data-ar="الشريط العلوي الإعلاني" data-en="Top Announcement Bar">الشريط العلوي الإعلاني</div>
+
+<div class="setting-desc" data-ar="إظهار أو إخفاء شريط العروض" data-en="Show or hide the promotions bar">إظهار أو إخفاء شريط العروض</div>
+
+</div>
+
+<label class="toggle-switch">
+
+<input checked="" id="toggle-topbar" onchange="toggleTopBar(this.checked)" type="checkbox"/>
+
+<div class="toggle-track"></div>
+
+</label>
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<div class="setting-label" data-ar="الوضع المدمج" data-en="Compact Mode">الوضع المدمج</div>
+
+<div class="setting-desc" data-ar="تقليل المسافات لعرض أكثر محتوى" data-en="Reduce spacing to show more content">تقليل المسافات لعرض أكثر محتوى</div>
+
+</div>
+
+<label class="toggle-switch">
+
+<input id="toggle-compact" onchange="toggleCompact(this.checked)" type="checkbox"/>
+
+<div class="toggle-track"></div>
+
+</label>
+
+</div>
+
+</div>
+
+<div class="settings-actions">
+
+<button class="btn-reset" data-ar="إعادة الإعدادات الافتراضية" data-en="Reset to Default" id="btn-reset-text" onclick="resetSettings()">إعادة الإعدادات الافتراضية</button>
+
+<button class="btn btn-gold" data-ar="💾 حفظ الإعدادات" data-en="💾 Save Settings" id="btn-save-text" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+<div class="footer-grid">
+
+<div>
+
+<div class="footer-brand-name">MOSIQATI</div>
+
+<p class="footer-brand-desc" data-ar="متجرك الموسيقي الأول في الأردن منذ عام 2014." data-en="Jordan's premier music store since 2014.">متجرك الموسيقي الأول في الأردن منذ عام 2014.</p>
+
+<div class="social-links">
+
+<div class="social-link">📘</div>
+
+<div class="social-link">📷</div>
+
+<div class="social-link">▶️</div>
+
+<div class="social-link">💬</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
+
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
+
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
+
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="الفئات" data-en="Categories">الفئات</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="قيثارات" data-en="Guitars" href="store.html">قيثارات</a></li>
+
+<li><a data-ar="بيانو" data-en="Piano" href="store.html">بيانو</a></li>
+
+<li><a data-ar="عود" data-en="Oud" href="store.html">عود</a></li>
+
+<li><a data-ar="معدات استوديو" data-en="Studio Gear" href="store.html">معدات استوديو</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</div>
+
+<ul class="footer-links">
+
+<li><a href="#">📍 <span data-ar="الشميساني، عمان" data-en="Shmeisani, Amman">الشميساني، عمان</span></a></li>
+
+<li><a href="#">📞 +962 79 000 0000</a></li>
+
+<li><a href="#">✉️ info@mosiqati.jo</a></li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+<p data-ar="© 2024 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2024 MOSIQATI - All Rights Reserved">© 2024 موسيقاتي - جميع الحقوق محفوظة</p>
+
+<div class="footer-bottom-links">
+
+<a data-ar="سياسة الخصوصية" data-en="Privacy Policy" href="#">سياسة الخصوصية</a>
+
+<a data-ar="شروط الاستخدام" data-en="Terms of Use" href="#">شروط الاستخدام</a>
+
+</div>
+
+</div>
+
+</footer>
+
+<div class="save-toast" id="save-toast">✅ تم حفظ الإعدادات بنجاح!</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="script.js"></script>
+<script>
+  // ===================================
+  // تطبيق الإعدادات المحفوظة عند التحميل
+  // ===================================
+  (function applyOnLoad() {
+    var s = getSaved();
+    applyFontSize(s.fontSize || 16);
+    applyAccent(s.accentColor || '#c9a84c', s.accentLight || '#e8c96a', s.accentDark || '#a07830');
+    applyBg(s.bgColor || '#0a0a0a', s.bgDark || '#111111', s.bgCard || '#1a1a1a');
+    applyLang(s.lang || 'ar');
+    if (s.compact) applyCompact(true);
+    if (s.noAnim)  applyNoAnim(true);
+    if (s.hideTopBar) applyHideTopBar(true);
+
+    // sync UI controls
+    
+    document.getElementById('font-slider').value = s.fontSize || 16;
+    document.getElementById('font-size-val').textContent = (s.fontSize || 16) + 'px';
+    document.getElementById('toggle-compact').checked  = !!s.compact;
+    document.getElementById('toggle-anim').checked     = !s.noAnim;
+    document.getElementById('toggle-topbar').checked   = !s.hideTopBar;
+  })();
+
+  // ===================================
+  // localStorage helpers
+  // ===================================
+  function getSaved() {
+    try { return JSON.parse(localStorage.getItem('mosiqati-settings') || '{}'); } catch(e) { return {}; }
+  }
+  function setSaved(obj) {
+    var cur = getSaved();
+    localStorage.setItem('mosiqati-settings', JSON.stringify(Object.assign(cur, obj)));
+  }
+
+  // ===================================
+  // حجم الخط
+  // ===================================
+  function applyFontSize(size) {
+    document.documentElement.style.fontSize = size + 'px';
+    var prev = document.getElementById('font-preview');
+    if (prev) prev.style.fontSize = size + 'px';
+  }
+
+  function changeFontSize(val) {
+    val = parseInt(val);
+    document.getElementById('font-size-val').textContent = val + 'px';
+    applyFontSize(val);
+  }
+
+  function setFontPreset(val) {
+    
+    document.getElementById('font-slider').value = val;
+    document.getElementById('font-size-val').textContent = val + 'px';
+    applyFontSize(val);
+  }
+
+  // ===================================
+  // لون التمييز
+  // ===================================
+  function applyAccent(color, light, dark) {
+    document.documentElement.style.setProperty('--color-gold',       color);
+    document.documentElement.style.setProperty('--color-gold-light', light);
+    document.documentElement.style.setProperty('--color-gold-dark',  dark);
+  }
+
+  function setAccent(btn, color, light, dark) {
+    document.querySelectorAll('.theme-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    applyAccent(color, light, dark);
+    setSaved({ accentColor: color, accentLight: light, accentDark: dark });
+  }
+
+  // ===================================
+  // الخلفية
+  // ===================================
+  function applyBg(bg, dark, card) {
+    document.documentElement.style.setProperty('--color-black', bg);
+    document.documentElement.style.setProperty('--color-dark',  dark);
+    document.documentElement.style.setProperty('--color-card',  card);
+    document.body.style.backgroundColor = bg;
+    var prev = document.getElementById('bg-preview-inner');
+    if (prev) prev.style.background = bg;
+  }
+
+  function setBg(btn, bg, dark, card) {
+    document.querySelectorAll('.bg-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    applyBg(bg, dark, card);
+    setSaved({ bgColor: bg, bgDark: dark, bgCard: card });
+  }
+
+  // ===================================
+  // اللغة
+  // ===================================
+  function applyLang(lang) {
+    var isAr = lang === 'ar';
+    document.documentElement.lang = lang;
+    document.documentElement.dir  = isAr ? 'rtl' : 'ltr';
+
+    // ترجمة جميع العناصر التي لها data-ar / data-en
+    document.querySelectorAll('[data-ar][data-en]').forEach(function(el) {
+      el.textContent = isAr ? el.dataset.ar : el.dataset.en;
+    });
+
+    // اتجاه الكتابة
+    var dirLabel = document.getElementById('dir-label');
+    if (dirLabel) dirLabel.textContent = isAr ? 'يمين إلى يسار ←' : '← Left to Right';
+
+    // الزر النشط
+    document.getElementById('lang-ar').classList.toggle('active', isAr);
+    document.getElementById('lang-en').classList.toggle('active', !isAr);
+  }
+
+  function setLang(lang) {
+    applyLang(lang);
+    setSaved({ lang: lang });
+  }
+
+  // ===================================
+  // خيارات العرض
+  // ===================================
+  function applyNoAnim(state) {
+    if (state) {
+      var st = document.createElement('style');
+      st.id = 'no-anim-style';
+      st.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; }';
+      if (!document.getElementById('no-anim-style')) document.head.appendChild(st);
+    } else {
+      var el = document.getElementById('no-anim-style');
+      if (el) el.remove();
+    }
+  }
+
+  function toggleAnimations(on) {
+    applyNoAnim(!on);
+    setSaved({ noAnim: !on });
+  }
+
+  function applyHideTopBar(hide) {
+    
+    var tb = document.querySelector('.top-bar');
+    if (tb) tb.style.display = hide ? 'none' : '';
+  }
+
+  function toggleTopBar(show) {
+    applyHideTopBar(!show);
+    setSaved({ hideTopBar: !show });
+  }
+
+  function applyCompact(on) {
+    if (on) {
+      var st = document.createElement('style');
+      st.id = 'compact-style';
+      
+      st.textContent = 'section { padding: 40px 5% !important; } .product-card, .gift-card, .offer-card { margin-bottom: 10px; }';
+      if (!document.getElementById('compact-style')) document.head.appendChild(st);
+    } else {
+      var el = document.getElementById('compact-style');
+      if (el) el.remove();
+    }
+  }
+
+  function toggleCompact(on) {
+    applyCompact(on);
+    setSaved({ compact: on });
+  }
+
+  // ===================================
+  // حفظ وإعادة ضبط
+  // ===================================
+  function saveSettings() {
+    var s = {
+      
+      fontSize:    parseInt(document.getElementById('font-slider').value),
+      lang:        document.getElementById('lang-ar').classList.contains('active') ? 'ar' : 'en',
+      compact:     document.getElementById('toggle-compact').checked,
+      noAnim:      !document.getElementById('toggle-anim').checked,
+      hideTopBar:  !document.getElementById('toggle-topbar').checked
+    };
+    setSaved(s);
+
+    
+    var toast = document.getElementById('save-toast');
+    var lang = s.lang;
+    
+    toast.textContent = lang === 'ar' ? '✅ تم حفظ الإعدادات بنجاح!' : '✅ Settings saved successfully!';
+    
+    toast.style.display = 'block';
+    
+    setTimeout(function() { toast.style.display = 'none'; }, 3000);
+  }
+
+  function resetSettings() {
+    localStorage.removeItem('mosiqati-settings');
+    location.reload();
+  }
+
+  // ===================================
+  // القائمة الجانبية
+  // ===================================
+  function setActive(el) {
+    document.querySelectorAll('.sidebar-item').forEach(function(i){ i.classList.remove('active'); });
+    el.classList.add('active');
+  }
+  
+  </script>
+
+<button class="cart-float" onclick="window.location='cart.html'">
+  🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
+</button>
+<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+<script>
+  document.getElementById('musicToggle').addEventListener('click', function(){
+    var bg = getBgAudio();
+    if (_bgPlaying) {
+      bg.pause();
+      _bgPlaying = false;
+      this.textContent = '🎵';
+      this.classList.remove('playing');
+    } else {
+      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
+      _bgPlaying = true;
+      _bgStarted = true;
+      this.textContent = '🔇';
+      this.classList.add('playing');
+    }
+  });
+</script>
+</body>
+
+</html>
