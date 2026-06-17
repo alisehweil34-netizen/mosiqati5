@@ -534,9 +534,9 @@ var SFX = {};
 function playSound(name) {
   try {
     var files = {
-      addToCart   : 'assets/sounds/add-to-cart.mp3',
-      orderSuccess: 'assets/sounds/order-success.mp3',
-      error       : 'assets/sounds/error.mp3'
+      addToCart   : 'add-to-cart.mp3',
+      orderSuccess: 'order-success.mp3',
+      error       : 'error.mp3'
     };
     if (!files[name]) return;
     if (!SFX[name]) SFX[name] = new Audio(files[name]);
@@ -553,7 +553,7 @@ var _bgPlaying = false;
 
 function getBgAudio() {
   if (!_bgAudio) {
-    _bgAudio = new Audio('assets/sounds/background.mp3');
+    _bgAudio = new Audio('background.mp3');
     _bgAudio.loop   = true;
     _bgAudio.volume = 0.18;
   }
