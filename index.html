@@ -200,146 +200,156 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="script.js"></script>
 <script>
-    function setFieldState(inputId, msgId, isOk, msg) {
-      const input = document.getElementById(inputId);
-      const msgEl = document.getElementById(msgId);
-      input.classList.toggle('error', !isOk);
-      input.classList.toggle('success', isOk);
-      msgEl.textContent = msg;
-      msgEl.className = 'field-msg show ' + (isOk ? 'ok' : 'err');
+
+  /* ── أدوات UI ── */
+  function showAlert(msg, isSuccess) {
+    var box = document.getElementById('alertBox');
+    box.textContent = msg;
+    box.className = 'alert-box show' + (isSuccess ? ' success-box' : '');
+  }
+  function hideAlert() {
+    document.getElementById('alertBox').className = 'alert-box';
+  }
+  function setFieldState(id, msgId, isOk, msg) {
+    var inp = document.getElementById(id);
+    var el  = document.getElementById(msgId);
+    inp.classList.toggle('error',   !isOk);
+    inp.classList.toggle('success',  isOk);
+    el.textContent = msg;
+    el.className = 'field-msg show ' + (isOk ? 'ok' : 'err');
+  }
+  function clearField(id, msgId) {
+    var inp = document.getElementById(id);
+    var el  = document.getElementById(msgId);
+    inp.classList.remove('error','success');
+    el.className = 'field-msg';
+    el.textContent = '';
+  }
+
+  /* ── التحقق من الإيميل (مع شرط النطاق) ── */
+  function validateLoginEmail() {
+    var val = document.getElementById('loginEmail').value.trim();
+    if (!val) { clearField('loginEmail','emailMsg'); return false; }
+
+    // تحقق من صيغة الإيميل العامة
+    var basicOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val);
+    if (!basicOk) {
+      setFieldState('loginEmail','emailMsg', false, 'صيغة البريد الإلكتروني غير صحيحة');
+      return false;
     }
 
-    function clearField(inputId, msgId) {
-      const input = document.getElementById(inputId);
-      const msgEl = document.getElementById(msgId);
-      input.classList.remove('error', 'success');
-      msgEl.className = 'field-msg';
-      msgEl.textContent = '';
+    // تحقق من النطاق (gmail, outlook, hotmail, yahoo, etc.)
+    var allowed = ['gmail.com','outlook.com','hotmail.com','yahoo.com','icloud.com','live.com','msn.com','protonmail.com','yandex.com','mail.com'];
+    var domain = val.split('@')[1].toLowerCase();
+    if (!allowed.includes(domain)) {
+      setFieldState('loginEmail','emailMsg', false, 'يجب أن يكون البريد من: Gmail أو Outlook أو Yahoo أو غيرها المعروفة');
+      return false;
     }
 
-    function validateLoginEmail() {
-      const val = document.getElementById('loginEmail').value.trim();
-      if (!val) { clearField('loginEmail','emailMsg'); return false; }
-      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-      setFieldState('loginEmail','emailMsg', ok, ok ? 'بريد إلكتروني صحيح ✓' : 'صيغة البريد الإلكتروني غير صحيحة');
-      return ok;
+    setFieldState('loginEmail','emailMsg', true, 'بريد إلكتروني صحيح ✓');
+    return true;
+  }
+
+  /* ── التحقق من كلمة المرور ── */
+  function validateLoginPass() {
+    var val = document.getElementById('loginPass').value;
+    if (!val) { clearField('loginPass','passMsg'); return false; }
+    var ok = val.length >= 6;
+    setFieldState('loginPass','passMsg', ok, ok ? 'كلمة المرور مقبولة ✓' : 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+    return ok;
+  }
+
+  /* ── تسجيل الدخول ── */
+  async function submitLogin() {
+    hideAlert();
+
+    var emailOk = validateLoginEmail();
+    var passOk  = validateLoginPass();
+
+    if (!emailOk || !passOk) {
+      showAlert('يرجى تصحيح الأخطاء الموجودة قبل المتابعة');
+      return;
     }
 
-    function validateLoginPass() {
-      const val = document.getElementById('loginPass').value;
-      if (!val) { clearField('loginPass','passMsg'); return false; }
-      const ok = val.length >= 6;
-      setFieldState('loginPass','passMsg', ok, ok ? 'كلمة المرور مقبولة ✓' : 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
-      return ok;
+    var emailVal = document.getElementById('loginEmail').value.trim();
+    var passVal  = document.getElementById('loginPass').value;
+
+    // التحقق من اتصال Firebase
+    if (typeof db === 'undefined' || !db) {
+      showAlert('تعذّر الاتصال بـ Firebase، أعد تحميل الصفحة');
+      return;
     }
 
-    function showAlert(msg, isSuccess) {
-      const box = document.getElementById('alertBox');
-      box.textContent = msg;
-      box.className = 'alert-box show' + (isSuccess ? ' success-box' : '');
-    }
+    var btn = document.querySelector('.btn-enter');
+    btn.disabled = true;
+    btn.textContent = 'جارٍ التحقق...';
 
-    function hideAlert() {
-      document.getElementById('alertBox').className = 'alert-box';
-    }
+    try {
+      // تشفير كلمة المرور SHA-256
+      var encoder    = new TextEncoder();
+      var hashBuf    = await crypto.subtle.digest('SHA-256', encoder.encode(passVal));
+      var hashArr    = Array.from(new Uint8Array(hashBuf));
+      var hashedPass = hashArr.map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
 
-    async function submitLogin() {
-      alert('زر الدخول يعمل ✓');
-      hideAlert();
-      const emailOk = validateLoginEmail();
-      const passOk  = validateLoginPass();
+      // البحث عن الإيميل في Firebase
+      var snapshot = await db.ref('users').orderByChild('email').equalTo(emailVal).once('value');
 
-      const emailVal = document.getElementById('loginEmail').value.trim();
-      const passVal  = document.getElementById('loginPass').value;
-
-      if (!emailVal && !passVal) {
-        showAlert('يرجى ملء جميع الحقول المطلوبة');
-        playSound('error');
-        return;
-      }
-      if (!emailOk || !passOk) {
-        showAlert('يرجى تصحيح الأخطاء الموجودة قبل المتابعة');
-        playSound('error');
-        return;
-      }
-
-      if (!db) {
-        showAlert('تعذّر الاتصال بـ Firebase، حاول مجدداً');
-        return;
-      }
-
-      const btn = document.querySelector('.btn-enter');
-      btn.disabled = true;
-      btn.textContent = 'جارٍ التحقق...';
-
-      try {
-        // تشفير كلمة المرور بنفس طريقة التسجيل (SHA-256)
-        const encoder    = new TextEncoder();
-        const hashBuf    = await crypto.subtle.digest('SHA-256', encoder.encode(passVal));
-        const hashArr    = Array.from(new Uint8Array(hashBuf));
-        const hashedPass = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
-
-        // البحث عن المستخدم بالإيميل
-        const snapshot = await db.ref('users').orderByChild('email').equalTo(emailVal).once('value');
-
-        if (!snapshot.exists()) {
-          showAlert('⚠️ البريد الإلكتروني غير مسجل');
-          playSound('error');
-          btn.disabled = false;
-          btn.textContent = 'دخول';
-          return;
-        }
-
-        // التحقق من كلمة المرور
-        let matched  = false;
-        let userData = null;
-        snapshot.forEach(child => {
-          if (child.val().password === hashedPass) {
-            matched  = true;
-            userData = child.val();
-          }
-        });
-
-        if (!matched) {
-          showAlert('⚠️ كلمة المرور غير صحيحة');
-          playSound('error');
-          btn.disabled = false;
-          btn.textContent = 'دخول';
-          return;
-        }
-
-        // حفظ بيانات الجلسة
-        localStorage.setItem('mosiqati-user', JSON.stringify({ name: userData.full_name, email: userData.email }));
-
-        showAlert('✅ تم تسجيل الدخول بنجاح', true);
-        setTimeout(() => { window.location.href = 'home.html'; }, 1200);
-
-      } catch (err) {
-        console.error(err);
-        showAlert('حدث خطأ، حاول مجدداً');
+      if (!snapshot.exists()) {
+        showAlert('⚠️ البريد الإلكتروني غير مسجل');
         btn.disabled = false;
         btn.textContent = 'دخول';
+        return;
       }
-    }
-  </script>
 
-<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
-<script>
-  document.getElementById('musicToggle').addEventListener('click', function(){
-    var bg = getBgAudio();
-    if (_bgPlaying) {
-      bg.pause();
-      _bgPlaying = false;
-      this.textContent = '🎵';
-      this.classList.remove('playing');
-    } else {
-      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
-      _bgPlaying = true;
-      _bgStarted = true;
-      this.textContent = '🔇';
-      this.classList.add('playing');
+      // مطابقة كلمة المرور
+      var matched  = false;
+      var userData = null;
+      snapshot.forEach(function(child) {
+        if (child.val().password === hashedPass) {
+          matched  = true;
+          userData = child.val();
+        }
+      });
+
+      if (!matched) {
+        showAlert('⚠️ كلمة المرور غير صحيحة');
+        btn.disabled = false;
+        btn.textContent = 'دخول';
+        return;
+      }
+
+      // حفظ الجلسة والانتقال
+      localStorage.setItem('mosiqati-user', JSON.stringify({ name: userData.full_name, email: userData.email }));
+      showAlert('✅ تم تسجيل الدخول بنجاح', true);
+      setTimeout(function(){ window.location.href = 'home.html'; }, 1200);
+
+    } catch (err) {
+      console.error('Login error:', err);
+      showAlert('حدث خطأ: ' + err.message);
+      btn.disabled = false;
+      btn.textContent = 'دخول';
+    }
+  }
+
+  /* ── زر الموسيقى ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggle = document.getElementById('musicToggle');
+    if (toggle) {
+      toggle.addEventListener('click', function() {
+        var bg = getBgAudio();
+        if (_bgPlaying) {
+          bg.pause(); _bgPlaying = false;
+          this.textContent = '🎵'; this.classList.remove('playing');
+        } else {
+          bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
+          _bgPlaying = true; _bgStarted = true;
+          this.textContent = '🔇'; this.classList.add('playing');
+        }
+      });
     }
   });
+
 </script>
+<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
 </body>
 </html>
