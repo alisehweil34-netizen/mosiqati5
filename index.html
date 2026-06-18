@@ -291,25 +291,38 @@
       var hashArr    = Array.from(new Uint8Array(hashBuf));
       var hashedPass = hashArr.map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
 
-      // البحث عن الإيميل في Firebase
-      var snapshot = await db.ref('users').orderByChild('email').equalTo(emailVal).once('value');
+      // قراءة كل المستخدمين والبحث يدوياً (يتجاوز مشكلة Firebase index)
+      var snapshot = await db.ref('users').once('value');
 
       if (!snapshot.exists()) {
-        showAlert('⚠️ البريد الإلكتروني غير مسجل');
+        showAlert('⚠️ لا يوجد مستخدمون مسجلون بعد');
         btn.disabled = false;
         btn.textContent = 'دخول';
         return;
       }
 
-      // مطابقة كلمة المرور
-      var matched  = false;
-      var userData = null;
+      // البحث عن الإيميل ومطابقة كلمة المرور
+      var foundEmail = false;
+      var matched    = false;
+      var userData   = null;
+
       snapshot.forEach(function(child) {
-        if (child.val().password === hashedPass) {
-          matched  = true;
-          userData = child.val();
+        var u = child.val();
+        if (u.email && u.email.toLowerCase() === emailVal.toLowerCase()) {
+          foundEmail = true;
+          if (u.password === hashedPass) {
+            matched  = true;
+            userData = u;
+          }
         }
       });
+
+      if (!foundEmail) {
+        showAlert('⚠️ البريد الإلكتروني غير مسجل');
+        btn.disabled = false;
+        btn.textContent = 'دخول';
+        return;
+      }
 
       if (!matched) {
         showAlert('⚠️ كلمة المرور غير صحيحة');
@@ -325,7 +338,7 @@
 
     } catch (err) {
       console.error('Login error:', err);
-      showAlert('حدث خطأ: ' + err.message);
+      showAlert('حدث خطأ في الاتصال بـ Firebase: ' + err.message);
       btn.disabled = false;
       btn.textContent = 'دخول';
     }
