@@ -243,7 +243,8 @@
       document.getElementById('alertBox').className = 'alert-box';
     }
 
-    function submitLogin() {
+    async function submitLogin() {
+      alert('زر الدخول يعمل ✓');
       hideAlert();
       const emailOk = validateLoginEmail();
       const passOk  = validateLoginPass();
@@ -262,8 +263,63 @@
         return;
       }
 
-      // كل شيء صحيح → انتقل للصفحة الرئيسية
-      window.location.href = 'home.html';
+      if (!db) {
+        showAlert('تعذّر الاتصال بـ Firebase، حاول مجدداً');
+        return;
+      }
+
+      const btn = document.querySelector('.btn-enter');
+      btn.disabled = true;
+      btn.textContent = 'جارٍ التحقق...';
+
+      try {
+        // تشفير كلمة المرور بنفس طريقة التسجيل (SHA-256)
+        const encoder    = new TextEncoder();
+        const hashBuf    = await crypto.subtle.digest('SHA-256', encoder.encode(passVal));
+        const hashArr    = Array.from(new Uint8Array(hashBuf));
+        const hashedPass = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        // البحث عن المستخدم بالإيميل
+        const snapshot = await db.ref('users').orderByChild('email').equalTo(emailVal).once('value');
+
+        if (!snapshot.exists()) {
+          showAlert('⚠️ البريد الإلكتروني غير مسجل');
+          playSound('error');
+          btn.disabled = false;
+          btn.textContent = 'دخول';
+          return;
+        }
+
+        // التحقق من كلمة المرور
+        let matched  = false;
+        let userData = null;
+        snapshot.forEach(child => {
+          if (child.val().password === hashedPass) {
+            matched  = true;
+            userData = child.val();
+          }
+        });
+
+        if (!matched) {
+          showAlert('⚠️ كلمة المرور غير صحيحة');
+          playSound('error');
+          btn.disabled = false;
+          btn.textContent = 'دخول';
+          return;
+        }
+
+        // حفظ بيانات الجلسة
+        localStorage.setItem('mosiqati-user', JSON.stringify({ name: userData.full_name, email: userData.email }));
+
+        showAlert('✅ تم تسجيل الدخول بنجاح', true);
+        setTimeout(() => { window.location.href = 'home.html'; }, 1200);
+
+      } catch (err) {
+        console.error(err);
+        showAlert('حدث خطأ، حاول مجدداً');
+        btn.disabled = false;
+        btn.textContent = 'دخول';
+      }
     }
   </script>
 
