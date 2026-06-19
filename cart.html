@@ -856,7 +856,19 @@
       setTimeout(() => { if (el.textContent === msg) el.textContent = ''; }, 4000);
     }
 
+    function getCurrentUser() {
+      try {
+        return JSON.parse(localStorage.getItem('mosiqati-user') || 'null');
+      } catch (e) { return null; }
+    }
+
     function openCheckout() {
+      const user = getCurrentUser();
+      if (!user || !user.id) {
+        alert('يرجى تسجيل الدخول أولاً لإتمام الطلب');
+        window.location.href = 'index.html';
+        return;
+      }
       document.getElementById('checkoutModal').classList.add('active');
     }
 
@@ -873,14 +885,19 @@ async function saveOrderToServer(orderNum, cart, totalAmount, subtotal, discount
       console.warn('Firebase غير متاح، لم يتم حفظ الطلب');
       return;
     }
+    const user = getCurrentUser();
     await db.ref('orders').push({
-      order_number : orderNum,
-      products     : cart,
-      subtotal     : subtotal,
-      discount     : discountAmount,
-      total        : Number(totalAmount),
-      promo_code   : promoCode || null,
-      createdAt    : new Date().toISOString()
+      order_number   : orderNum,
+      user_id        : user ? user.id : null,
+      customer_name  : user ? user.name : null,
+      customer_email : user ? user.email : null,
+      customer_phone : user ? user.phone : null,
+      products       : cart,
+      subtotal       : subtotal,
+      discount       : discountAmount,
+      total          : Number(totalAmount),
+      promo_code     : promoCode || null,
+      createdAt      : new Date().toISOString()
     });
   } catch(e){ console.error('فشل حفظ الطلب في Firebase:', e); }
 }
