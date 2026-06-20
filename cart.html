@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html dir="ltr" lang="en">
+<html dir="rtl" lang="ar">
 
 <head>
 
@@ -9,7 +9,7 @@
 
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 
-<title>Shopping Cart – Mosiqati</title>
+<title>سلة التسوق – موسيقاتي</title>
 
 <link href="style.css" rel="stylesheet"/>
 
@@ -167,7 +167,7 @@
       color: var(--color-gray);
     }
 
-    /* --- التحكم بQuantity --- */
+    /* --- التحكم بالكمية --- */
     .qty-control {
       display: flex;
       align-items: center;
@@ -215,7 +215,7 @@
 
     .remove-btn:hover { color: #e74c3c; }
 
-    /* --- Order Summary --- */
+    /* --- ملخص الطلب --- */
     
     .cart-summary {
       position: sticky;
@@ -437,27 +437,30 @@
 
 <body>
 
-<div class="top-bar" data-ar="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">🎵 Free shipping on orders over 50 JOD | Exclusive deals this week</div>
+<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">
+    🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع
+  
+  </div>
 
 <nav class="navbar">
 
-<a class="navbar-logo" href="home.html"><img alt="Mosiqati" class="navbar-logo-img" src="logo.png"/></a>
+<a class="navbar-logo" href="home.html"><img alt="موسيقاتي" class="navbar-logo-img" src="logo.png"/></a>
 
 <ul class="navbar-links" id="nav-links">
 
-<li><a data-ar="الرئيسية" data-en="Home" href="home.html">Home</a></li>
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
 
-<li><a data-ar="المتجر" data-en="Store" href="store.html">Store</a></li>
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
 
-<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">Gifts</a></li>
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
 
-<li><a data-ar="العروض" data-en="Offers" href="offers.html">Offers</a></li>
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
 
-<li><a data-ar="من نحن" data-en="About Us" href="about.html">About Us</a></li>
+<li><a data-ar="من نحن" data-en="About Us" href="about.html">من نحن</a></li>
 
-<li><a data-ar="تواصل معنا" data-en="Contact Us" href="Contact.html">Contact Us</a></li>
+<li><a data-ar="تواصل معنا" data-en="Contact Us" href="Contact.html">تواصل معنا</a></li>
 
-<li><a data-ar="الاعدادات" data-en="Settings" href="settings.html">Settings</a></li>
+<li><a data-ar="الاعدادات" data-en="Settings" href="settings.html">الاعدادات </a></li>
 
 </ul>
 
@@ -475,7 +478,7 @@
 
 <div class="breadcrumb">
 
-<a data-ar="الرئيسية" data-en="Home" href="home.html">Home</a> ← <a data-ar="المتجر" data-en="Store" href="store.html">Store</a> ← Cart
+<a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a> ← <a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a> ← سلة التسوق
     
     </div>
 
@@ -494,9 +497,9 @@
 
 <div class="cart-toolbar">
 
-<button class="clear-btn" data-ar="🗑 إفراغ السلة" data-en="🗑 Clear Cart" onclick="clearCart()">🗑 Clear Cart</button>
+<button class="clear-btn" data-ar="🗑 إفراغ السلة" data-en="🗑 إفراغ Cart" onclick="clearCart()">🗑 إفراغ السلة</button>
 
-<a class="continue-link" data-ar="← متابعة التسوق" data-en="← Continue Shopping" href="store.html">← Continue Shopping</a>
+<a class="continue-link" data-ar="← متابعة التسوق" data-en="← Continue Shopping" href="store.html">← متابعة التسوق</a>
 
 </div>
 
@@ -506,19 +509,19 @@
 
 <div class="cart-summary">
 
-<h3 data-ar="📋 Order Summary" data-en="📋 Order Summary">📋 Order Summary</h3>
+<h3 data-ar="📋 ملخص الطلب" data-en="📋 Order Summary">📋 ملخص الطلب</h3>
 
 <div class="summary-row">
 
-<span class="label" data-ar="Subtotal" data-en="Subtotal">Subtotal</span>
+<span class="label" data-ar="المجموع الجزئي" data-en="Subtotal">المجموع الجزئي</span>
 
-<span id="subtotalVal">0 JOD</span>
+<span id="subtotalVal">0 د.أ</span>
 
 </div>
 
 <div class="summary-row">
 
-<span class="label" data-ar="Shipping" data-en="Shipping">Shipping</span>
+<span class="label" data-ar="الشحن" data-en="Shipping">الشحن</span>
 
 <span id="shippingVal">—</span>
 
@@ -526,41 +529,44 @@
 
 <div class="summary-row">
 
-<span class="label" data-ar="ضريبة المبيعات (16%)" data-en="Sales Tax (16%)">Sales Tax (16%)</span>
+<span class="label" data-ar="ضريبة المبيعات (16%)" data-en="Sales Tax (16%)">ضريبة المبيعات (16%)</span>
 
-<span id="taxVal">0 JOD</span>
+<span id="taxVal">0 د.أ</span>
 
 </div>
 
 <div class="summary-row" id="discountRow" style="display:none; color: #2ecc71;">
 
-<span class="label" style="color: #2ecc71;" data-ar="🎉 خصم الكوبون" data-en="🎉 Coupon Discount">🎉 Coupon Discount</span>
+<span class="label" style="color: #2ecc71;" data-ar="🎉 خصم الكوبون" data-en="🎉 Coupon Discount">🎉 خصم الكوبون</span>
 
-<span id="discountVal">0 JOD</span>
+<span id="discountVal">0 د.أ</span>
 
 </div>
 
 <div class="summary-row total">
 
-<span class="label" data-ar="Total" data-en="Total">Total</span>
+<span class="label" data-ar="الإجمالي" data-en="Total">الإجمالي</span>
 
-<span id="totalVal">0 JOD</span>
+<span id="totalVal">0 د.أ</span>
 
 </div>
 
 <div class="promo-row">
 
-<input class="promo-input" dir="ltr" id="promoInput" placeholder="Discount code..."/>
+<input class="promo-input" dir="ltr" id="promoInput" placeholder="كود الخصم..."/>
 
-<button class="promo-btn" data-ar="Apply" data-en="Apply" onclick="applyPromo()" data-ar="Apply" data-en="Apply">Apply</button>
+<button class="promo-btn" data-ar="تطبيق" data-en="Apply" onclick="applyPromo()" data-ar="تطبيق" data-en="Apply">تطبيق</button>
 
 </div>
 
 <div class="promo-msg" id="promoMsg"></div>
 
-<button class="btn btn-gold" data-ar="إتمام الشراء ←" data-en="Checkout ←" id="checkoutBtn" onclick="openCheckout()" style="width: 100%;">Checkout ←</button>
+<button class="btn btn-gold" data-ar="إتمام الشراء ←" data-en="Checkout ←" id="checkoutBtn" onclick="openCheckout()" style="width: 100%;">
+        إتمام الشراء ←
+      
+      </button>
 
-<p class="secure-note" data-ar="🔒 الدفع آمن ومشفر بالكامل" data-en="🔒 Payment is fully secure and encrypted">🔒 Payment is fully secure and encrypted</p>
+<p class="secure-note" data-ar="🔒 الدفع آمن ومشفر بالكامل" data-en="🔒 Payment is fully secure and encrypted">🔒 الدفع آمن ومشفر بالكامل</p>
 
 <div class="payment-icons">
 
@@ -586,17 +592,17 @@
 
 <div class="footer-brand-name">MOSIQATI</div>
 
-<p class="footer-brand-desc" data-ar="متجرك الموسيقي الأول في الأردن منذ عام 2014." data-en="Jordan's #1 music store since 2014.">Jordan's #1 music store since 2014.</p>
+<p class="footer-brand-desc" data-ar="متجرك الموسيقي الأول في الأردن منذ عام 2014." data-en="Jordan's #1 music store since 2014.">متجرك الموسيقي الأول في الأردن منذ عام 2014.</p>
 
 <div class="social-links">
 
-<div class="social-link" title="Facebook">📘</div>
+<div class="social-link" title="فيسبوك">📘</div>
 
-<div class="social-link" title="Instagram">📷</div>
+<div class="social-link" title="إنستغرام">📷</div>
 
-<div class="social-link" title="YouTube">▶️</div>
+<div class="social-link" title="يوتيوب">▶️</div>
 
-<div class="social-link" title="WhatsApp">💬</div>
+<div class="social-link" title="واتساب">💬</div>
 
 </div>
 
@@ -604,17 +610,17 @@
 
 <div>
 
-<div class="footer-heading" data-ar="روابط سريعة" data-en="Quick Links">Quick Links</div>
+<div class="footer-heading" data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</div>
 
 <ul class="footer-links">
 
-<li><a data-ar="الرئيسية" data-en="Home" href="home.html">Home</a></li>
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
 
-<li><a data-ar="المتجر" data-en="Store" href="store.html">Store</a></li>
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
 
-<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">Gifts</a></li>
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
 
-<li><a data-ar="العروض" data-en="Offers" href="offers.html">Offers</a></li>
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
 
 </ul>
 
@@ -622,17 +628,17 @@
 
 <div>
 
-<div class="footer-heading" data-ar="الفئات" data-en="Categories">Categories</div>
+<div class="footer-heading" data-ar="الفئات" data-en="Categories">الفئات</div>
 
 <ul class="footer-links">
 
-<li><a data-ar="قيثارات" data-en="Guitars" href="store.html">Guitars</a></li>
+<li><a data-ar="قيثارات" data-en="Guitars" href="store.html">قيثارات</a></li>
 
-<li><a data-ar="بيانو" data-en="Piano" href="store.html">Piano</a></li>
+<li><a data-ar="بيانو" data-en="Piano" href="store.html">بيانو</a></li>
 
-<li><a data-ar="عود" data-en="Oud" href="store.html">Oud</a></li>
+<li><a data-ar="عود" data-en="Oud" href="store.html">عود</a></li>
 
-<li><a data-ar="معدات استوديو" data-en="Studio Gear" href="store.html">Studio Gear</a></li>
+<li><a data-ar="معدات استوديو" data-en="Studio Gear" href="store.html">معدات استوديو</a></li>
 
 </ul>
 
@@ -640,11 +646,11 @@
 
 <div>
 
-<div class="footer-heading" data-ar="تواصل معنا" data-en="Contact Us">Contact Us</div>
+<div class="footer-heading" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</div>
 
 <ul class="footer-links">
 
-<li><a href="#">📍 📍 Shmeisani, Amman</a></li>
+<li><a href="#">📍 الشميساني، عمان</a></li>
 
 <li><a href="#">📞 +962 79 000 0000</a></li>
 
@@ -658,13 +664,13 @@
 
 <div class="footer-bottom">
 
-<p data-ar="© 2026 MOSIQATI - All Rights Reserved" data-en="© 2026 MOSIQATI - All Rights Reserved">© 2026 MOSIQATI - All Rights Reserved</p>
+<p data-ar="© 2024 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2024 MOSIQATI - All Rights Reserved">© 2024 موسيقاتي - جميع الحقوق محفوظة</p>
 
 <div class="footer-bottom-links">
 
-<a data-ar="سياسة الخصوصية" data-en="Privacy Policy" href="#">Privacy Policy</a>
+<a data-ar="سياسة الخصوصية" data-en="Privacy Policy" href="#">سياسة الخصوصية</a>
 
-<a data-ar="شروط الاستخدام" data-en="Terms of Use" href="#">Terms of Use</a>
+<a data-ar="شروط الاستخدام" data-en="Terms of Use" href="#">شروط الاستخدام</a>
 
 </div>
 
@@ -678,28 +684,21 @@
 
 <span class="icon">🎵</span>
 
-<h2 data-ar="تأكيد الطلب" data-en="Confirm Order">Confirm Order</h2>
+<h2 data-ar="تأكيد الطلب" data-en="Confirm Order">تأكيد الطلب</h2>
 
-<p data-ar="هل أنت متأكد من Checkout؟ سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل." data-en="Are you sure you want to complete the order? We will contact you on your phone number to confirm the details.">هل أنت متأكد من Checkout؟<br/>سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل.</p>
+<p data-ar="هل أنت متأكد من إتمام الطلب؟ سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل." data-en="Are you sure you want to complete the order? We will contact you on your phone number to confirm the details.">هل أنت متأكد من إتمام الطلب؟<br/>سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل.</p>
 
 <div class="modal-actions">
 
-<button class="modal-close" onclick="closeModal()" data-ar="إلغاء" data-en="Cancel">Cancel</button>
+<button class="modal-close" onclick="closeModal()" data-ar="إلغاء" data-en="Cancel">إلغاء</button>
 
-<button class="modal-confirm" onclick="confirmOrder()" data-ar="تأكيد الطلب ✓" data-en="Confirm Order ✓">Confirm Order ✓</button>
-
-</div>
+<button class="modal-confirm" onclick="confirmOrder()" data-ar="تأكيد الطلب ✓" data-en="Confirm Order ✓">تأكيد الطلب ✓</button>
 
 </div>
 
 </div>
-<!-- mosiqati-lang-force --><script>
-try {
-  var s = JSON.parse(localStorage.getItem('mosiqati-settings') || '{}');
-  s.lang = 'en';
-  localStorage.setItem('mosiqati-settings', JSON.stringify(s));
-} catch(e) {}
-</script>
+
+</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="script.js"></script>
@@ -733,11 +732,11 @@ try {
             
             <span class="icon">🛒</span>
             
-            <h3 data-ar="Your cart is empty!" data-en="Your Cart is Empty!">Your Cart is Empty!</h3>
+            <h3 data-ar="سلتك فارغة!" data-en="Your Cart is Empty!">سلتك فارغة!</h3>
             
-            <p data-ar="Add some musical instruments الرائعة إلى سلتك" data-en="Add some amazing musical instruments to your cart">Add some amazing musical instruments to your cart</p>
+            <p data-ar="أضف بعض الآلات الموسيقية الرائعة إلى سلتك" data-en="Add some amazing musical instruments to your cart">أضف بعض الآلات الموسيقية الرائعة إلى سلتك</p>
             
-            <a href="store.html" class="btn btn-gold" data-ar="🎵 تسوق الآن" data-en="🎵 Shop Now">🎵 Shop Now</a>
+            <a href="store.html" class="btn btn-gold" data-ar="🎵 تسوق الآن" data-en="🎵 Shop Now">🎵 تسوق الآن</a>
           </div>`;
         document.getElementById('checkoutBtn').disabled = true;
         document.getElementById('checkoutBtn').style.opacity = '0.4';
@@ -769,7 +768,7 @@ try {
               
               <div class="item-price">${item.price} ${getLang()==='en'?'JOD':'د.أ'}</div>
               
-              <div class="item-price-total">${getLang()==='en'?'Total':'Total'}: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'د.أ'}</div>
+              <div class="item-price-total">${getLang()==='en'?'Total':'الإجمالي'}: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'د.أ'}</div>
             
             </div>
             
@@ -783,7 +782,7 @@ try {
             
             </div>
             
-            <button class="remove-btn" onclick="removeItem(${item.id})">${getLang()==='en'?'✕ Remove':'✕ Remove'}</button>
+            <button class="remove-btn" onclick="removeItem(${item.id})">${getLang()==='en'?'✕ Remove':'✕ حذف'}</button>
           
           </div>
         
@@ -838,12 +837,12 @@ try {
     }
 
     function applyPromo() {
-      if (promoApplied) { showPromoMsg(getLang()==='en'?'A coupon has already been applied':'تم Apply كوبون بالفعل', 'error'); return; }
+      if (promoApplied) { showPromoMsg(getLang()==='en'?'A coupon has already been applied':'تم تطبيق كوبون بالفعل', 'error'); return; }
       const code = document.getElementById('promoInput').value.trim().toUpperCase();
       if (PROMOS[code]) {
         discount = PROMOS[code];
         promoApplied = true;
-        showPromoMsg(`🎉 تم Apply خصم ${discount}% بنجاح!`, 'success');
+        showPromoMsg(`🎉 تم تطبيق خصم ${discount}% بنجاح!`, 'success');
         updateSummary(getCart(), discount);
       } else {
         showPromoMsg('❌ الكوبون غير صحيح', 'error');
@@ -866,7 +865,7 @@ try {
     function openCheckout() {
       const user = getCurrentUser();
       if (!user || !user.id) {
-        alert(getLang()==='en'?'Please log in first to complete the order':'يرجى Login أولاً لCheckout');
+        alert(getLang()==='en'?'Please log in first to complete the order':'يرجى تسجيل الدخول أولاً لإتمام الطلب');
         window.location.href = 'index.html';
         return;
       }
@@ -878,7 +877,7 @@ try {
     }
 
     // ===== حفظ الطلبات عبر MySQL/PHP =====
-    // يتم الحفظ الAutomatic فوراً عند تأكيد كل طلب
+    // يتم الحفظ التلقائي فوراً عند تأكيد كل طلب
 
 async function saveOrderToServer(orderNum, cart, totalAmount, subtotal, discountAmount, promoCode) {
   try {
@@ -920,21 +919,21 @@ function confirmOrder() {
         
         <span class="icon">🎉</span>
         
-        <h2 style="color: var(--color-gold)" data-ar="تم تأكيد طلبك!" data-en="Your order is confirmed!">Your order is confirmed!</h2>
+        <h2 style="color: var(--color-gold)" data-ar="تم تأكيد طلبك!" data-en="Your order is confirmed!">تم تأكيد طلبك!</h2>
         
         <div class="order-num">${orderNum}</div>
         
-        <p><span data-ar="شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل." data-en="Thank you! We will contact you soon to confirm delivery details.">Thank you! We will contact you soon to confirm delivery details.</span><br>
+        <p><span data-ar="شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل." data-en="Thank you! We will contact you soon to confirm delivery details.">شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل.</span><br>
            
-           <span style="color:var(--color-gold);font-size:0.85rem;" data-ar="✅ تم حفظ الطلب في قاعدة البيانات" data-en="✅ Order saved to database">✅ Order saved to database</span>
+           <span style="color:var(--color-gold);font-size:0.85rem;" data-ar="✅ تم حفظ الطلب في قاعدة البيانات" data-en="✅ Order saved to database">✅ تم حفظ الطلب في قاعدة البيانات</span>
         
         </p>
         
         <div class="modal-actions">
           
-          <button class="modal-close" onclick="window.location='home.html'" data-ar="الرئيسية" data-en="Home">Home</button>
+          <button class="modal-close" onclick="window.location='home.html'" data-ar="الرئيسية" data-en="Home">الرئيسية</button>
           
-          <button class="modal-confirm" onclick="closeModal(); saveCart([]); renderCart();" data-ar="عرض السلة" data-en="View Cart">View Cart</button>
+          <button class="modal-confirm" onclick="closeModal(); saveCart([]); renderCart();" data-ar="عرض السلة" data-en="View Cart">عرض السلة</button>
         </div>`;
       saveCart([]);
     }
@@ -950,7 +949,7 @@ function confirmOrder() {
 <button class="cart-float" onclick="window.location='cart.html'" style="display:none!important">
   🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
 </button>
-<button class="music-toggle" id="musicToggle" title="Music On/Off">🎵</button>
+<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
 <script>
   document.getElementById('musicToggle').addEventListener('click', function(){
     var bg = getBgAudio();
