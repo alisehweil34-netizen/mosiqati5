@@ -290,7 +290,7 @@ try {
 function copyDiscountCode() {
   var code = 'MOSIQATI10';
   var btn = document.getElementById('copy-code-btn');
-  var lang = getLang ? getLang() : (JSON.parse(localStorage.getItem('mosiqati-settings')||'{}').lang || 'ar');
+  var lang = getLang ? getLang() : (JSON.parse(localStorage.getItem('mosiqati-settings')||'{}').lang || 'en');
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(code).then(function() {
       btn.innerHTML = '✅ ' + (lang === 'en' ? 'Code Copied!' : 'تم النسخ!');
