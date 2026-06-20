@@ -450,80 +450,107 @@ function updateCartCount() {
 function applyAllSettings() {
   
   var s = {};
-  
   try { s = JSON.parse(localStorage.getItem('mosiqati-settings') || '{}'); } catch(e) {}
 
-  
-  
   var lang = s.lang || 'ar';
-  
   var isAr = lang === 'ar';
 
   document.documentElement.lang = lang;
   document.documentElement.dir  = isAr ? 'rtl' : 'ltr';
 
-  
-  
-  document.querySelectorAll('[data-ar][data-en]').forEach(function (el) {
-    
-    el.textContent = isAr ? el.getAttribute('data-ar') : el.getAttribute('data-en');
-  
+  // ترجمة جميع العناصر التي عندها data-ar وdata-en
+  document.querySelectorAll('[data-ar][data-en]').forEach(function(el) {
+    // نحافظ على الـ HTML الداخلي إذا كان فيه عناصر أبناء
+    var hasChildElements = el.children.length > 0;
+    if (!hasChildElements) {
+      el.textContent = isAr ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+    }
   });
 
-  
-  
+  // ترجمة placeholder
+  document.querySelectorAll('[data-ar-placeholder][data-en-placeholder]').forEach(function(el) {
+    el.placeholder = isAr ? el.getAttribute('data-ar-placeholder') : el.getAttribute('data-en-placeholder');
+  });
+
+  // ترجمة العناصر الثابتة بدون data attributes
+  var fixedTranslations = [
+    { selector: '.product-price span',       ar: 'دينار أردني',    en: 'JOD'          },
+    { selector: '.price-currency',           ar: 'دينار أردني',    en: 'JOD'          },
+    { selector: '.logo-tagline',             ar: 'متجر الآلات الموسيقية', en: 'Music Instruments Store' },
+    { selector: '.hero-subtitle',            ar: null,              en: null           },
+    { selector: '.cart-empty-title',         ar: 'سلتك فارغة!',   en: 'Your Cart is Empty!' },
+    { selector: '.cart-empty-sub',           ar: 'أضف بعض الآلات الموسيقية', en: 'Add some music instruments' },
+    { selector: '.order-summary-title',      ar: 'ملخص الطلب',    en: 'Order Summary' },
+    { selector: '.subtotal-label',           ar: 'المجموع الجزئي', en: 'Subtotal'     },
+    { selector: '.discount-label',           ar: 'الخصم',          en: 'Discount'     },
+    { selector: '.shipping-label',           ar: 'الشحن',          en: 'Shipping'     },
+    { selector: '.total-label',              ar: 'الإجمالي',       en: 'Total'        },
+    { selector: '.free-text',               ar: 'مجاني',           en: 'Free'         },
+    { selector: '.btn-checkout',            ar: 'إتمام الطلب',     en: 'Checkout'     },
+    { selector: '.cart-float',             ar: '🛒',              en: '🛒'           },
+  ];
+
+  fixedTranslations.forEach(function(t) {
+    if (!t.ar || !t.en) return;
+    document.querySelectorAll(t.selector).forEach(function(el) {
+      if (el.children.length === 0) {
+        el.textContent = isAr ? t.ar : t.en;
+      }
+    });
+  });
+
+  // تغيير عنوان الصفحة
+  var titles = {
+    'ar': {
+      'home.html'    : 'موسيقاتي - الرئيسية',
+      'store.html'   : 'موسيقاتي - المتجر',
+      'gifts.html'   : 'موسيقاتي - الهدايا',
+      'offers.html'  : 'موسيقاتي - العروض',
+      'about.html'   : 'موسيقاتي - من نحن',
+      'Contact.html' : 'موسيقاتي - تواصل معنا',
+      'settings.html': 'موسيقاتي - الإعدادات',
+      'cart.html'    : 'موسيقاتي - سلة التسوق',
+      'index.html'   : 'موسيقاتي - تسجيل الدخول',
+      'register.html': 'موسيقاتي - إنشاء حساب',
+    },
+    'en': {
+      'home.html'    : 'MOSIQATI - Home',
+      'store.html'   : 'MOSIQATI - Store',
+      'gifts.html'   : 'MOSIQATI - Gifts',
+      'offers.html'  : 'MOSIQATI - Offers',
+      'about.html'   : 'MOSIQATI - About Us',
+      'Contact.html' : 'MOSIQATI - Contact Us',
+      'settings.html': 'MOSIQATI - Settings',
+      'cart.html'    : 'MOSIQATI - Shopping Cart',
+      'index.html'   : 'MOSIQATI - Login',
+      'register.html': 'MOSIQATI - Register',
+    }
+  };
+  var page = window.location.pathname.split('/').pop() || 'home.html';
+  var titleMap = titles[lang] || titles['ar'];
+  if (titleMap[page]) document.title = titleMap[page];
+
+  // تغيير اتجاه الخط للعناصر
   if (!isAr) {
-    document.title = document.title
-      
-      .replace('موسيقاتي', 'MOSIQATI')
-      
-      .replace('متجر الآلات الموسيقية', 'Music Instruments Store')
-      
-      .replace('الرئيسية', 'Home')
-      
-      .replace('المتجر', 'Store')
-      
-      .replace('الهدايا', 'Gifts')
-      
-      .replace('العروض', 'Offers')
-      
-      .replace('من نحن', 'About Us')
-      
-      .replace('تواصل معنا', 'Contact Us')
-      
-      .replace('الإعدادات', 'Settings')
-      
-      .replace('سلة التسوق', 'Shopping Cart');
-  
+    document.body.style.fontFamily = "'Segoe UI', Arial, sans-serif";
+  } else {
+    document.body.style.fontFamily = "";
   }
 
-  
-  
+  // الإعدادات الأخرى
   var compactStyle = document.getElementById('compact-style');
-  
   if (s.compact) {
-    
     if (!compactStyle) {
-      
       var st = document.createElement('style');
       st.id = 'compact-style';
-      
       st.textContent = 'section { padding: 40px 5% !important; } .products-grid, .gifts-grid, .offers-grid, .values-grid { gap: 15px !important; }';
-      
       document.head.appendChild(st);
-    
     }
-  
   } else {
-    
     if (compactStyle) compactStyle.remove();
-  
   }
 
-  
-  
   var topBar = document.querySelector('.top-bar');
-  
   if (topBar) topBar.style.display = s.hideTopBar ? 'none' : '';
 
 }

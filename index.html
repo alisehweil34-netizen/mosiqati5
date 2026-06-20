@@ -160,40 +160,40 @@
         <img src="logo.png" alt="موسيقاتي">
       </div>
       <div class="logo-name">موسيقا<span>تي</span></div>
-      <div class="logo-tagline">متجر الآلات الموسيقية</div>
+      <div class="logo-tagline" data-ar="متجر الآلات الموسيقية" data-en="Music Instruments Store">متجر الآلات الموسيقية</div>
     </div>
 
     <div class="gold-sep"><span></span><i></i><span></span></div>
 
     <div class="login-box">
       <div class="login-heading">
-        <h1>تسجيل الدخول</h1>
-        <p>أدخل بياناتك للمتابعة</p>
+        <h1 data-ar="تسجيل الدخول" data-en="Sign In">تسجيل الدخول</h1>
+        <p data-ar="أدخل بياناتك للمتابعة" data-en="Enter your credentials to continue">أدخل بياناتك للمتابعة</p>
       </div>
 
       <div class="alert-box" id="alertBox"></div>
 
       <div class="field">
-        <label>البريد الإلكتروني</label>
+        <label data-ar="البريد الإلكتروني" data-en="Email Address">البريد الإلكتروني</label>
         <input type="email" id="loginEmail" placeholder="example@email.com" oninput="validateLoginEmail()">
         <div class="field-msg" id="emailMsg"></div>
       </div>
 
       <div class="field">
-        <label>كلمة المرور</label>
+        <label data-ar="كلمة المرور" data-en="Password">كلمة المرور</label>
         <input type="password" id="loginPass" placeholder="••••••••" oninput="validateLoginPass()">
         <div class="field-msg" id="passMsg"></div>
-        <div class="forgot"><a href="#">نسيت كلمة المرور؟</a></div>
+        <div class="forgot"><a href="#" data-ar="نسيت كلمة المرور؟" data-en="Forgot password?">نسيت كلمة المرور؟</a></div>
       </div>
 
-      <button class="btn-enter" onclick="submitLogin()">دخول</button>
+      <button class="btn-enter" onclick="submitLogin()" data-ar="دخول" data-en="Sign In">دخول</button>
 
       <div class="form-foot">
-        ليس لديك حساب؟ <a href="register.html">سجّل الآن</a>
+        <span data-ar="ليس لديك حساب؟" data-en="Don't have an account?">ليس لديك حساب؟</span> <a href="register.html" data-ar="سجّل الآن" data-en="Register Now">سجّل الآن</a>
       </div>
     </div>
 
-    <div class="copy">© 2025 موسيقاتي — جميع الحقوق محفوظة</div>
+    <div class="copy"><span data-ar="© 2025 موسيقاتي — جميع الحقوق محفوظة" data-en="© 2025 MOSIQATI — All Rights Reserved">© 2025 موسيقاتي — جميع الحقوق محفوظة</span></div>
 
   </div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -221,7 +221,7 @@
       const val = document.getElementById('loginEmail').value.trim();
       if (!val) { clearField('loginEmail','emailMsg'); return false; }
       const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-      setFieldState('loginEmail','emailMsg', ok, ok ? 'بريد إلكتروني صحيح ✓' : 'صيغة البريد الإلكتروني غير صحيحة');
+      setFieldState('loginEmail','emailMsg', ok, ok ? (getLang()==='en'?'Valid email ✓':'بريد إلكتروني صحيح ✓') : (getLang()==='en'?'Invalid email format':'صيغة البريد الإلكتروني غير صحيحة'));
       return ok;
     }
 
@@ -229,7 +229,7 @@
       const val = document.getElementById('loginPass').value;
       if (!val) { clearField('loginPass','passMsg'); return false; }
       const ok = val.length >= 6;
-      setFieldState('loginPass','passMsg', ok, ok ? 'كلمة المرور مقبولة ✓' : 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+      setFieldState('loginPass','passMsg', ok, ok ? (getLang()==='en'?'Password accepted ✓':'كلمة المرور مقبولة ✓') : (getLang()==='en'?'Password must be at least 6 characters':'كلمة المرور يجب أن تكون 6 أحرف على الأقل'));
       return ok;
     }
 
@@ -244,7 +244,6 @@
     }
 
     async function submitLogin() {
-      alert('زر الدخول يعمل ✓');
       hideAlert();
       const emailOk = validateLoginEmail();
       const passOk  = validateLoginPass();
@@ -253,12 +252,12 @@
       const passVal  = document.getElementById('loginPass').value;
 
       if (!emailVal && !passVal) {
-        showAlert('يرجى ملء جميع الحقول المطلوبة');
+        showAlert(getLang()==='en'?'Please fill in all required fields':'يرجى ملء جميع الحقول المطلوبة');
         playSound('error');
         return;
       }
       if (!emailOk || !passOk) {
-        showAlert('يرجى تصحيح الأخطاء الموجودة قبل المتابعة');
+        showAlert(getLang()==='en'?'Please fix the errors before continuing':'يرجى تصحيح الأخطاء الموجودة قبل المتابعة');
         playSound('error');
         return;
       }
