@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>موسيقاتي — تسجيل الدخول</title>
+  <title>موسيقاتي — Login</title>
   <link rel="stylesheet" href="style.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -167,29 +167,29 @@
 
     <div class="login-box">
       <div class="login-heading">
-        <h1 data-ar="تسجيل الدخول" data-en="Sign In">Sign In</h1>
+        <h1 data-ar="Login" data-en="Sign In">Sign In</h1>
         <p data-ar="أدخل بياناتك للمتابعة" data-en="Enter your credentials to continue">Enter your credentials to continue</p>
       </div>
 
       <div class="alert-box" id="alertBox"></div>
 
       <div class="field">
-        <label data-ar="البريد الإلكتروني" data-en="Email Address">Email Address</label>
+        <label data-ar="Email Address" data-en="Email Address">Email Address</label>
         <input type="email" id="loginEmail" placeholder="example@email.com" oninput="validateLoginEmail()">
         <div class="field-msg" id="emailMsg"></div>
       </div>
 
       <div class="field">
-        <label data-ar="كلمة المرور" data-en="Password">Password</label>
+        <label data-ar="Password" data-en="Password">Password</label>
         <input type="password" id="loginPass" placeholder="••••••••" oninput="validateLoginPass()">
         <div class="field-msg" id="passMsg"></div>
-        <div class="forgot"><a href="#" data-ar="نسيت كلمة المرور؟" data-en="Forgot password?">Forgot password?</a></div>
+        <div class="forgot"><a href="#" data-ar="نسيت Password؟" data-en="Forgot password?">Forgot password?</a></div>
       </div>
 
       <button class="btn-enter" onclick="submitLogin()" data-ar="دخول" data-en="Sign In">Sign In</button>
 
       <div class="form-foot">
-        <span data-ar="ليس لديك حساب؟" data-en="Don't have an account?">Don't have an account?</span> <a href="register.html" data-ar="سجّل الآن" data-en="Register Now">Register Now</a>
+        <span data-ar="Don't have an account?" data-en="Don't have an account?">Don't have an account?</span> <a href="register.html" data-ar="سجّل الآن" data-en="Register Now">Register Now</a>
       </div>
     </div>
 
@@ -228,7 +228,7 @@ try {
       const val = document.getElementById('loginEmail').value.trim();
       if (!val) { clearField('loginEmail','emailMsg'); return false; }
       const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-      setFieldState('loginEmail','emailMsg', ok, ok ? (getLang()==='en'?'Valid email ✓':'بريد إلكتروني صحيح ✓') : (getLang()==='en'?'Invalid email format':'صيغة البريد الإلكتروني غير صحيحة'));
+      setFieldState('loginEmail','emailMsg', ok, ok ? (getLang()==='en'?'Valid email ✓':'بريد إلكتروني صحيح ✓') : (getLang()==='en'?'Invalid email format':'صيغة Email Address غير صحيحة'));
       return ok;
     }
 
@@ -236,7 +236,7 @@ try {
       const val = document.getElementById('loginPass').value;
       if (!val) { clearField('loginPass','passMsg'); return false; }
       const ok = val.length >= 6;
-      setFieldState('loginPass','passMsg', ok, ok ? (getLang()==='en'?'Password accepted ✓':'كلمة المرور مقبولة ✓') : (getLang()==='en'?'Password must be at least 6 characters':'كلمة المرور يجب أن تكون 6 أحرف على الأقل'));
+      setFieldState('loginPass','passMsg', ok, ok ? (getLang()==='en'?'Password accepted ✓':'Password مقبولة ✓') : (getLang()==='en'?'Password must be at least 6 characters':'Password يجب أن تكون 6 أحرف على الأقل'));
       return ok;
     }
 
@@ -279,7 +279,7 @@ try {
       btn.textContent = getLang()==='en' ? 'Checking...' : 'جارٍ التحقق...';
 
       try {
-        // تشفير كلمة المرور بنفس طريقة التسجيل (SHA-256)
+        // تشفير Password بنفس طريقة التسجيل (SHA-256)
         const encoder    = new TextEncoder();
         const hashBuf    = await crypto.subtle.digest('SHA-256', encoder.encode(passVal));
         const hashArr    = Array.from(new Uint8Array(hashBuf));
@@ -289,14 +289,14 @@ try {
         const snapshot = await db.ref('users').orderByChild('email').equalTo(emailVal).once('value');
 
         if (!snapshot.exists()) {
-          showAlert('⚠️ البريد الإلكتروني غير مسجل');
+          showAlert('⚠️ Email Address غير مسجل');
           playSound('error');
           btn.disabled = false;
           btn.textContent = getLang()==='en' ? 'Sign In' : 'دخول';
           return;
         }
 
-        // التحقق من كلمة المرور
+        // التحقق من Password
         let matched  = false;
         let userData = null;
         let userId   = null;
@@ -309,7 +309,7 @@ try {
         });
 
         if (!matched) {
-          showAlert('⚠️ كلمة المرور غير صحيحة');
+          showAlert('⚠️ Password غير صحيحة');
           playSound('error');
           btn.disabled = false;
           btn.textContent = getLang()==='en' ? 'Sign In' : 'دخول';
@@ -319,7 +319,7 @@ try {
         // حفظ بيانات الجلسة
         localStorage.setItem('mosiqati-user', JSON.stringify({ id: userId, name: userData.full_name, email: userData.email, phone: userData.phone || '' }));
 
-        showAlert('✅ تم تسجيل الدخول بنجاح', true);
+        showAlert('✅ تم Login بنجاح', true);
         setTimeout(() => { window.location.href = 'home.html'; }, 1200);
 
       } catch (err) {
@@ -331,7 +331,7 @@ try {
     }
   </script>
 
-<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+<button class="music-toggle" id="musicToggle" title="On/Off الموسيقى">🎵</button>
 <script>
   document.getElementById('musicToggle').addEventListener('click', function(){
     var bg = getBgAudio();

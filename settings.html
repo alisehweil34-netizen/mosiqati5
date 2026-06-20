@@ -9,13 +9,13 @@
 
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 
-<title>الإعدادات - موسيقاتي</title>
+<title>Settings - موسيقاتي</title>
 
 <link href="style.css" rel="stylesheet"/>
 
 <style>
     /* ===================================
-       تنسيقات خاصة بصفحة الإعدادات
+       تنسيقات خاصة بصفحة Settings
     =================================== */
 
     
@@ -67,7 +67,7 @@
 
     .sidebar-item .icon { font-size: 1.1rem; }
 
-    /* --- بطاقات الإعدادات --- */
+    /* --- بطاقات Settings --- */
     
     .settings-content { display: flex; flex-direction: column; gap: 25px; }
 
@@ -247,7 +247,7 @@
       box-shadow: 0 0 0 3px rgba(201,168,76,0.2);
     }
 
-    /* --- خيارات اللغة --- */
+    /* --- خيارات Language --- */
     .lang-options {
       display: flex;
       gap: 10px;
@@ -428,7 +428,7 @@
 
 <body>
 
-<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week" id="top-bar-text">🎵 Free shipping on orders over 50 JOD | Exclusive deals this week</div>
+<div class="top-bar" data-ar="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week" id="top-bar-text">🎵 Free shipping on orders over 50 JOD | Exclusive deals this week</div>
 
 <nav class="navbar">
 
@@ -448,7 +448,7 @@
 
 <li><a data-ar="تواصل معنا" data-en="Contact Us" href="Contact.html" id="nav-contact">Contact Us</a></li>
 
-<li><a class="active" data-ar="الإعدادات" data-en="Settings" href="setting.html" id="nav-settings">Settings</a></li>
+<li><a class="active" data-ar="Settings" data-en="Settings" href="setting.html" id="nav-settings">Settings</a></li>
 
 </ul>
 
@@ -464,7 +464,7 @@
 
 <div class="page-hero">
 
-<h1>⚙️ <span id="page-title-text" data-ar="الإعدادات" data-en="Settings">Settings</span></h1>
+<h1>⚙️ <span id="page-title-text" data-ar="Settings" data-en="Settings">Settings</span></h1>
 
 <p data-ar="خصّص تجربتك على الموقع كما تريد" data-en="Customize your website experience as you like" id="page-subtitle-text">Customize your website experience as you like</p>
 
@@ -480,7 +480,7 @@
 
 <a class="sidebar-item" href="#bg-section" onclick="setActive(this)"><span class="icon">🖼️</span> <span class="lbl" data-ar="الخلفية" data-en="Background">Background</span></a>
 
-<a class="sidebar-item" href="#lang-section" onclick="setActive(this)"><span class="icon">🌐</span> <span class="lbl" data-ar="اللغة" data-en="Language">Language</span></a>
+<a class="sidebar-item" href="#lang-section" onclick="setActive(this)"><span class="icon">🌐</span> <span class="lbl" data-ar="Language" data-en="Language">Language</span></a>
 
 <a class="sidebar-item" href="#display-section" onclick="setActive(this)"><span class="icon">✨</span> <span class="lbl" data-ar="العرض" data-en="Display">Display</span></a>
 </aside>
@@ -632,7 +632,7 @@
 
 <div class="setting-label" data-ar="اختر الخلفية" data-en="Choose Background">Choose Background</div>
 
-<div class="setting-desc" data-ar="سيتم تطبيق الخلفية على جميع الصفحات" data-en="Will be applied across all pages">Will be applied across all pages</div>
+<div class="setting-desc" data-ar="سيتم Apply الخلفية على جميع الصفحات" data-en="Will be applied across all pages">Will be applied across all pages</div>
 
 </div>
 
@@ -680,7 +680,7 @@
 
 <div class="card-header-text">
 
-<h3 data-ar="اللغة" data-en="Language">Language</h3>
+<h3 data-ar="Language" data-en="Language">Language</h3>
 
 <p data-ar="اختر لغة عرض الموقع" data-en="Choose the site display language">Choose the site display language</p>
 
@@ -702,7 +702,7 @@
 
 <button class="lang-btn active" id="lang-ar" onclick="setLang('ar')">
 
-<span class="lang-flag">🇯🇴</span> العربية
+<span class="lang-flag">🇯🇴</span> Arabic
             
             </button>
 
@@ -722,7 +722,7 @@
 
 <div class="setting-label" data-ar="اتجاه الكتابة" data-en="Text Direction">Text Direction</div>
 
-<div class="setting-desc" data-ar="يتغير تلقائياً مع اللغة" data-en="Changes automatically with language">Changes automatically with language</div>
+<div class="setting-desc" data-ar="يتغير Automaticاً مع Language" data-en="Changes automatically with language">Changes automatically with language</div>
 
 </div>
 
@@ -758,7 +758,7 @@
 
 <div class="setting-label" data-ar="الحركات والتأثيرات" data-en="Animations &amp; Effects">Animations &amp; Effects</div>
 
-<div class="setting-desc" data-ar="تفعيل/إيقاف تأثيرات الحركة" data-en="Enable/disable motion effects">Enable/disable motion effects</div>
+<div class="setting-desc" data-ar="تفعيل/Off تأثيرات الحركة" data-en="Enable/disable motion effects">Enable/disable motion effects</div>
 
 </div>
 
@@ -816,9 +816,9 @@
 
 <div class="settings-actions">
 
-<button class="btn-reset" data-ar="إعادة الإعدادات الافتراضية" data-en="Reset to Default" id="btn-reset-text" onclick="resetSettings()">Reset to Default</button>
+<button class="btn-reset" data-ar="إعادة Settings الافتراضية" data-en="Reset to Default" id="btn-reset-text" onclick="resetSettings()">Reset to Default</button>
 
-<button class="btn btn-gold" data-ar="💾 حفظ الإعدادات" data-en="💾 Save Settings" id="btn-save-text" onclick="saveSettings()">💾 Save Settings</button>
+<button class="btn btn-gold" data-ar="💾 حفظ Settings" data-en="💾 Save Settings" id="btn-save-text" onclick="saveSettings()">💾 Save Settings</button>
 
 </div>
 
@@ -892,7 +892,7 @@
 
 <ul class="footer-links">
 
-<li><a href="#">📍 <span data-ar="الشميساني، عمان" data-en="Shmeisani, Amman">Shmeisani, Amman</span></a></li>
+<li><a href="#">📍 <span data-ar="📍 Shmeisani, Amman" data-en="Shmeisani, Amman">Shmeisani, Amman</span></a></li>
 
 <li><a href="#">📞 +962 79 000 0000</a></li>
 
@@ -906,7 +906,7 @@
 
 <div class="footer-bottom">
 
-<p data-ar="© 2026 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2026 MOSIQATI - All Rights Reserved">© 2026 MOSIQATI - All Rights Reserved</p>
+<p data-ar="© 2026 MOSIQATI - All Rights Reserved" data-en="© 2026 MOSIQATI - All Rights Reserved">© 2026 MOSIQATI - All Rights Reserved</p>
 
 <div class="footer-bottom-links">
 
@@ -920,7 +920,7 @@
 
 </footer>
 
-<div class="save-toast" id="save-toast" data-ar="✅ تم حفظ الإعدادات بنجاح!" data-en="✅ Settings saved successfully!">✅ Settings saved successfully!</div>
+<div class="save-toast" id="save-toast" data-ar="✅ تم حفظ Settings بنجاح!" data-en="✅ Settings saved successfully!">✅ Settings saved successfully!</div>
 <!-- mosiqati-lang-force --><script>
 try {
   var s = JSON.parse(localStorage.getItem('mosiqati-settings') || '{}');
@@ -933,7 +933,7 @@ try {
 <script src="script.js"></script>
 <script>
   // ===================================
-  // تطبيق الإعدادات المحفوظة عند التحميل
+  // Apply Settings المحفوظة عند التحميل
   // ===================================
   (function applyOnLoad() {
     var s = getSaved();
@@ -1023,7 +1023,7 @@ try {
   }
 
   // ===================================
-  // اللغة
+  // Language
   // ===================================
   function applyLang(lang) {
     var isAr = lang === 'ar';
@@ -1116,7 +1116,7 @@ try {
     var toast = document.getElementById('save-toast');
     var lang = s.lang;
     
-    toast.textContent = lang === 'ar' ? '✅ تم حفظ الإعدادات بنجاح!' : '✅ Settings saved successfully!';
+    toast.textContent = lang === 'ar' ? '✅ تم حفظ Settings بنجاح!' : '✅ Settings saved successfully!';
     
     toast.style.display = 'block';
     
@@ -1141,7 +1141,7 @@ try {
 <button class="cart-float" onclick="window.location='cart.html'">
   🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
 </button>
-<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+<button class="music-toggle" id="musicToggle" title="On/Off الموسيقى">🎵</button>
 <script>
   document.getElementById('musicToggle').addEventListener('click', function(){
     var bg = getBgAudio();

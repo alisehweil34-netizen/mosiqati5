@@ -167,7 +167,7 @@
       color: var(--color-gray);
     }
 
-    /* --- التحكم بالكمية --- */
+    /* --- التحكم بQuantity --- */
     .qty-control {
       display: flex;
       align-items: center;
@@ -215,7 +215,7 @@
 
     .remove-btn:hover { color: #e74c3c; }
 
-    /* --- ملخص الطلب --- */
+    /* --- Order Summary --- */
     
     .cart-summary {
       position: sticky;
@@ -437,7 +437,7 @@
 
 <body>
 
-<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">🎵 Free shipping on orders over 50 JOD | Exclusive deals this week</div>
+<div class="top-bar" data-ar="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">🎵 Free shipping on orders over 50 JOD | Exclusive deals this week</div>
 
 <nav class="navbar">
 
@@ -506,11 +506,11 @@
 
 <div class="cart-summary">
 
-<h3 data-ar="📋 ملخص الطلب" data-en="📋 Order Summary">📋 Order Summary</h3>
+<h3 data-ar="📋 Order Summary" data-en="📋 Order Summary">📋 Order Summary</h3>
 
 <div class="summary-row">
 
-<span class="label" data-ar="المجموع الجزئي" data-en="Subtotal">Subtotal</span>
+<span class="label" data-ar="Subtotal" data-en="Subtotal">Subtotal</span>
 
 <span id="subtotalVal">0 د.أ</span>
 
@@ -518,7 +518,7 @@
 
 <div class="summary-row">
 
-<span class="label" data-ar="الشحن" data-en="Shipping">Shipping</span>
+<span class="label" data-ar="Shipping" data-en="Shipping">Shipping</span>
 
 <span id="shippingVal">—</span>
 
@@ -542,7 +542,7 @@
 
 <div class="summary-row total">
 
-<span class="label" data-ar="الإجمالي" data-en="Total">Total</span>
+<span class="label" data-ar="Total" data-en="Total">Total</span>
 
 <span id="totalVal">0 د.أ</span>
 
@@ -550,9 +550,9 @@
 
 <div class="promo-row">
 
-<input class="promo-input" dir="ltr" id="promoInput" placeholder="كود الخصم..."/>
+<input class="promo-input" dir="ltr" id="promoInput" placeholder="كود Discount..."/>
 
-<button class="promo-btn" data-ar="تطبيق" data-en="Apply" onclick="applyPromo()" data-ar="تطبيق" data-en="Apply">Apply</button>
+<button class="promo-btn" data-ar="Apply" data-en="Apply" onclick="applyPromo()" data-ar="Apply" data-en="Apply">Apply</button>
 
 </div>
 
@@ -644,7 +644,7 @@
 
 <ul class="footer-links">
 
-<li><a href="#">📍 الشميساني، عمان</a></li>
+<li><a href="#">📍 📍 Shmeisani, Amman</a></li>
 
 <li><a href="#">📞 +962 79 000 0000</a></li>
 
@@ -658,7 +658,7 @@
 
 <div class="footer-bottom">
 
-<p data-ar="© 2026 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2026 MOSIQATI - All Rights Reserved">© 2026 MOSIQATI - All Rights Reserved</p>
+<p data-ar="© 2026 MOSIQATI - All Rights Reserved" data-en="© 2026 MOSIQATI - All Rights Reserved">© 2026 MOSIQATI - All Rights Reserved</p>
 
 <div class="footer-bottom-links">
 
@@ -680,7 +680,7 @@
 
 <h2 data-ar="تأكيد الطلب" data-en="Confirm Order">Confirm Order</h2>
 
-<p data-ar="هل أنت متأكد من إتمام الطلب؟ سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل." data-en="Are you sure you want to complete the order? We will contact you on your phone number to confirm the details.">هل أنت متأكد من إتمام الطلب؟<br/>سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل.</p>
+<p data-ar="هل أنت متأكد من Checkout؟ سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل." data-en="Are you sure you want to complete the order? We will contact you on your phone number to confirm the details.">هل أنت متأكد من Checkout؟<br/>سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل.</p>
 
 <div class="modal-actions">
 
@@ -733,9 +733,9 @@ try {
             
             <span class="icon">🛒</span>
             
-            <h3 data-ar="سلتك فارغة!" data-en="Your Cart is Empty!">Your Cart is Empty!</h3>
+            <h3 data-ar="Your cart is empty!" data-en="Your Cart is Empty!">Your Cart is Empty!</h3>
             
-            <p data-ar="أضف بعض الآلات الموسيقية الرائعة إلى سلتك" data-en="Add some amazing musical instruments to your cart">Add some amazing musical instruments to your cart</p>
+            <p data-ar="Add some musical instruments الرائعة إلى سلتك" data-en="Add some amazing musical instruments to your cart">Add some amazing musical instruments to your cart</p>
             
             <a href="store.html" class="btn btn-gold" data-ar="🎵 تسوق الآن" data-en="🎵 Shop Now">🎵 Shop Now</a>
           </div>`;
@@ -769,7 +769,7 @@ try {
               
               <div class="item-price">${item.price} ${getLang()==='en'?'JOD':'د.أ'}</div>
               
-              <div class="item-price-total">${getLang()==='en'?'Total':'الإجمالي'}: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'د.أ'}</div>
+              <div class="item-price-total">${getLang()==='en'?'Total':'Total'}: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'د.أ'}</div>
             
             </div>
             
@@ -783,7 +783,7 @@ try {
             
             </div>
             
-            <button class="remove-btn" onclick="removeItem(${item.id})">${getLang()==='en'?'✕ Remove':'✕ حذف'}</button>
+            <button class="remove-btn" onclick="removeItem(${item.id})">${getLang()==='en'?'✕ Remove':'✕ Remove'}</button>
           
           </div>
         
@@ -838,12 +838,12 @@ try {
     }
 
     function applyPromo() {
-      if (promoApplied) { showPromoMsg(getLang()==='en'?'A coupon has already been applied':'تم تطبيق كوبون بالفعل', 'error'); return; }
+      if (promoApplied) { showPromoMsg(getLang()==='en'?'A coupon has already been applied':'تم Apply كوبون بالفعل', 'error'); return; }
       const code = document.getElementById('promoInput').value.trim().toUpperCase();
       if (PROMOS[code]) {
         discount = PROMOS[code];
         promoApplied = true;
-        showPromoMsg(`🎉 تم تطبيق خصم ${discount}% بنجاح!`, 'success');
+        showPromoMsg(`🎉 تم Apply خصم ${discount}% بنجاح!`, 'success');
         updateSummary(getCart(), discount);
       } else {
         showPromoMsg('❌ الكوبون غير صحيح', 'error');
@@ -866,7 +866,7 @@ try {
     function openCheckout() {
       const user = getCurrentUser();
       if (!user || !user.id) {
-        alert(getLang()==='en'?'Please log in first to complete the order':'يرجى تسجيل الدخول أولاً لإتمام الطلب');
+        alert(getLang()==='en'?'Please log in first to complete the order':'يرجى Login أولاً لCheckout');
         window.location.href = 'index.html';
         return;
       }
@@ -878,7 +878,7 @@ try {
     }
 
     // ===== حفظ الطلبات عبر MySQL/PHP =====
-    // يتم الحفظ التلقائي فوراً عند تأكيد كل طلب
+    // يتم الحفظ الAutomatic فوراً عند تأكيد كل طلب
 
 async function saveOrderToServer(orderNum, cart, totalAmount, subtotal, discountAmount, promoCode) {
   try {
@@ -950,7 +950,7 @@ function confirmOrder() {
 <button class="cart-float" onclick="window.location='cart.html'" style="display:none!important">
   🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
 </button>
-<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+<button class="music-toggle" id="musicToggle" title="On/Off الموسيقى">🎵</button>
 <script>
   document.getElementById('musicToggle').addEventListener('click', function(){
     var bg = getBgAudio();
