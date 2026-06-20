@@ -338,18 +338,18 @@
       const v = document.getElementById('regName').value.trim();
       if (!v) { clearFieldUI('regName','nameMsg'); return false; }
       if (v.length < 3) {
-        setField('regName','nameMsg', false, 'الاسم يجب أن يكون 3 أحرف على الأقل');
+        setField('regName','nameMsg', false, getLang()==='en'?'Name must be at least 3 characters':'الاسم يجب أن يكون 3 أحرف على الأقل');
         return false;
       }
       if (!/^[\u0600-\u06FFa-zA-Z\s]+$/.test(v)) {
-        setField('regName','nameMsg', false, 'الاسم يجب أن يحتوي على أحرف فقط (عربية أو إنجليزية)');
+        setField('regName','nameMsg', false, getLang()==='en'?'Name must contain letters only':'الاسم يجب أن يحتوي على أحرف فقط (عربية أو إنجليزية)');
         return false;
       }
       if (v.split(/\s+/).filter(Boolean).length < 2) {
-        setField('regName','nameMsg', false, 'يرجى إدخال الاسم الكامل (الاسم والكنية)');
+        setField('regName','nameMsg', false, getLang()==='en'?'Please enter full name (first and last)':'يرجى إدخال الاسم الكامل (الاسم والكنية)');
         return false;
       }
-      setField('regName','nameMsg', true, 'الاسم صحيح ✓');
+      setField('regName','nameMsg', true, getLang()==='en'?'Name is valid ✓':'الاسم صحيح ✓');
       return true;
     }
 
@@ -358,7 +358,7 @@
       const v = document.getElementById('regEmail').value.trim();
       if (!v) { clearFieldUI('regEmail','emailMsg'); return false; }
       const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-      setField('regEmail','emailMsg', ok, ok ? 'بريد إلكتروني صحيح ✓' : 'صيغة البريد الإلكتروني غير صحيحة');
+      setField('regEmail','emailMsg', ok, ok ? (getLang()==='en'?'Valid email ✓':'بريد إلكتروني صحيح ✓') : (getLang()==='en'?'Invalid email format':'صيغة البريد الإلكتروني غير صحيحة'));
       return ok;
     }
 
@@ -367,7 +367,7 @@
       const v = document.getElementById('regPhone').value.trim();
       if (!v) { clearFieldUI('regPhone','phoneMsg'); return false; }
       const ok = /^(\+?[0-9]{7,15})$/.test(v.replace(/\s/g,''));
-      setField('regPhone','phoneMsg', ok, ok ? 'رقم الهاتف صحيح ✓' : 'رقم الهاتف غير صحيح (7-15 رقمًا)');
+      setField('regPhone','phoneMsg', ok, ok ? (getLang()==='en'?'Valid phone number ✓':'رقم الهاتف صحيح ✓') : (getLang()==='en'?'Invalid phone number (7-15 digits)':'رقم الهاتف غير صحيح (7-15 رقمًا)'));
       return ok;
     }
 
@@ -407,18 +407,18 @@
 
       const score = [r.len, r.upper, r.num, r.special].filter(Boolean).length;
       const colors = ['#e05555','#e07733','#c9a84c','#4caf73'];
-      const labels = ['ضعيفة جداً','ضعيفة','متوسطة','قوية'];
+      const labels = getLang()==='en' ? ['Very Weak','Weak','Medium','Strong'] : ['ضعيفة جداً','ضعيفة','متوسطة','قوية'];
       const segs   = ['s1','s2','s3','s4'];
 
       segs.forEach((id, i) => {
         document.getElementById(id).style.background = i < score ? colors[score-1] : '#222';
       });
-      label.textContent = 'قوة كلمة المرور: ' + labels[score-1];
+      label.textContent = (getLang()==='en'?'Password Strength: ':'قوة كلمة المرور: ') + labels[score-1];
       label.style.color  = colors[score-1];
 
       const allMet = r.len && r.upper && r.num && r.special;
       if (allMet) {
-        setField('regPass','passMsg', true, 'كلمة المرور قوية ✓');
+        setField('regPass','passMsg', true, getLang()==='en'?'Strong password ✓':'كلمة المرور قوية ✓');
       } else {
         document.getElementById('passMsg').className = 'field-msg';
         document.getElementById('regPass').classList.remove('success');
@@ -436,7 +436,7 @@
       const v2 = document.getElementById('regPass2').value;
       if (!v2) { clearFieldUI('regPass2','pass2Msg'); return false; }
       const ok = v1 === v2;
-      setField('regPass2','pass2Msg', ok, ok ? 'كلمات المرور متطابقة ✓' : 'كلمات المرور غير متطابقة');
+      setField('regPass2','pass2Msg', ok, ok ? (getLang()==='en'?'Passwords match ✓':'كلمات المرور متطابقة ✓') : (getLang()==='en'?'Passwords do not match':'كلمات المرور غير متطابقة'));
       return ok;
     }
 
@@ -451,7 +451,7 @@
       const pass2Ok = validatePass2();
 
       if (!nameOk || !emailOk || !phoneOk || !passOk || !pass2Ok) {
-        showAlert('يرجى تعبئة جميع الحقول بشكل صحيح قبل المتابعة');
+        showAlert(getLang()==='en'?'Please fill all fields correctly before continuing':'يرجى تعبئة جميع الحقول بشكل صحيح قبل المتابعة');
         playSound('error');
         const firstErr = document.querySelector('.field input.error');
         if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -460,7 +460,7 @@
 
       const btn = document.querySelector('.btn-enter');
       btn.disabled = true;
-      btn.textContent = 'جارٍ الحفظ...';
+      btn.textContent = getLang()==='en'?'Saving...':'جارٍ الحفظ...';
 
       const fullName = document.getElementById('regName').value.trim();
       const email    = document.getElementById('regEmail').value.trim();
@@ -468,9 +468,9 @@
       const password = document.getElementById('regPass').value;
 
       if (!db) {
-        showAlert('تعذّر الاتصال بـ Firebase، تأكد من تحميل مكتبة Firebase في الصفحة');
+        showAlert(getLang()==='en'?'Could not connect to Firebase':'تعذّر الاتصال بـ Firebase، تأكد من تحميل مكتبة Firebase في الصفحة');
         btn.disabled = false;
-        btn.textContent = 'إنشاء الحساب';
+        btn.textContent = getLang()==='en'?'Create Account':'إنشاء الحساب';
         return;
       }
 
@@ -479,9 +479,9 @@
         const existing = await db.ref('users').orderByChild('email').equalTo(email).once('value');
 
         if (existing.exists()) {
-          showAlert('⚠️ البريد الإلكتروني مسجل مسبقاً');
+          showAlert(getLang()==='en'?'⚠️ Email is already registered':'⚠️ البريد الإلكتروني مسجل مسبقاً');
           btn.disabled = false;
-          btn.textContent = 'إنشاء الحساب';
+          btn.textContent = getLang()==='en'?'Create Account':'إنشاء الحساب';
           return;
         }
 
@@ -501,14 +501,14 @@
 
         localStorage.setItem('mosiqati-user', JSON.stringify({ id: newUserRef.key, name: fullName, email: email, phone: phone }));
 
-        showAlert('✅ تم إنشاء الحساب بنجاح', true);
+        showAlert(getLang()==='en'?'✅ Account created successfully':' ✅ تم إنشاء الحساب بنجاح', true);
         setTimeout(() => { window.location.href = 'home.html'; }, 1500);
 
       } catch (err) {
         console.error(err);
-        showAlert('تعذّر الاتصال بـ Firebase، حاول مجدداً');
+        showAlert(getLang()==='en'?'Could not connect to Firebase, please try again':'تعذّر الاتصال بـ Firebase، حاول مجدداً');
         btn.disabled = false;
-        btn.textContent = 'إنشاء الحساب';
+        btn.textContent = getLang()==='en'?'Create Account':'إنشاء الحساب';
       }
     }
   </script>

@@ -626,14 +626,14 @@
           el.style.borderColor = '';
         }
       });
-      if (!valid) { alert('يرجى ملء جميع الحقول المطلوبة'); return; }
+      if (!valid) { alert(getLang()==='en'?'Please fill in all required fields':'يرجى ملء جميع الحقول المطلوبة'); return; }
 
       // التحقق من صحة البريد الإلكتروني
       const emailEl = document.getElementById('email');
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(emailEl.value.trim())) {
         emailEl.style.borderColor = '#e74c3c';
-        alert('⚠️ يرجى إدخال بريد إلكتروني صحيح (مثال: name@domain.com)');
+        alert(getLang()==='en'?'⚠️ Please enter a valid email address (e.g. name@domain.com)':'⚠️ يرجى إدخال بريد إلكتروني صحيح (مثال: name@domain.com)');
         return;
       }
 

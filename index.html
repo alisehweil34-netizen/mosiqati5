@@ -263,13 +263,13 @@
       }
 
       if (!db) {
-        showAlert('تعذّر الاتصال بـ Firebase، حاول مجدداً');
+        showAlert(getLang()==='en'?'Could not connect to Firebase, please try again':'تعذّر الاتصال بـ Firebase، حاول مجدداً');
         return;
       }
 
       const btn = document.querySelector('.btn-enter');
       btn.disabled = true;
-      btn.textContent = 'جارٍ التحقق...';
+      btn.textContent = getLang()==='en' ? 'Checking...' : 'جارٍ التحقق...';
 
       try {
         // تشفير كلمة المرور بنفس طريقة التسجيل (SHA-256)
@@ -285,7 +285,7 @@
           showAlert('⚠️ البريد الإلكتروني غير مسجل');
           playSound('error');
           btn.disabled = false;
-          btn.textContent = 'دخول';
+          btn.textContent = getLang()==='en' ? 'Sign In' : 'دخول';
           return;
         }
 
@@ -305,7 +305,7 @@
           showAlert('⚠️ كلمة المرور غير صحيحة');
           playSound('error');
           btn.disabled = false;
-          btn.textContent = 'دخول';
+          btn.textContent = getLang()==='en' ? 'Sign In' : 'دخول';
           return;
         }
 
@@ -317,9 +317,9 @@
 
       } catch (err) {
         console.error(err);
-        showAlert('حدث خطأ، حاول مجدداً');
+        showAlert(getLang()==='en'?'An error occurred, please try again':'حدث خطأ، حاول مجدداً');
         btn.disabled = false;
-        btn.textContent = 'دخول';
+        btn.textContent = getLang()==='en' ? 'Sign In' : 'دخول';
       }
     }
   </script>

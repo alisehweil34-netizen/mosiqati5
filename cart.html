@@ -831,13 +831,13 @@
     }
 
     function clearCart() {
-      if (!confirm('هل تريد إفراغ السلة؟')) return;
+      if (!confirm(getLang()==='en'?'Are you sure you want to clear the cart?':'هل تريد إفراغ السلة؟')) return;
       saveCart([]);
       renderCart();
     }
 
     function applyPromo() {
-      if (promoApplied) { showPromoMsg('تم تطبيق كوبون بالفعل', 'error'); return; }
+      if (promoApplied) { showPromoMsg(getLang()==='en'?'A coupon has already been applied':'تم تطبيق كوبون بالفعل', 'error'); return; }
       const code = document.getElementById('promoInput').value.trim().toUpperCase();
       if (PROMOS[code]) {
         discount = PROMOS[code];
@@ -865,7 +865,7 @@
     function openCheckout() {
       const user = getCurrentUser();
       if (!user || !user.id) {
-        alert('يرجى تسجيل الدخول أولاً لإتمام الطلب');
+        alert(getLang()==='en'?'Please log in first to complete the order':'يرجى تسجيل الدخول أولاً لإتمام الطلب');
         window.location.href = 'index.html';
         return;
       }

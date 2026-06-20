@@ -579,7 +579,7 @@
     async function submitRating(productId, value) {
       const user = getCurrentUser();
       if (!user || !user.id) {
-        alert('يرجى تسجيل الدخول أولاً لتتمكن من تقييم المنتج');
+        alert(getLang()==='en'?'Please log in first to rate the product':'يرجى تسجيل الدخول أولاً لتتمكن من تقييم المنتج');
         window.location.href = 'index.html';
         return;
       }
