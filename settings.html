@@ -451,7 +451,7 @@
 
 <li><a data-ar="تواصل معنا" data-en="Contact Us" href="Contact.html" id="nav-contact">تواصل معنا</a></li>
 
-<li><a class="active" data-ar="الإعدادات" data-en="Settings" href="setting.html" id="nav-settings">الإعدادات</a></li>
+<li><a class="active" data-ar="الإعدادات" data-en="Settings" href="settings.html" id="nav-settings">الإعدادات</a></li>
 
 </ul>
 
@@ -912,7 +912,7 @@
 
 <div class="footer-bottom">
 
-<p data-ar="© 2024 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2024 MOSIQATI - All Rights Reserved">© 2024 موسيقاتي - جميع الحقوق محفوظة</p>
+<p data-ar="© 2026 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2026 MOSIQATI - All Rights Reserved">© 2026 موسيقاتي - جميع الحقوق محفوظة</p>
 
 <div class="footer-bottom-links">
 
@@ -1101,23 +1101,30 @@
   // حفظ وإعادة ضبط
   // ===================================
   function saveSettings() {
+    var computedStyle = getComputedStyle(document.documentElement);
     var s = {
-      
       fontSize:    parseInt(document.getElementById('font-slider').value),
       lang:        document.getElementById('lang-ar').classList.contains('active') ? 'ar' : 'en',
       compact:     document.getElementById('toggle-compact').checked,
       noAnim:      !document.getElementById('toggle-anim').checked,
-      hideTopBar:  !document.getElementById('toggle-topbar').checked
+      hideTopBar:  !document.getElementById('toggle-topbar').checked,
+      accentColor: computedStyle.getPropertyValue('--color-gold').trim() || getSaved().accentColor || '#c9a84c',
+      accentLight: computedStyle.getPropertyValue('--color-gold-light').trim() || getSaved().accentLight || '#e8c96a',
+      accentDark:  computedStyle.getPropertyValue('--color-gold-dark').trim() || getSaved().accentDark || '#a07830',
+      bgColor:     computedStyle.getPropertyValue('--color-black').trim() || getSaved().bgColor || '#0a0a0a',
+      bgDark:      computedStyle.getPropertyValue('--color-dark').trim() || getSaved().bgDark || '#111111',
+      bgCard:      computedStyle.getPropertyValue('--color-card').trim() || getSaved().bgCard || '#1a1a1a'
     };
     setSaved(s);
 
-    
     var toast = document.getElementById('save-toast');
     var lang = s.lang;
     
     toast.textContent = lang === 'ar' ? '✅ تم حفظ الإعدادات بنجاح!' : '✅ Settings saved successfully!';
-    
     toast.style.display = 'block';
+    toast.style.animation = 'none';
+    void toast.offsetWidth;
+    toast.style.animation = 'slideUp 0.4s ease';
     
     setTimeout(function() { toast.style.display = 'none'; }, 3000);
   }
