@@ -9,7 +9,7 @@
 
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 
-<title>Settings - موسيقاتي</title>
+<title>Settings - Mosiqati</title>
 
 <link href="style.css" rel="stylesheet"/>
 
@@ -432,7 +432,7 @@
 
 <nav class="navbar">
 
-<a class="navbar-logo" href="home.html"><img alt="موسيقاتي" class="navbar-logo-img" src="logo.png"/></a>
+<a class="navbar-logo" href="home.html"><img alt="Mosiqati" class="navbar-logo-img" src="logo.png"/></a>
 
 <ul class="navbar-links" id="nav-links">
 
@@ -515,11 +515,11 @@
 
 <div class="font-slider-wrap">
 
-<span style="font-size:0.8rem; color:var(--color-gray)">أ</span>
+<span style="font-size:0.8rem; color:var(--color-gray)">A</span>
 
 <input id="font-slider" max="22" min="12" oninput="changeFontSize(this.value)" type="range" value="16"/>
 
-<span style="font-size:1.1rem; color:var(--color-gray)">أ</span>
+<span style="font-size:1.1rem; color:var(--color-gray)">A</span>
 
 <span class="font-size-display" id="font-size-val">16px</span>
 
@@ -548,7 +548,7 @@
 </div>
 
 <div class="font-preview" id="font-preview">
-          🎵 مرحباً بك في موسيقاتي — متجر الآلات الموسيقية الأول في الأردن. هذا مثال على حجم الخط الحالي في الموقع.
+          🎵 Welcome to Mosiqati — Jordan's #1 music instrument store. This is an example of the current font size on the site.
         
         </div>
 
@@ -582,17 +582,17 @@
 
 <div class="theme-options">
 
-<button class="theme-btn active" onclick="setAccent(this,'#c9a84c','#e8c96a','#a07830')" style="background: linear-gradient(135deg,#c9a84c,#e8c96a);" title="ذهبي"></button>
+<button class="theme-btn active" onclick="setAccent(this,'#c9a84c','#e8c96a','#a07830')" style="background: linear-gradient(135deg,#c9a84c,#e8c96a);" title="Gold"></button>
 
-<button class="theme-btn" onclick="setAccent(this,'#e05252','#ff7070','#b03030')" style="background: linear-gradient(135deg,#e05252,#ff7070);" title="أحمر"></button>
+<button class="theme-btn" onclick="setAccent(this,'#e05252','#ff7070','#b03030')" style="background: linear-gradient(135deg,#e05252,#ff7070);" title="Red"></button>
 
-<button class="theme-btn" onclick="setAccent(this,'#4a9eff','#7ec8ff','#2a7acc')" style="background: linear-gradient(135deg,#4a9eff,#7ec8ff);" title="أزرق"></button>
+<button class="theme-btn" onclick="setAccent(this,'#4a9eff','#7ec8ff','#2a7acc')" style="background: linear-gradient(135deg,#4a9eff,#7ec8ff);" title="Blue"></button>
 
-<button class="theme-btn" onclick="setAccent(this,'#43d98c','#7ff5be','#25a566')" style="background: linear-gradient(135deg,#43d98c,#7ff5be);" title="أخضر"></button>
+<button class="theme-btn" onclick="setAccent(this,'#43d98c','#7ff5be','#25a566')" style="background: linear-gradient(135deg,#43d98c,#7ff5be);" title="Green"></button>
 
-<button class="theme-btn" onclick="setAccent(this,'#b56cff','#d4a8ff','#8840d4')" style="background: linear-gradient(135deg,#b56cff,#d4a8ff);" title="بنفسجي"></button>
+<button class="theme-btn" onclick="setAccent(this,'#b56cff','#d4a8ff','#8840d4')" style="background: linear-gradient(135deg,#b56cff,#d4a8ff);" title="Purple"></button>
 
-<button class="theme-btn" onclick="setAccent(this,'#ff9f45','#ffcc80','#cc6a00')" style="background: linear-gradient(135deg,#ff9f45,#ffcc80);" title="برتقالي"></button>
+<button class="theme-btn" onclick="setAccent(this,'#ff9f45','#ffcc80','#cc6a00')" style="background: linear-gradient(135deg,#ff9f45,#ffcc80);" title="Orange"></button>
 
 </div>
 
@@ -728,7 +728,7 @@
 
 <div style="display:flex;align-items:center;gap:10px;">
 
-<span id="dir-label" style="font-size:0.85rem;color:var(--color-gold);font-weight:600;">يمين إلى يسار ←</span>
+<span id="dir-label" style="font-size:0.85rem;color:var(--color-gold);font-weight:600;">← Left to Right</span>
 
 </div>
 
@@ -1141,7 +1141,7 @@ try {
 <button class="cart-float" onclick="window.location='cart.html'">
   🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
 </button>
-<button class="music-toggle" id="musicToggle" title="On/Off الموسيقى">🎵</button>
+<button class="music-toggle" id="musicToggle" title="Music On/Off">🎵</button>
 <script>
   document.getElementById('musicToggle').addEventListener('click', function(){
     var bg = getBgAudio();

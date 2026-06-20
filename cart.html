@@ -9,7 +9,7 @@
 
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 
-<title>سلة التسوق – موسيقاتي</title>
+<title>Shopping Cart – Mosiqati</title>
 
 <link href="style.css" rel="stylesheet"/>
 
@@ -441,7 +441,7 @@
 
 <nav class="navbar">
 
-<a class="navbar-logo" href="home.html"><img alt="موسيقاتي" class="navbar-logo-img" src="logo.png"/></a>
+<a class="navbar-logo" href="home.html"><img alt="Mosiqati" class="navbar-logo-img" src="logo.png"/></a>
 
 <ul class="navbar-links" id="nav-links">
 
@@ -475,7 +475,7 @@
 
 <div class="breadcrumb">
 
-<a data-ar="الرئيسية" data-en="Home" href="home.html">Home</a> ← <a data-ar="المتجر" data-en="Store" href="store.html">Store</a> ← سلة التسوق
+<a data-ar="الرئيسية" data-en="Home" href="home.html">Home</a> ← <a data-ar="المتجر" data-en="Store" href="store.html">Store</a> ← Cart
     
     </div>
 
@@ -494,7 +494,7 @@
 
 <div class="cart-toolbar">
 
-<button class="clear-btn" data-ar="🗑 إفراغ السلة" data-en="🗑 إفراغ Cart" onclick="clearCart()">🗑 إفراغ Cart</button>
+<button class="clear-btn" data-ar="🗑 إفراغ السلة" data-en="🗑 Clear Cart" onclick="clearCart()">🗑 Clear Cart</button>
 
 <a class="continue-link" data-ar="← متابعة التسوق" data-en="← Continue Shopping" href="store.html">← Continue Shopping</a>
 
@@ -512,7 +512,7 @@
 
 <span class="label" data-ar="Subtotal" data-en="Subtotal">Subtotal</span>
 
-<span id="subtotalVal">0 د.أ</span>
+<span id="subtotalVal">0 JOD</span>
 
 </div>
 
@@ -528,7 +528,7 @@
 
 <span class="label" data-ar="ضريبة المبيعات (16%)" data-en="Sales Tax (16%)">Sales Tax (16%)</span>
 
-<span id="taxVal">0 د.أ</span>
+<span id="taxVal">0 JOD</span>
 
 </div>
 
@@ -536,7 +536,7 @@
 
 <span class="label" style="color: #2ecc71;" data-ar="🎉 خصم الكوبون" data-en="🎉 Coupon Discount">🎉 Coupon Discount</span>
 
-<span id="discountVal">0 د.أ</span>
+<span id="discountVal">0 JOD</span>
 
 </div>
 
@@ -544,13 +544,13 @@
 
 <span class="label" data-ar="Total" data-en="Total">Total</span>
 
-<span id="totalVal">0 د.أ</span>
+<span id="totalVal">0 JOD</span>
 
 </div>
 
 <div class="promo-row">
 
-<input class="promo-input" dir="ltr" id="promoInput" placeholder="كود Discount..."/>
+<input class="promo-input" dir="ltr" id="promoInput" placeholder="Discount code..."/>
 
 <button class="promo-btn" data-ar="Apply" data-en="Apply" onclick="applyPromo()" data-ar="Apply" data-en="Apply">Apply</button>
 
@@ -590,13 +590,13 @@
 
 <div class="social-links">
 
-<div class="social-link" title="فيسبوك">📘</div>
+<div class="social-link" title="Facebook">📘</div>
 
-<div class="social-link" title="إنستغرام">📷</div>
+<div class="social-link" title="Instagram">📷</div>
 
-<div class="social-link" title="يوتيوب">▶️</div>
+<div class="social-link" title="YouTube">▶️</div>
 
-<div class="social-link" title="واتساب">💬</div>
+<div class="social-link" title="WhatsApp">💬</div>
 
 </div>
 
@@ -950,7 +950,7 @@ function confirmOrder() {
 <button class="cart-float" onclick="window.location='cart.html'" style="display:none!important">
   🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
 </button>
-<button class="music-toggle" id="musicToggle" title="On/Off الموسيقى">🎵</button>
+<button class="music-toggle" id="musicToggle" title="Music On/Off">🎵</button>
 <script>
   document.getElementById('musicToggle').addEventListener('click', function(){
     var bg = getBgAudio();

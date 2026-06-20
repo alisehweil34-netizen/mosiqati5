@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>موسيقاتي — إنشاء حساب</title>
+  <title>Mosiqati — Create Account</title>
   <link rel="stylesheet" href="style.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -217,9 +217,9 @@
     <div class="side-decor">
       <div class="decor-quote">
         <span class="quote-mark">"</span>
-        <p>الموسيقى لغةٌ تتحدّث إلى الروح، وتعبّر عمّا يعجز الكلامُ عن وصفه</p>
+        <p>Music is a language that speaks to the soul, expressing what words fail to describe</p>
         <div class="decor-line"></div>
-        <span class="author">موسيقاتي</span>
+        <span class="author">Mosiqati</span>
       </div>
     </div>
 
@@ -228,9 +228,9 @@
 
       <div class="logo-area">
         <div class="logo-img-wrap">
-          <img src="logo.png" alt="موسيقاتي">
+          <img src="logo.png" alt="Mosiqati">
         </div>
-        <div class="logo-name">موسيقا<span>تي</span></div>
+        <div class="logo-name">Mosiqa<span>ti</span></div>
         <div class="logo-tagline" data-ar="متجر الآلات الموسيقية" data-en="Music Instruments Store">Music Instruments Store</div>
       </div>
 
@@ -247,7 +247,7 @@
         <!-- الاسم الكامل -->
         <div class="field">
           <label data-ar="الاسم الكامل" data-en="Full Name">Full Name</label>
-          <input type="text" id="regName" placeholder="Mohammad أحمد" oninput="validateName()">
+          <input type="text" id="regName" placeholder="Mohammad Ahmad" oninput="validateName()">
           <div class="field-msg" id="nameMsg"></div>
         </div>
 
@@ -279,10 +279,10 @@
           <div class="strength-label field-msg show" id="strengthLabel" style="color:#555;display:none"></div>
           <!-- متطلبات -->
           <div class="pass-rules" id="passRules">
-            <div class="rule" id="r-len"><div class="dot"></div> 8 أحرف على الأقل</div>
-            <div class="rule" id="r-upper"><div class="dot"></div> حرف كبير واحد على الأقل (A-Z)</div>
-            <div class="rule" id="r-num"><div class="dot"></div> رقم واحد على الأقل (0-9)</div>
-            <div class="rule" id="r-special"><div class="dot"></div> رمز خاص واحد على الأقل (!@#$...)</div>
+            <div class="rule" id="r-len"><div class="dot"></div> At least 8 characters</div>
+            <div class="rule" id="r-upper"><div class="dot"></div> At least one uppercase letter (A-Z)</div>
+            <div class="rule" id="r-num"><div class="dot"></div> At least one number (0-9)</div>
+            <div class="rule" id="r-special"><div class="dot"></div> At least one special character (!@#$...)</div>
           </div>
           <div class="field-msg" id="passMsg"></div>
         </div>
@@ -520,7 +520,7 @@ try {
     }
   </script>
 
-<button class="music-toggle" id="musicToggle" title="On/Off الموسيقى">🎵</button>
+<button class="music-toggle" id="musicToggle" title="Music On/Off">🎵</button>
 <script>
   document.getElementById('musicToggle').addEventListener('click', function(){
     var bg = getBgAudio();
