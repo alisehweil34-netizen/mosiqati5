@@ -483,7 +483,7 @@
     </div>
 
 <h1 style="font-size: 2rem; font-weight: 900; font-family: 'Playfair Display', serif;">
-      سلة <span style="color: var(--color-gold);">التسوق</span>
+      <span data-ar="سلة التسوق" data-en="Shopping Cart">سلة <span style="color: var(--color-gold);">التسوق</span></span>
 
 </h1>
 
@@ -529,7 +529,7 @@
 
 <div class="summary-row">
 
-<span class="label">ضريبة المبيعات (16%)</span>
+<span class="label" data-ar="ضريبة المبيعات (16%)" data-en="Sales Tax (16%)">ضريبة المبيعات (16%)</span>
 
 <span id="taxVal">0 د.أ</span>
 
@@ -537,7 +537,7 @@
 
 <div class="summary-row" id="discountRow" style="display:none; color: #2ecc71;">
 
-<span class="label" style="color: #2ecc71;">🎉 خصم الكوبون</span>
+<span class="label" style="color: #2ecc71;" data-ar="🎉 خصم الكوبون" data-en="🎉 Coupon Discount">🎉 خصم الكوبون</span>
 
 <span id="discountVal">0 د.أ</span>
 
@@ -566,7 +566,7 @@
       
       </button>
 
-<p class="secure-note">🔒 الدفع آمن ومشفر بالكامل</p>
+<p class="secure-note" data-ar="🔒 الدفع آمن ومشفر بالكامل" data-en="🔒 Payment is fully secure and encrypted">🔒 الدفع آمن ومشفر بالكامل</p>
 
 <div class="payment-icons">
 
@@ -684,15 +684,15 @@
 
 <span class="icon">🎵</span>
 
-<h2>تأكيد <span style="color: var(--color-gold);">الطلب</span></h2>
+<h2 data-ar="تأكيد الطلب" data-en="Confirm Order">تأكيد الطلب</h2>
 
-<p>هل أنت متأكد من إتمام الطلب؟<br/>سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل.</p>
+<p data-ar="هل أنت متأكد من إتمام الطلب؟ سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل." data-en="Are you sure you want to complete the order? We will contact you on your phone number to confirm the details.">هل أنت متأكد من إتمام الطلب؟<br/>سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل.</p>
 
 <div class="modal-actions">
 
-<button class="modal-close" onclick="closeModal()">إلغاء</button>
+<button class="modal-close" onclick="closeModal()" data-ar="إلغاء" data-en="Cancel">إلغاء</button>
 
-<button class="modal-confirm" onclick="confirmOrder()">تأكيد الطلب ✓</button>
+<button class="modal-confirm" onclick="confirmOrder()" data-ar="تأكيد الطلب ✓" data-en="Confirm Order ✓">تأكيد الطلب ✓</button>
 
 </div>
 
@@ -732,11 +732,11 @@
             
             <span class="icon">🛒</span>
             
-            <h3>سلتك فارغة!</h3>
+            <h3 data-ar="سلتك فارغة!" data-en="Your Cart is Empty!">سلتك فارغة!</h3>
             
-            <p>أضف بعض الآلات الموسيقية الرائعة إلى سلتك</p>
+            <p data-ar="أضف بعض الآلات الموسيقية الرائعة إلى سلتك" data-en="Add some amazing musical instruments to your cart">أضف بعض الآلات الموسيقية الرائعة إلى سلتك</p>
             
-            <a href="store.html" class="btn btn-gold">🎵 تسوق الآن</a>
+            <a href="store.html" class="btn btn-gold" data-ar="🎵 تسوق الآن" data-en="🎵 Shop Now">🎵 تسوق الآن</a>
           </div>`;
         document.getElementById('checkoutBtn').disabled = true;
         document.getElementById('checkoutBtn').style.opacity = '0.4';
@@ -766,9 +766,9 @@
             
             <div>
               
-              <div class="item-price">${item.price} د.أ</div>
+              <div class="item-price">${item.price} ${getLang()==='en'?'JOD':'د.أ'}</div>
               
-              <div class="item-price-total">الإجمالي: ${(item.price * item.qty).toFixed(2)} د.أ</div>
+              <div class="item-price-total">${getLang()==='en'?'Total':'الإجمالي'}: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'د.أ'}</div>
             
             </div>
             
@@ -782,7 +782,7 @@
             
             </div>
             
-            <button class="remove-btn" onclick="removeItem(${item.id})">✕ حذف</button>
+            <button class="remove-btn" onclick="removeItem(${item.id})">${getLang()==='en'?'✕ Remove':'✕ حذف'}</button>
           
           </div>
         
@@ -919,21 +919,21 @@ function confirmOrder() {
         
         <span class="icon">🎉</span>
         
-        <h2 style="color: var(--color-gold)">تم تأكيد طلبك!</h2>
+        <h2 style="color: var(--color-gold)" data-ar="تم تأكيد طلبك!" data-en="Your order is confirmed!">تم تأكيد طلبك!</h2>
         
         <div class="order-num">${orderNum}</div>
         
-        <p>شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل.<br>
+        <p><span data-ar="شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل." data-en="Thank you! We will contact you soon to confirm delivery details.">شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل.</span><br>
            
-           <span style="color:var(--color-gold);font-size:0.85rem;">✅ تم حفظ الطلب في قاعدة البيانات</span>
+           <span style="color:var(--color-gold);font-size:0.85rem;" data-ar="✅ تم حفظ الطلب في قاعدة البيانات" data-en="✅ Order saved to database">✅ تم حفظ الطلب في قاعدة البيانات</span>
         
         </p>
         
         <div class="modal-actions">
           
-          <button class="modal-close" onclick="window.location='home.html'">الرئيسية</button>
+          <button class="modal-close" onclick="window.location='home.html'" data-ar="الرئيسية" data-en="Home">الرئيسية</button>
           
-          <button class="modal-confirm" onclick="closeModal(); saveCart([]); renderCart();">عرض السلة</button>
+          <button class="modal-confirm" onclick="closeModal(); saveCart([]); renderCart();" data-ar="عرض السلة" data-en="View Cart">عرض السلة</button>
         </div>`;
       saveCart([]);
     }

@@ -460,10 +460,17 @@ function applyAllSettings() {
 
   // ترجمة جميع العناصر التي عندها data-ar وdata-en
   document.querySelectorAll('[data-ar][data-en]').forEach(function(el) {
-    // نحافظ على الـ HTML الداخلي إذا كان فيه عناصر أبناء
+    var arText = el.getAttribute('data-ar');
+    var enText = el.getAttribute('data-en');
     var hasChildElements = el.children.length > 0;
     if (!hasChildElements) {
-      el.textContent = isAr ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+      el.textContent = isAr ? arText : enText;
+    } else {
+      // عنصر يحتوي على span داخله للتلوين — نستبدل كامل المحتوى الداخلي
+      // لكن نحتفظ بالspan الملوّن فقط بعد النص
+      // الأبسط: نحفظ innerHTML ونستبدل النص بدون تغيير الأيقونة/اللون
+      // نستعمل innerHTML مباشرة إذا كانت ترجمة مخصصة
+      el.innerHTML = isAr ? arText : enText;
     }
   });
 
