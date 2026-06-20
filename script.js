@@ -422,9 +422,9 @@ function getLang() {
   
   try {
     
-    return JSON.parse(localStorage.getItem('mosiqati-settings') || '{}').lang || 'ar';
+    return JSON.parse(localStorage.getItem('mosiqati-settings') || '{}').lang || 'en';
   
-  } catch(e) { return 'ar'; }
+  } catch(e) { return 'en'; }
 
 }
 
@@ -452,7 +452,7 @@ function applyAllSettings() {
   var s = {};
   try { s = JSON.parse(localStorage.getItem('mosiqati-settings') || '{}'); } catch(e) {}
 
-  var lang = s.lang || 'ar';
+  var lang = s.lang || 'en';
   var isAr = lang === 'ar';
 
   document.documentElement.lang = lang;
