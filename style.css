@@ -58,7 +58,7 @@ body {
   
   font-size: 16px;
   
-  padding-top: 126px;
+  padding-top: 106px;
 
 }
 
@@ -104,7 +104,7 @@ img {
   
   z-index: 1000;
   
-  height: 90px;
+  height: 70px;
   
   backdrop-filter: blur(10px);
 
@@ -112,7 +112,7 @@ img {
 
 .navbar-logo {
   
-  font-size: 2rem;
+  font-size: 1.6rem;
   
   font-weight: 900;
   
@@ -146,7 +146,7 @@ img {
   
   color: var(--color-white);
   
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   
   font-weight: 600;
   
@@ -1742,7 +1742,7 @@ footer {
     
     position: absolute;
     
-    top: 126px;
+    top: 106px;
     
     right: 0;
     
@@ -1866,7 +1866,7 @@ footer {
 
 .navbar-logo-img {
   
-  height: 62px;
+  height: 46px;
   
   width: auto;
   
