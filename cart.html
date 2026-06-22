@@ -440,7 +440,7 @@
 <div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">
     🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع
   
-  </div>
+  
 
 <nav class="navbar">
 
@@ -480,7 +480,7 @@
 
 <a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a> ← <a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a> ← سلة التسوق
     
-    </div>
+    
 
 <h1 style="font-size: 2rem; font-weight: 900; font-family: 'Playfair Display', serif;">
       <span data-ar="سلة التسوق" data-en="Shopping Cart">سلة <span style="color: var(--color-gold);">التسوق</span></span>
@@ -489,7 +489,7 @@
 
 <p id="itemCountText" style="color: var(--color-gray); margin-top: 5px; font-size: 0.9rem;"></p>
 
-</div>
+
 
 <div class="cart-layout">
 
@@ -501,11 +501,11 @@
 
 <a class="continue-link" data-ar="← متابعة التسوق" data-en="← Continue Shopping" href="store.html">← متابعة التسوق</a>
 
-</div>
 
-<div id="cartItems"></div>
 
-</div>
+<div id="cartItems">
+
+
 
 <div class="cart-summary">
 
@@ -517,7 +517,7 @@
 
 <span id="subtotalVal">0 د.أ</span>
 
-</div>
+
 
 <div class="summary-row">
 
@@ -525,7 +525,7 @@
 
 <span id="shippingVal">—</span>
 
-</div>
+
 
 <div class="summary-row">
 
@@ -533,7 +533,7 @@
 
 <span id="taxVal">0 د.أ</span>
 
-</div>
+
 
 <div class="summary-row" id="discountRow" style="display:none; color: #2ecc71;">
 
@@ -541,7 +541,7 @@
 
 <span id="discountVal">0 د.أ</span>
 
-</div>
+
 
 <div class="summary-row total">
 
@@ -549,7 +549,7 @@
 
 <span id="totalVal">0 د.أ</span>
 
-</div>
+
 
 <div class="promo-row">
 
@@ -557,9 +557,9 @@
 
 <button class="promo-btn" data-ar="تطبيق" data-en="Apply" onclick="applyPromo()" data-ar="تطبيق" data-en="Apply">تطبيق</button>
 
-</div>
 
-<div class="promo-msg" id="promoMsg"></div>
+
+<div class="promo-msg" id="promoMsg">
 
 <button class="btn btn-gold" data-ar="إتمام الشراء ←" data-en="Checkout ←" id="checkoutBtn" onclick="openCheckout()" style="width: 100%;">
         إتمام الشراء ←
@@ -578,11 +578,11 @@
 
 <span class="p-icon">Bank</span>
 
-</div>
 
-</div>
 
-</div>
+
+
+
 
 <footer>
 
@@ -590,27 +590,27 @@
 
 <div>
 
-<div class="footer-brand-name">MOSIQATI</div>
+<div class="footer-brand-name">MOSIQATI
 
 <p class="footer-brand-desc" data-ar="متجرك الموسيقي الأول في الأردن منذ عام 2014." data-en="Jordan's #1 music store since 2014.">متجرك الموسيقي الأول في الأردن منذ عام 2014.</p>
 
 <div class="social-links">
 
-<div class="social-link" title="فيسبوك">📘</div>
+<div class="social-link" title="فيسبوك">📘
 
-<div class="social-link" title="إنستغرام">📷</div>
+<div class="social-link" title="إنستغرام">📷
 
-<div class="social-link" title="يوتيوب">▶️</div>
+<div class="social-link" title="يوتيوب">▶️
 
-<div class="social-link" title="واتساب">💬</div>
+<div class="social-link" title="واتساب">💬
 
-</div>
 
-</div>
+
+
 
 <div>
 
-<div class="footer-heading" data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</div>
+<div class="footer-heading" data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة
 
 <ul class="footer-links">
 
@@ -624,11 +624,11 @@
 
 </ul>
 
-</div>
+
 
 <div>
 
-<div class="footer-heading" data-ar="الفئات" data-en="Categories">الفئات</div>
+<div class="footer-heading" data-ar="الفئات" data-en="Categories">الفئات
 
 <ul class="footer-links">
 
@@ -642,11 +642,11 @@
 
 </ul>
 
-</div>
+
 
 <div>
 
-<div class="footer-heading" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</div>
+<div class="footer-heading" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا
 
 <ul class="footer-links">
 
@@ -658,9 +658,9 @@
 
 </ul>
 
-</div>
 
-</div>
+
+
 
 <div class="footer-bottom">
 
@@ -672,9 +672,9 @@
 
 <a data-ar="شروط الاستخدام" data-en="Terms of Use" href="#">شروط الاستخدام</a>
 
-</div>
 
-</div>
+
+
 
 </footer>
 
@@ -694,11 +694,11 @@
 
 <button class="modal-confirm" onclick="confirmOrder()" data-ar="تأكيد الطلب ✓" data-en="Confirm Order ✓">تأكيد الطلب ✓</button>
 
-</div>
 
-</div>
 
-</div>
+
+
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="script.js"></script>
@@ -737,7 +737,7 @@
             <p data-ar="أضف بعض الآلات الموسيقية الرائعة إلى سلتك" data-en="Add some amazing musical instruments to your cart">أضف بعض الآلات الموسيقية الرائعة إلى سلتك</p>
             
             <a href="store.html" class="btn btn-gold" data-ar="🎵 تسوق الآن" data-en="🎵 Shop Now">🎵 تسوق الآن</a>
-          </div>`;
+          `;
         document.getElementById('checkoutBtn').disabled = true;
         document.getElementById('checkoutBtn').style.opacity = '0.4';
         updateSummary([], 0);
@@ -751,26 +751,26 @@
         
         <div class="cart-item" id="item-${item.id}">
           
-          <div class="item-img">${item.emoji || '🎵'}</div>
+          <div class="item-img">${item.emoji || '🎵'}
           
           <div class="item-info">
             
-            <div class="item-name">${item.name}</div>
+            <div class="item-name">${item.name}
             
-            <div class="item-desc">${item.desc || ''}</div>
+            <div class="item-desc">${item.desc || ''}
             ${item.badge ? `<span class="item-badge">${item.badge}</span>` : ''}
           
-          </div>
+          
           
           <div class="item-actions">
             
             <div>
               
-              <div class="item-price">${item.price} ${getLang()==='en'?'JOD':'د.أ'}</div>
+              <div class="item-price">${item.price} ${getLang()==='en'?'JOD':'د.أ'}
               
-              <div class="item-price-total">${getLang()==='en'?'Total':'الإجمالي'}: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'د.أ'}</div>
+              <div class="item-price-total">${getLang()==='en'?'Total':'الإجمالي'}: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'د.أ'}
             
-            </div>
+            
             
             <div class="qty-control">
               
@@ -780,13 +780,13 @@
               
               <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
             
-            </div>
+            
             
             <button class="remove-btn" onclick="removeItem('${item.id}')">${getLang()==='en'?'✕ Remove':'✕ حذف'}</button>
           
-          </div>
+          
         
-        </div>
+        
       `).join('');
 
       updateSummary(cart, discount);
@@ -921,7 +921,7 @@ function confirmOrder() {
         
         <h2 style="color: var(--color-gold)" data-ar="تم تأكيد طلبك!" data-en="Your order is confirmed!">تم تأكيد طلبك!</h2>
         
-        <div class="order-num">${orderNum}</div>
+        <div class="order-num">${orderNum}
         
         <p><span data-ar="شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل." data-en="Thank you! We will contact you soon to confirm delivery details.">شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل.</span><br>
            
@@ -934,7 +934,7 @@ function confirmOrder() {
           <button class="modal-close" onclick="window.location='home.html'" data-ar="الرئيسية" data-en="Home">الرئيسية</button>
           
           <button class="modal-confirm" onclick="closeModal(); saveCart([]); renderCart();" data-ar="عرض السلة" data-en="View Cart">عرض السلة</button>
-        </div>`;
+        `;
       saveCart([]);
     }
 
