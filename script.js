@@ -61,6 +61,10 @@ try {
       document.documentElement.style.setProperty('--color-card',  s.bgCard  || '#1a1a1a');
       
       document.body && (document.body.style.backgroundColor = s.bgColor);
+      
+      // الهيدر دائماً أسود بغض النظر عن ثيم الصفحة
+      var navEl = document.querySelector('.navbar');
+      if (navEl) navEl.style.setProperty('background-color', '#0a0a0a', 'important');
     
     }
 
