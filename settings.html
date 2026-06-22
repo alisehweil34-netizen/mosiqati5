@@ -428,8 +428,8 @@
 
 <body>
 
-<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week" id="top-bar-text">
-    🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع
+<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 DJO | Exclusive deals this week" id="top-bar-text">
+    🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع
   
   </div>
 
@@ -540,17 +540,17 @@
 
 <div style="display:flex; gap:8px;" id="font-presets">
 
-<button class="btn btn-outline" data-ar="صغير" data-en="Small" onclick="setFontPreset(13,this)" style="padding:6px 14px; font-size:0.8rem;">صغير</button>
+<button class="btn btn-outline" data-ar="صغير" data-en="Small" onclick="setFontPreset(12,this)" style="padding:6px 14px; font-size:0.8rem;">صغير</button>
 
 <button class="btn btn-gold" data-ar="متوسط" data-en="Medium" onclick="setFontPreset(16,this)" style="padding:6px 14px; font-size:0.8rem;">متوسط</button>
 
-<button class="btn btn-outline" data-ar="كبير" data-en="Large" onclick="setFontPreset(19,this)" style="padding:6px 14px; font-size:0.8rem;">كبير</button>
+<button class="btn btn-outline" data-ar="كبير" data-en="Large" onclick="setFontPreset(22,this)" style="padding:6px 14px; font-size:0.8rem;">كبير</button>
 
 </div>
 
 </div>
 
-<div class="font-preview" id="font-preview">
+<div class="font-preview" id="font-preview" data-ar="🎵 مرحباً بك في موسيقاتي — متجر الآلات الموسيقية الأول في الأردن. هذا مثال على حجم الخط الحالي في الموقع" data-en="🎵 Welcome to Musiqati — Jordan's premier musical instrument store. This is an example of the current font size on the website.">
           🎵 مرحباً بك في موسيقاتي — متجر الآلات الموسيقية الأول في الأردن. هذا مثال على حجم الخط الحالي في الموقع.
         
         </div>
@@ -1168,7 +1168,8 @@
   }
 
   function resetSettings() {
-    localStorage.removeItem('mosiqati-settings');
+    // الاحتفاظ باللغة الإنجليزية عند إعادة الضبط
+    localStorage.setItem('mosiqati-settings', JSON.stringify({ lang: 'en' }));
     location.reload();
   }
 

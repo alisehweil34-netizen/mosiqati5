@@ -437,8 +437,8 @@
 
 <body>
 
-<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">
-    🎵 شحن مجاني على الطلبات فوق 50 دينار | عروض حصرية هذا الأسبوع
+<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 DJO | Exclusive deals this week">
+    🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع
   
   </div>
 
@@ -478,7 +478,7 @@
 
 <div class="breadcrumb">
 
-<a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a> ← <a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a> ← سلة التسوق
+<a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a> ← <a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a> <A data-ar="← سلة التسوق" data-en="← Shopping cart"></A> 
     
     </div>
 
@@ -497,7 +497,7 @@
 
 <div class="cart-toolbar">
 
-<button class="clear-btn" data-ar="🗑 إفراغ السلة" data-en="🗑 إفراغ Cart" onclick="clearCart()">🗑 إفراغ السلة</button>
+<button class="clear-btn" data-ar="🗑 Empty the basket" data-en="🗑 Empty Cart" onclick="clearCart()">🗑 إفراغ السلة</button>
 
 <a class="continue-link" data-ar="← متابعة التسوق" data-en="← Continue Shopping" href="store.html">← متابعة التسوق</a>
 
@@ -515,7 +515,7 @@
 
 <span class="label" data-ar="المجموع الجزئي" data-en="Subtotal">المجموع الجزئي</span>
 
-<span id="subtotalVal">0 د.أ</span>
+<span id="subtotalVal" >0 DJO</span>
 
 </div>
 
@@ -531,7 +531,7 @@
 
 <span class="label" data-ar="ضريبة المبيعات (16%)" data-en="Sales Tax (16%)">ضريبة المبيعات (16%)</span>
 
-<span id="taxVal">0 د.أ</span>
+<span id="taxVal">0 DJO</span>
 
 </div>
 
@@ -539,7 +539,7 @@
 
 <span class="label" style="color: #2ecc71;" data-ar="🎉 خصم الكوبون" data-en="🎉 Coupon Discount">🎉 خصم الكوبون</span>
 
-<span id="discountVal">0 د.أ</span>
+<span id="discountVal" data-ar="0 DJO" data-en="0 DJO">0 DJO</span>
 
 </div>
 
@@ -547,13 +547,13 @@
 
 <span class="label" data-ar="الإجمالي" data-en="Total">الإجمالي</span>
 
-<span id="totalVal">0 د.أ</span>
+<span id="totalVal">0 DJO</span>
 
 </div>
 
 <div class="promo-row">
 
-<input class="promo-input" dir="ltr" id="promoInput" placeholder="كود الخصم..."/>
+<input class="promo-input" dir="ltr" id="promoInput"  data-ar-placeholder=" Discount code..." data-en-placecholder=""/>
 
 <button class="promo-btn" data-ar="تطبيق" data-en="Apply" onclick="applyPromo()" data-ar="تطبيق" data-en="Apply">تطبيق</button>
 
@@ -650,7 +650,7 @@
 
 <ul class="footer-links">
 
-<li><a href="#">📍 الشميساني، عمان</a></li>
+<li><a href="#" data-ar="📍 الشميساني، عمان" data-en="📍 Shmeisani, Amman">📍 الشميساني، عمان</a></li>
 
 <li><a href="#">📞 +962 79 000 0000</a></li>
 
@@ -711,7 +711,9 @@
     function getCart() {
       try {
         const raw = localStorage.getItem(CART_KEY);
-        return raw ? JSON.parse(raw) : [];
+        const cart = raw ? JSON.parse(raw) : [];
+        // تنقية العناصر الفاسدة (السعر 0 أو الاسم مثل DJO)
+        return cart.filter(i => i && i.name && i.name !== 'DJO' && i.price > 0);
       } catch { return []; }
     }
 
@@ -723,7 +725,7 @@
       const totalQty = cart.reduce((s,i) => s + i.qty, 0);
 
       document.getElementById('itemCountText').textContent =
-        cart.length ? `${totalQty} منتج في سلتك` : '';
+        cart.length ? `${totalQty} item${totalQty !== 1 ? "s" : ""} in your cart` : '';
 
       if (!cart.length) {
         container.innerHTML = `
@@ -766,9 +768,9 @@
             
             <div>
               
-              <div class="item-price">${item.price} ${getLang()==='en'?'JOD':'د.أ'}</div>
+              <div class="item-price">${item.price} ${getLang()==='en'?'DJO':'DJO'}</div>
               
-              <div class="item-price-total">${getLang()==='en'?'Total':'الإجمالي'}: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'د.أ'}</div>
+              <div class="item-price-total">Total: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'DJO':'DJO'}</div>
             
             </div>
             
@@ -799,21 +801,21 @@
       const discAmt = sub * (disc / 100);
       const total = sub + shipping + tax - discAmt;
 
-      document.getElementById('subtotalVal').textContent = sub.toFixed(2) + ' د.أ';
-      document.getElementById('shippingVal').textContent = sub === 0 ? '—' : shipping === 0 ? '🎁 مجاناً' : shipping + ' د.أ';
-      document.getElementById('taxVal').textContent = tax.toFixed(2) + ' د.أ';
-      document.getElementById('totalVal').textContent = total.toFixed(2) + ' د.أ';
+      document.getElementById('subtotalVal').textContent = sub.toFixed(2) + ' DJO';
+      document.getElementById('shippingVal').textContent = sub === 0 ? '—' : shipping === 0 ? '🎁 Free' : shipping + ' DJO';
+      document.getElementById('taxVal').textContent = tax.toFixed(2) + ' DJO';
+      document.getElementById('totalVal').textContent = total.toFixed(2) + ' DJO';
 
       const dr = document.getElementById('discountRow');
       if (discAmt > 0) {
         dr.style.display = 'flex';
-        document.getElementById('discountVal').textContent = '-' + discAmt.toFixed(2) + ' د.أ';
+        document.getElementById('discountVal').textContent = '-' + discAmt.toFixed(2) + ' DJO';
       } else { dr.style.display = 'none'; }
     }
 
     function changeQty(id, delta) {
       let cart = getCart();
-      const idx = cart.findIndex(i => i.id === id);
+      const idx = cart.findIndex(i => String(i.id) === String(id));
       if (idx === -1) return;
       cart[idx].qty = Math.max(1, cart[idx].qty + delta);
       saveCart(cart);
@@ -824,7 +826,7 @@
       const el = document.getElementById('item-' + id);
       if (el) { el.style.opacity = '0'; el.style.transform = 'translateX(30px)'; el.style.transition = 'all 0.3s'; }
       setTimeout(() => {
-        let cart = getCart().filter(i => i.id !== id);
+        let cart = getCart().filter(i => String(i.id) !== String(id));
         saveCart(cart);
         renderCart();
       }, 300);
