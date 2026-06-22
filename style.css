@@ -76,9 +76,9 @@ img {
 
 .navbar {
   
-  background-color: #ffffff;
+  background-color: rgba(10, 10, 10, 0.97);
   
-  border-bottom: 2px solid var(--color-gold-dark);
+  border-bottom: 1px solid var(--color-gold-dark);
   
   padding: 0 5%;
   
@@ -122,7 +122,7 @@ img {
 
 .navbar-logo span {
   
-  color: #333333;
+  color: var(--color-white);
 
 }
 
@@ -140,7 +140,7 @@ img {
 
 .navbar-links a {
   
-  color: #1a1a1a;
+  color: var(--color-white);
   
   font-size: 0.95rem;
   
@@ -159,7 +159,7 @@ img {
 .navbar-links a:hover,
 .navbar-links a.active {
   
-  color: var(--color-gold-dark);
+  color: var(--color-gold);
 
 }
 
