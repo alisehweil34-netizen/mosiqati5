@@ -89,6 +89,8 @@ document.addEventListener('DOMContentLoaded', function () {
   
   applyAllSettings();
 
+  initMusicToggle();
+
   
   
   
@@ -157,26 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
       
       var emoji = this.dataset.emoji || '🎵';
 
-      
-      var cart = [];
-      
-      try { cart = JSON.parse(localStorage.getItem('mosiqati-cart') || '[]'); } catch(e) {}
-
-      
-      var existing = cart.find(function(i) { return i.id === id; });
-      
-      if (existing) {
-        existing.qty += 1;
-      
-      } else {
-        
-        cart.push({ id: id, name: name, price: price, emoji: emoji, qty: 1 });
-      
-      }
-
-      
-      localStorage.setItem('mosiqati-cart', JSON.stringify(cart));
-      updateCartCount();
+      addItemToCart({ id: id, name: name, price: price, emoji: emoji });
       playSound('addToCart');
 
       
@@ -212,12 +195,16 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.btn-gift').forEach(function (btn) {
     
     btn.addEventListener('click', function () {
-      
-      var lang = getLang();
-      
-      alert(lang === 'en'
-        ? '🎁 We will contact you soon to confirm the gift order!'
-        : '🎁 سيتم التواصل معك قريباً لتأكيد طلب الهدية!');
+
+      var card  = this.closest('.gift-card');
+      var name  = card ? (card.querySelector('.gift-name')?.textContent.trim() || 'هدية') : 'هدية';
+      var priceText = card ? (card.querySelector('.gift-price')?.textContent || '') : '';
+      var priceMatch = priceText.match(/[\d.]+/);
+      var price = priceMatch ? parseFloat(priceMatch[0]) : 0;
+      var emoji = (name.match(/^[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/u) || [])[0] || '🎁';
+
+      addItemToCart({ id: 'gift-' + name, name: name, price: price, emoji: emoji });
+      window.location.href = 'cart.html';
     
     });
   
@@ -233,13 +220,16 @@ document.addEventListener('DOMContentLoaded', function () {
       
       var card  = this.closest('.offer-card');
       
-      var title = card ? (card.querySelector('.offer-title')?.textContent || '') : '';
-      
-      var lang  = getLang();
-      
-      alert(lang === 'en'
-        ? '🎉 Great! Offer activated: "' + title + '"'
-        : '🎉 رائع! تم تفعيل عرض: "' + title + '"');
+      var title = card ? (card.querySelector('.offer-title')?.textContent.trim() || 'عرض') : 'عرض';
+
+      var priceEl = card ? card.querySelector('.offer-new-price') : null;
+      var priceText = priceEl ? priceEl.textContent : '';
+      var priceMatch = priceText.match(/[\d.]+/);
+      var price = priceMatch ? parseFloat(priceMatch[0]) : 0;
+      var emoji = (title.match(/^[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/u) || [])[0] || '🎉';
+
+      addItemToCart({ id: 'offer-' + title, name: title, price: price, emoji: emoji });
+      window.location.href = 'cart.html';
     
     });
   
@@ -428,6 +418,23 @@ function getLang() {
 
 }
 
+function addItemToCart(item) {
+  try {
+    var cart = [];
+    try { cart = JSON.parse(localStorage.getItem('mosiqati-cart') || '[]'); } catch(e) {}
+
+    var existing = cart.find(function(i) { return i.id === item.id; });
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ id: item.id, name: item.name, price: item.price, emoji: item.emoji, qty: 1 });
+    }
+
+    localStorage.setItem('mosiqati-cart', JSON.stringify(cart));
+    updateCartCount();
+  } catch(e) {}
+}
+
 function updateCartCount() {
   try {
     var cart  = JSON.parse(localStorage.getItem('mosiqati-cart') || '[]');
@@ -550,7 +557,7 @@ function applyAllSettings() {
     if (!compactStyle) {
       var st = document.createElement('style');
       st.id = 'compact-style';
-      st.textContent = 'section { padding: 40px 5% !important; } .products-grid, .gifts-grid, .offers-grid, .values-grid { gap: 15px !important; }';
+      st.textContent = 'section { padding: 25px 5% !important; } .settings-card { padding: 16px !important; margin-bottom: 14px !important; } .setting-row { padding: 10px 0 !important; } .product-card, .gift-card, .offer-card { padding: 14px !important; margin-bottom: 10px; } .products-grid, .gifts-grid, .offers-grid, .values-grid, .offers-grid { gap: 12px !important; }';
       document.head.appendChild(st);
     }
   } else {
@@ -581,9 +588,18 @@ function playSound(name) {
 }
 
 /* الموسيقى الخلفية */
+var MUSIC_KEY  = 'mosiqati-music';
 var _bgAudio   = null;
 var _bgStarted = false;
 var _bgPlaying = false;
+
+function getMusicPref() {
+  try { return localStorage.getItem(MUSIC_KEY); } catch(e) { return null; }
+}
+
+function setMusicPref(v) {
+  try { localStorage.setItem(MUSIC_KEY, v); } catch(e) {}
+}
 
 function getBgAudio() {
   if (!_bgAudio) {
@@ -594,13 +610,69 @@ function getBgAudio() {
   return _bgAudio;
 }
 
+function updateMusicIcon() {
+  var btn = document.getElementById('musicToggle');
+  if (!btn) return;
+  if (_bgPlaying) {
+    btn.textContent = '🔇';
+    btn.classList.add('playing');
+  } else {
+    btn.textContent = '🎵';
+    btn.classList.remove('playing');
+  }
+}
+
 function startBg() {
   if (_bgStarted) return;
   _bgStarted = true;
   getBgAudio().play().then(function(){
     _bgPlaying = true;
-    var btn = document.getElementById('musicToggle');
-    if (btn) { btn.textContent = '🔇'; btn.classList.add('playing'); }
-  }).catch(function(){});
+    setMusicPref('on');
+    updateMusicIcon();
+  }).catch(function(){
+    _bgStarted = false;
+  });
 }
-document.addEventListener('click', startBg, { once: true });
+
+function initMusicToggle() {
+  var btn = document.getElementById('musicToggle');
+  if (!btn) return;
+
+  var pref = getMusicPref();
+
+  if (pref !== 'off') {
+    // الموسيقى كانت مفعّلة في صفحة سابقة (أو هذه أول زيارة) - نحاول تشغيلها مباشرة
+    getBgAudio().play().then(function(){
+      _bgPlaying = true;
+      _bgStarted = true;
+      updateMusicIcon();
+    }).catch(function(){
+      // المتصفح منع التشغيل التلقائي، ستبدأ مع أول نقرة في الصفحة
+    });
+  } else {
+    _bgPlaying = false;
+  }
+
+  updateMusicIcon();
+
+  btn.addEventListener('click', function () {
+    var bg = getBgAudio();
+    if (_bgPlaying) {
+      bg.pause();
+      _bgPlaying = false;
+      setMusicPref('off');
+    } else {
+      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
+      _bgPlaying = true;
+      _bgStarted = true;
+      setMusicPref('on');
+    }
+    updateMusicIcon();
+  });
+}
+
+function clickToStartBg() {
+  if (getMusicPref() !== 'off') startBg();
+  document.removeEventListener('click', clickToStartBg);
+}
+document.addEventListener('click', clickToStartBg);

@@ -538,13 +538,13 @@
 
 </div>
 
-<div style="display:flex; gap:8px;">
+<div style="display:flex; gap:8px;" id="font-presets">
 
-<button class="btn btn-outline" data-ar="صغير" data-en="Small" onclick="setFontPreset(13)" style="padding:6px 14px; font-size:0.8rem;">صغير</button>
+<button class="btn btn-outline" data-ar="صغير" data-en="Small" onclick="setFontPreset(13,this)" style="padding:6px 14px; font-size:0.8rem;">صغير</button>
 
-<button class="btn btn-gold" data-ar="متوسط" data-en="Medium" onclick="setFontPreset(16)" style="padding:6px 14px; font-size:0.8rem;">متوسط</button>
+<button class="btn btn-gold" data-ar="متوسط" data-en="Medium" onclick="setFontPreset(16,this)" style="padding:6px 14px; font-size:0.8rem;">متوسط</button>
 
-<button class="btn btn-outline" data-ar="كبير" data-en="Large" onclick="setFontPreset(19)" style="padding:6px 14px; font-size:0.8rem;">كبير</button>
+<button class="btn btn-outline" data-ar="كبير" data-en="Large" onclick="setFontPreset(19,this)" style="padding:6px 14px; font-size:0.8rem;">كبير</button>
 
 </div>
 
@@ -653,6 +653,8 @@
 <button class="bg-btn" data-ar="بني" data-en="Brown" onclick="setBg(this,'#1a0a00','#220d00','#2a1200')" style="background:#1a0a00; color:#888;">بني</button>
 
 <button class="bg-btn" data-ar="رمادي" data-en="Gray" onclick="setBg(this,'#1f1f1f','#282828','#333333')" style="background:#1f1f1f; color:#888;">رمادي</button>
+
+<button class="bg-btn" data-ar="أبيض" data-en="White" onclick="setBg(this,'#ffffff','#f0f0f0','#f7f7f7')" style="background:#ffffff; color:#333; border:1px solid #ccc;">أبيض</button>
 
 </div>
 
@@ -948,9 +950,24 @@
     
     document.getElementById('font-slider').value = s.fontSize || 16;
     document.getElementById('font-size-val').textContent = (s.fontSize || 16) + 'px';
+    syncFontPresetActive(s.fontSize || 16);
     document.getElementById('toggle-compact').checked  = !!s.compact;
     document.getElementById('toggle-anim').checked     = !s.noAnim;
     document.getElementById('toggle-topbar').checked   = !s.hideTopBar;
+    if (s.accentColor) {
+      document.querySelectorAll('.theme-btn').forEach(function(b){
+        var onclickAttr = b.getAttribute('onclick') || '';
+        var match = onclickAttr.indexOf("'" + s.accentColor + "'") !== -1;
+        b.classList.toggle('active', match);
+      });
+    }
+    if (s.bgColor) {
+      document.querySelectorAll('.bg-btn').forEach(function(b){
+        var onclickAttr = b.getAttribute('onclick') || '';
+        var match = onclickAttr.indexOf("'" + s.bgColor + "'") !== -1;
+        b.classList.toggle('active', match);
+      });
+    }
   })();
 
   // ===================================
@@ -977,13 +994,34 @@
     val = parseInt(val);
     document.getElementById('font-size-val').textContent = val + 'px';
     applyFontSize(val);
+    syncFontPresetActive(val);
+    setSaved({ fontSize: val });
   }
 
-  function setFontPreset(val) {
+  function setFontPreset(val, btn) {
     
     document.getElementById('font-slider').value = val;
     document.getElementById('font-size-val').textContent = val + 'px';
     applyFontSize(val);
+    setSaved({ fontSize: val });
+
+    document.querySelectorAll('#font-presets .btn').forEach(function(b){
+      b.classList.remove('btn-gold');
+      b.classList.add('btn-outline');
+    });
+    if (btn) {
+      btn.classList.remove('btn-outline');
+      btn.classList.add('btn-gold');
+    }
+  }
+
+  function syncFontPresetActive(val) {
+    val = parseInt(val);
+    document.querySelectorAll('#font-presets .btn').forEach(function(b){
+      var match = b.getAttribute('onclick') === "setFontPreset(" + val + ",this)";
+      b.classList.toggle('btn-gold', match);
+      b.classList.toggle('btn-outline', !match);
+    });
   }
 
   // ===================================
@@ -1084,7 +1122,7 @@
       var st = document.createElement('style');
       st.id = 'compact-style';
       
-      st.textContent = 'section { padding: 40px 5% !important; } .product-card, .gift-card, .offer-card { margin-bottom: 10px; }';
+      st.textContent = 'section { padding: 25px 5% !important; } .settings-card { padding: 16px !important; margin-bottom: 14px !important; } .setting-row { padding: 10px 0 !important; } .product-card, .gift-card, .offer-card { padding: 14px !important; margin-bottom: 10px; } .products-grid, .gifts-grid, .offers-grid, .values-grid { gap: 12px !important; }';
       if (!document.getElementById('compact-style')) document.head.appendChild(st);
     } else {
       var el = document.getElementById('compact-style');
@@ -1148,23 +1186,6 @@
   🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
 </button>
 <button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
-<script>
-  document.getElementById('musicToggle').addEventListener('click', function(){
-    var bg = getBgAudio();
-    if (_bgPlaying) {
-      bg.pause();
-      _bgPlaying = false;
-      this.textContent = '🎵';
-      this.classList.remove('playing');
-    } else {
-      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
-      _bgPlaying = true;
-      _bgStarted = true;
-      this.textContent = '🔇';
-      this.classList.add('playing');
-    }
-  });
-</script>
 </body>
 
 </html>

@@ -53,6 +53,8 @@ body {
   line-height: 1.7;
   
   font-size: 16px;
+  
+  padding-top: 70px;
 
 }
 
@@ -86,9 +88,15 @@ img {
   
   justify-content: space-between;
   
-  position: sticky;
+  position: fixed;
   
   top: 0;
+  
+  left: 0;
+  
+  right: 0;
+  
+  width: 100%;
   
   z-index: 1000;
   
@@ -634,8 +642,7 @@ section {
 .navbar {
     display: flex;
     align-items: center;
-    justify-content: center;
-    position: relative;
+    justify-content: space-between;
 }
 
 .navbar-logo {
@@ -764,6 +771,16 @@ section {
   
   transition: all var(--transition);
 
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+.gift-card .btn-gift {
+
+  margin-top: auto;
+
 }
 
 .gift-card:hover {
@@ -842,6 +859,16 @@ section {
   transition: all var(--transition);
   
   overflow: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+.offer-card .btn-offer {
+
+  margin-top: auto;
 
 }
 

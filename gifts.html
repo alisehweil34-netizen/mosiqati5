@@ -114,7 +114,10 @@
 
 <nav class="navbar">
 
-<a class="navbar-logo" href="home.html">MOSIQA<span>TI</span></a>
+<a class="navbar-logo" href="home.html">
+<img alt="موسيقاتي" class="navbar-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'" src="logo.png"/>
+<span class="navbar-logo-text" style="display:none">MOSIQA<span class="gold-text">TI</span></span>
+</a>
 
 <ul class="navbar-links" id="nav-links">
 
@@ -399,8 +402,6 @@
 
 <div class="offer-img-wrap">
 
-<img alt="باقة المحترف الكاملة" src="product-guitar.png"/>
-
 <div class="img-placeholder">
 
 <span>🎸</span>
@@ -610,23 +611,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="script.js"></script>
-<script>
-  document.getElementById('musicToggle').addEventListener('click', function(){
-    var bg = getBgAudio();
-    if (_bgPlaying) {
-      bg.pause();
-      _bgPlaying = false;
-      this.textContent = '🎵';
-      this.classList.remove('playing');
-    } else {
-      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
-      _bgPlaying = true;
-      _bgStarted = true;
-      this.textContent = '🔇';
-      this.classList.add('playing');
-    }
-  });
-</script>
 </body>
 
 </html>

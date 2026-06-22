@@ -483,23 +483,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="script.js"></script>
-<script>
-  document.getElementById('musicToggle').addEventListener('click', function(){
-    var bg = getBgAudio();
-    if (_bgPlaying) {
-      bg.pause();
-      _bgPlaying = false;
-      this.textContent = '🎵';
-      this.classList.remove('playing');
-    } else {
-      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
-      _bgPlaying = true;
-      _bgStarted = true;
-      this.textContent = '🔇';
-      this.classList.add('playing');
-    }
-  });
-</script>
 </body>
 
 </html>

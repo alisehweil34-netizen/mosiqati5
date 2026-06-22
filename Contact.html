@@ -668,23 +668,6 @@
   🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
 </button>
 <button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
-<script>
-  document.getElementById('musicToggle').addEventListener('click', function(){
-    var bg = getBgAudio();
-    if (_bgPlaying) {
-      bg.pause();
-      _bgPlaying = false;
-      this.textContent = '🎵';
-      this.classList.remove('playing');
-    } else {
-      bg.play().then(function(){ _bgPlaying = true; }).catch(function(){});
-      _bgPlaying = true;
-      _bgStarted = true;
-      this.textContent = '🔇';
-      this.classList.add('playing');
-    }
-  });
-</script>
 </body>
 
 </html>
