@@ -774,15 +774,15 @@
             
             <div class="qty-control">
               
-              <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+              <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
               
               <span class="qty-display">${item.qty}</span>
               
-              <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+              <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
             
             </div>
             
-            <button class="remove-btn" onclick="removeItem(${item.id})">${getLang()==='en'?'✕ Remove':'✕ حذف'}</button>
+            <button class="remove-btn" onclick="removeItem('${item.id}')">${getLang()==='en'?'✕ Remove':'✕ حذف'}</button>
           
           </div>
         
