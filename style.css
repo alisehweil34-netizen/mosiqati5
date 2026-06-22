@@ -54,7 +54,7 @@ body {
   
   font-size: 16px;
   
-  padding-top: 70px;
+  padding-top: 106px;
 
 }
 
@@ -90,7 +90,7 @@ img {
   
   position: fixed;
   
-  top: 0;
+  top: 36px;
   
   left: 0;
   
@@ -1548,6 +1548,13 @@ footer {
   
   font-weight: 700;
 
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1001;
+
 }
 
 .section-dark {
@@ -1731,7 +1738,7 @@ footer {
     
     position: absolute;
     
-    top: 70px;
+    top: 106px;
     
     right: 0;
     
