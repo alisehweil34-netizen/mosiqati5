@@ -713,7 +713,7 @@
         const raw = localStorage.getItem(CART_KEY);
         const cart = raw ? JSON.parse(raw) : [];
         // تنقية العناصر الفاسدة (السعر 0 أو الاسم مثل DJO)
-        return cart.filter(i => i && i.name && i.name !== 'DJO' && i.price > 0);
+        return cart.filter(i => i && i.name && i.name !== 'DJO');
       } catch { return []; }
     }
 
