@@ -497,7 +497,7 @@
 
 <div class="cart-toolbar">
 
-<button class="clear-btn" data-ar="🗑 Empty the basket" data-en="🗑 Empty Cart" onclick="clearCart()">🗑 إفراغ السلة</button>
+<button class="clear-btn" data-ar="🗑 إفراغ السلة" data-en="🗑 Empty Cart" onclick="clearCart()">🗑 إفراغ السلة</button>
 
 <a class="continue-link" data-ar="← متابعة التسوق" data-en="← Continue Shopping" href="store.html">← متابعة التسوق</a>
 
@@ -743,6 +743,7 @@
         document.getElementById('checkoutBtn').disabled = true;
         document.getElementById('checkoutBtn').style.opacity = '0.4';
         updateSummary([], 0);
+        if (typeof applyAllSettings === 'function') applyAllSettings();
         return;
       }
 
