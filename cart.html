@@ -844,10 +844,10 @@
       if (PROMOS[code]) {
         discount = PROMOS[code];
         promoApplied = true;
-        showPromoMsg(`🎉 تم تطبيق خصم ${discount}% بنجاح!`, 'success');
+        showPromoMsg(getLang()==='en' ? `🎉 ${discount}% discount applied successfully!` : `🎉 تم تطبيق خصم ${discount}% بنجاح!`, 'success');
         updateSummary(getCart(), discount);
       } else {
-        showPromoMsg('❌ الكوبون غير صحيح', 'error');
+        showPromoMsg(getLang()==='en' ? '❌ Invalid coupon' : '❌ الكوبون غير صحيح', 'error');
       }
     }
 
@@ -917,25 +917,26 @@ function confirmOrder() {
 
       playSound('orderSuccess');
 
+      const isAr = getLang() === 'ar';
       document.getElementById('modalContent').innerHTML = `
         
         <span class="icon">🎉</span>
         
-        <h2 style="color: var(--color-gold)" data-ar="تم تأكيد طلبك!" data-en="Your order is confirmed!">تم تأكيد طلبك!</h2>
+        <h2 style="color: var(--color-gold)">${isAr ? 'تم تأكيد طلبك!' : 'Your order is confirmed!'}</h2>
         
         <div class="order-num">${orderNum}</div>
         
-        <p><span data-ar="شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل." data-en="Thank you! We will contact you soon to confirm delivery details.">شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل.</span><br>
+        <p><span>${isAr ? 'شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل.' : 'Thank you! We will contact you soon to confirm delivery details.'}</span><br>
            
-           <span style="color:var(--color-gold);font-size:0.85rem;" data-ar="✅ تم حفظ الطلب في قاعدة البيانات" data-en="✅ Order saved to database">✅ تم حفظ الطلب في قاعدة البيانات</span>
+           <span style="color:var(--color-gold);font-size:0.85rem;">${isAr ? '✅ تم حفظ الطلب في قاعدة البيانات' : '✅ Order saved to database'}</span>
         
         </p>
         
         <div class="modal-actions">
           
-          <button class="modal-close" onclick="window.location='home.html'" data-ar="الرئيسية" data-en="Home">الرئيسية</button>
+          <button class="modal-close" onclick="window.location='home.html'">${isAr ? 'الرئيسية' : 'Home'}</button>
           
-          <button class="modal-confirm" onclick="closeModal(); saveCart([]); renderCart();" data-ar="عرض السلة" data-en="View Cart">عرض السلة</button>
+          <button class="modal-confirm" onclick="closeModal(); saveCart([]); renderCart();">${isAr ? 'عرض السلة' : 'View Cart'}</button>
         </div>`;
       saveCart([]);
     }

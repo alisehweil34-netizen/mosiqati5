@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
       
       var origBg = this.style.background;
       
-      this.textContent = '✅ تمت الإضافة!';
+      this.textContent = getLang() === 'ar' ? '✅ تمت الإضافة!' : '✅ Added!';
       
       this.style.background = 'linear-gradient(135deg,#2ecc71,#27ae60)';
       
@@ -699,88 +699,16 @@ document.addEventListener('click', clickToStartBg);
   var readTimeout = null;
   var savedText = '';
 
-  // تحميل قائمة الأصوات قد يتأخر (خصوصاً Chrome)، فنخزّنها فور توفرها
-  var cachedVoices = window.speechSynthesis.getVoices() || [];
-  if (!cachedVoices.length && 'onvoiceschanged' in window.speechSynthesis) {
-    window.speechSynthesis.addEventListener('voiceschanged', function () {
-      cachedVoices = window.speechSynthesis.getVoices() || [];
-    });
-  }
-
-  // اختيار أفضل صوت متاح للغة المطلوبة، مع تجربة عدة لهجات عربية شائعة
-  // (ar-SA, ar-EG, ar-AE...) وليس "ar-SA" فقط، لأن بعض الأجهزة لا تملك
-  // إلا لهجة عربية واحدة مختلفة عن السعودية
-  function pickVoice(langPrefix) {
-    var voices = cachedVoices.length ? cachedVoices : (window.speechSynthesis.getVoices() || []);
-    if (!voices.length) return null;
-    var exact = voices.find(function (v) { return v.lang && v.lang.toLowerCase() === langPrefix.toLowerCase(); });
-    if (exact) return exact;
-    var prefix = langPrefix.split('-')[0].toLowerCase();
-    var partial = voices.find(function (v) { return v.lang && v.lang.toLowerCase().indexOf(prefix) === 0; });
-    return partial || null;
-  }
-
-  function hasVoiceFor(langPrefix) {
-    return !!pickVoice(langPrefix);
-  }
-
-  function showToast(msg) {
-    var t = document.createElement('div');
-    t.textContent = msg;
-    t.style.cssText = [
-      'position:fixed', 'left:50%', 'bottom:30px', 'transform:translateX(-50%)',
-      'background:#222', 'color:#fff', 'padding:10px 18px', 'border-radius:10px',
-      'font-family:Cairo,sans-serif', 'font-size:13px', 'z-index:999999',
-      'box-shadow:0 4px 16px rgba(0,0,0,0.5)', 'max-width:90vw', 'text-align:center',
-    ].join(';');
-    document.body.appendChild(t);
-    setTimeout(function () { t.remove(); }, 4000);
-  }
-
-  // حل لمشكلة شهيرة في Chrome: استدعاء speak() مباشرة بعد cancel()
-  // في نفس اللحظة قد يُسقط الصوت بصمت بدون أي خطأ ظاهر. تأخير بسيط يحل ذلك.
-  // كذلك Chrome يوقف الصوت تلقائياً بعد ثوانٍ من الخمول أثناء النطق
-  // الطويل، فنستخدم resume() دورياً لمنع ذلك.
-  var keepAliveTimer = null;
   function speak(text) {
-    if (!text) return;
     window.speechSynthesis.cancel();
-    clearInterval(keepAliveTimer);
-
-    var isArabic = /[\u0600-\u06FF]/.test(text);
-    var targetLang = isArabic ? 'ar-SA' : 'en-US';
-
-    if (isArabic && !hasVoiceFor('ar')) {
-      // لا يوجد أي صوت عربي مثبّت على هذا المتصفح/الجهاز — هذا هو السبب
-      // الحقيقي لعدم النطق، وليس خللاً في الكود. نوضح ذلك للمستخدم بدل
-      // الفشل الصامت.
-      showToast('لا يوجد صوت عربي مثبّت على هذا المتصفح/الجهاز. على أندرويد ثبّت تطبيق "خدمات تحويل النص إلى كلام لـGoogle" واختر فيه لغة عربية، أو على iOS فعّل صوتاً عربياً من الإعدادات > الإتاحة > المحتوى المنطوق.');
-    }
-
-    setTimeout(function () {
-      var utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = targetLang;
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
-      utterance.volume = 1.0;
-
-      var voice = pickVoice(targetLang);
-      if (voice) utterance.voice = voice;
-
-      utterance.onstart = function () {
-        keepAliveTimer = setInterval(function () {
-          if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.pause();
-            window.speechSynthesis.resume();
-          }
-        }, 8000);
-      };
-      utterance.onend = utterance.onerror = function () {
-        clearInterval(keepAliveTimer);
-      };
-
-      window.speechSynthesis.speak(utterance);
-    }, 60);
+    // استخدام دالة getLang العامة من script.js
+    var lang = (typeof getLang === 'function') ? getLang() : 'en';
+    var utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang === 'ar' ? 'ar-SA' : 'en-US';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    window.speechSynthesis.speak(utterance);
   }
 
   function removePopup() {
@@ -788,105 +716,62 @@ document.addEventListener('click', clickToStartBg);
     clearTimeout(readTimeout);
   }
 
-  // نحسب موضع الزر من المستطيل الحقيقي للتحديد (Range) بدل موضع نقطة
-  // الضغط/اللمس، لأن الاعتماد على إحداثيات الحدث كان يجعل الزر "يتحرك"
-  // مع كل حركة طفيفة أثناء تثبيت التحديد (خصوصاً عند السحب باللمس على الموبايل)
-  function getSelectionRect() {
-    var sel = window.getSelection();
-    if (!sel || sel.rangeCount === 0) return null;
-    var range = sel.getRangeAt(0);
-    var rect = range.getBoundingClientRect();
-    if (!rect || (rect.width === 0 && rect.height === 0)) return null;
-    return rect;
-  }
-
-  function showPopupForSelection(text) {
+  function createPopup(x, y, text) {
+    removePopup();
     savedText = text;
-    var rect = getSelectionRect();
-    if (!rect) { removePopup(); return; }
 
-    var x = rect.left + rect.width / 2;
-    var y = rect.top;
+    popup = document.createElement('button');
+    popup.id = 'tts-popup';
+    popup.textContent = '🔊 اقرأ';
+    popup.style.cssText = [
+      'position:fixed',
+      'left:' + Math.min(x, window.innerWidth - 120) + 'px',
+      'top:' + Math.max(y - 50, 10) + 'px',
+      'background:#c9a84c',
+      'color:#0a0a0a',
+      'padding:7px 16px',
+      'border-radius:20px',
+      'font-size:13px',
+      'font-weight:700',
+      'cursor:pointer',
+      'z-index:999999',
+      'box-shadow:0 4px 16px rgba(0,0,0,0.5)',
+      'user-select:none',
+      'font-family:Cairo,sans-serif',
+      'white-space:nowrap',
+      'border:none',
+      'outline:none',
+      'pointer-events:auto',
+    ].join(';');
 
-    if (!popup) {
-      popup = document.createElement('button');
-      popup.id = 'tts-popup';
-      popup.textContent = '🔊 اقرأ';
-      popup.style.cssText = [
-        'position:fixed',
-        'background:#c9a84c',
-        'color:#0a0a0a',
-        'padding:7px 16px',
-        'border-radius:20px',
-        'font-size:13px',
-        'font-weight:700',
-        'cursor:pointer',
-        'z-index:999999',
-        'box-shadow:0 4px 16px rgba(0,0,0,0.5)',
-        'user-select:none',
-        'font-family:Cairo,sans-serif',
-        'white-space:nowrap',
-        'border:none',
-        'outline:none',
-        'pointer-events:auto',
-        'transform:translateX(-50%)',
-      ].join(';');
-
-      // touchend + mousedown يضمنان عمل الزر على اللمس والماوس بدون أن
-      // يلغي اختيار النص (preventDefault) أو يتسبب حدث آخر بإزالته أولاً
-      var triggerRead = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        speak(savedText);
-        removePopup();
-      };
-      popup.addEventListener('mousedown', triggerRead);
-      popup.addEventListener('touchstart', triggerRead, { passive: false });
-
-      document.body.appendChild(popup);
-    }
-
-    var left = Math.min(Math.max(x, 60), window.innerWidth - 60);
-    var top = Math.max(y - 46, 10);
-    popup.style.left = left + 'px';
-    popup.style.top = top + 'px';
-
-    clearTimeout(readTimeout);
-    readTimeout = setTimeout(removePopup, 6000);
-  }
-
-  function handleSelectionFinished(target) {
-    if (popup && target === popup) return;
-
-    var selected = window.getSelection();
-    var text = selected ? selected.toString().trim() : '';
-    if (text.length >= 2) {
-      showPopupForSelection(text);
-    } else {
+    // استخدام mousedown بدل click لمنع فقدان التحديد
+    popup.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      speak(savedText);
       removePopup();
-    }
+    });
+
+    document.body.appendChild(popup);
+    clearTimeout(readTimeout);
+    readTimeout = setTimeout(removePopup, 5000);
   }
 
-  // نؤخر المعالجة قليلاً (debounce) لتفادي إعادة إنشاء/تحريك الزر بشكل
-  // متكرر أثناء استمرار المستخدم بتعديل حدود التحديد
-  var selectionDebounce = null;
-  document.addEventListener('mouseup', function (e) {
+  document.addEventListener('mouseup', function(e) {
     if (popup && e.target === popup) return;
-    clearTimeout(selectionDebounce);
-    selectionDebounce = setTimeout(function () { handleSelectionFinished(e.target); }, 120);
-  });
 
-  document.addEventListener('touchend', function (e) {
-    if (popup && e.target === popup) return;
-    clearTimeout(selectionDebounce);
-    selectionDebounce = setTimeout(function () { handleSelectionFinished(e.target); }, 200);
+    setTimeout(function() {
+      var selected = window.getSelection();
+      var text = selected ? selected.toString().trim() : '';
+      if (text.length >= 2) {
+        createPopup(e.clientX, e.clientY, text);
+      } else {
+        removePopup();
+      }
+    }, 10);
   });
 
   document.addEventListener('mousedown', function(e) {
-    if (popup && e.target !== popup) removePopup();
-  });
-
-  document.addEventListener('touchstart', function(e) {
     if (popup && e.target !== popup) removePopup();
   });
 
