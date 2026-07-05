@@ -1,342 +1,1145 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>موسيقاتي — تسجيل الدخول</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نكهة زمان | ألبان ومشتقات حليب بلدية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@500;600;700&family=Cairo:wght@300;400;500;600;700;800&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #F6EFDD;
+    --milk: #FFFDF8;
+    --olive-dark: #2E3524;
+    --olive: #4C5A3A;
+    --brass: #A9782F;
+    --brass-light: #C79A4B;
+    --burgundy: #6E2430;
+    --ink: #2A2620;
+    --line: rgba(46,53,36,0.16);
+    --shadow: 0 12px 30px rgba(42,38,32,0.12);
+    --radius-card: 14px;
+  }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-      background: #0d0d0d;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Cairo', sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+  }
 
-    .login-side {
-      width: 440px;
-      background: #0f0f0f;
-      border: 1px solid #1e1e1e;
-      border-radius: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem 2.5rem;
-      position: relative;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
-    }
+  h1,h2,h3, .display{
+    font-family:'Aref Ruqaa', serif;
+    font-weight:700;
+    color:var(--olive-dark);
+  }
 
-    .login-side::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 15%;
-      left: 15%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
-      border-radius: 2px;
-    }
+  .eyebrow{
+    font-family:'Markazi Text', serif;
+    font-size:1.15rem;
+    letter-spacing:.04em;
+    color:var(--brass);
+    font-weight:600;
+  }
 
-    .logo-area { text-align: center; margin-bottom: 2.2rem; }
+  a{color:inherit;}
 
-    .logo-img-wrap {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      border: 1px solid #c9a84c33;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1rem;
-      background: #111;
-      box-shadow: 0 0 30px rgba(201,168,76,0.1);
-    }
+  /* ---------- texture background ---------- */
+  .grain{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.05;
+    z-index:2;
+    background-image:radial-gradient(circle, #000 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
 
-    .logo-img-wrap img { width: 48px; height: 48px; object-fit: contain; }
+  /* ---------- header / nav ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(246,239,221,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:14px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .brand-seal{
+    width:46px;height:46px;
+    border-radius:50%;
+    background:var(--milk);
+    color:var(--cream);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Aref Ruqaa',serif;
+    font-size:1.1rem;
+    border:2px solid var(--brass);
+    flex-shrink:0;
+    overflow:hidden;
+  }
+  .brand-seal img{width:100%;height:100%;object-fit:cover;}
+  .brand-name{
+    font-family:'Aref Ruqaa', serif;
+    font-size:1.5rem;
+    line-height:1;
+    color:var(--olive-dark);
+  }
+  .brand-name small{
+    display:block;
+    font-family:'Markazi Text', serif;
+    font-size:.85rem;
+    color:var(--brass);
+    font-weight:600;
+    margin-top:2px;
+  }
+  nav ul{
+    display:flex;
+    gap:28px;
+    list-style:none;
+    margin:0;padding:0;
+    font-size:.98rem;
+  }
+  nav a{
+    text-decoration:none;
+    color:var(--ink);
+    position:relative;
+    padding-bottom:4px;
+  }
+  nav a:after{
+    content:"";
+    position:absolute;
+    right:0;left:0;bottom:0;
+    height:2px;
+    background:var(--brass);
+    transform:scaleX(0);
+    transform-origin:right;
+    transition:transform .3s ease;
+  }
+  nav a:hover:after{transform:scaleX(1);}
+  .nav-toggle{display:none;}
 
-    .logo-name { font-size: 1.6rem; font-weight: 800; color: #fff; }
-    .logo-name span { color: #c9a84c; }
-    .logo-tagline { font-size: 0.75rem; color: #555; letter-spacing: 3px; text-transform: uppercase; margin-top: 0.4rem; }
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    max-width:1180px;
+    margin:0 auto;
+    padding:70px 28px 40px;
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap:40px;
+    align-items:center;
+  }
+  .hero-copy .eyebrow{display:block;margin-bottom:14px;}
+  .hero h1{
+    font-size:3.4rem;
+    line-height:1.15;
+    margin:0 0 18px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--burgundy);
+  }
+  .hero p{
+    font-size:1.15rem;
+    line-height:1.9;
+    color:#4a463c;
+    max-width:46ch;
+    margin:0 0 28px;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 26px;
+    border-radius:100px;
+    font-size:1rem;
+    font-weight:700;
+    text-decoration:none;
+    border:2px solid transparent;
+    transition:all .25s ease;
+    cursor:pointer;
+  }
+  .btn-primary{
+    background:var(--olive-dark);
+    color:var(--milk);
+  }
+  .btn-primary:hover{background:var(--burgundy);}
+  .btn-ghost{
+    background:transparent;
+    border-color:var(--olive-dark);
+    color:var(--olive-dark);
+  }
+  .btn-ghost:hover{background:var(--olive-dark); color:var(--milk);}
 
-    .gold-sep { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.8rem; width: 100%; }
-    .gold-sep span { flex: 1; height: 1px; background: #1e1e1e; }
-    .gold-sep i { width: 6px; height: 6px; border-radius: 50%; background: #c9a84c; display: block; }
+  .hero-visual{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .hero-seal{
+    position:relative;
+    width:100%;
+    max-width:420px;
+    border-radius:50%;
+    overflow:hidden;
+    aspect-ratio:1/1;
+    box-shadow: var(--shadow);
+    border: 6px solid var(--milk);
+    outline: 2px solid var(--line);
+  }
+  .hero-seal img{
+    width:100%;height:100%;object-fit:cover;
+  }
+  .hero-badge{
+    position:absolute;
+    bottom:-18px;
+    right:-18px;
+    width:110px;height:110px;
+    background:var(--burgundy);
+    color:var(--milk);
+    border-radius:50%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-family:'Aref Ruqaa', serif;
+    font-size:.95rem;
+    line-height:1.25;
+    border:3px solid var(--brass-light);
+    box-shadow:var(--shadow);
+  }
 
-    .login-box { width: 100%; }
+  /* ---------- marquee strip ---------- */
+  .strip{
+    background:var(--olive-dark);
+    color:var(--cream);
+    overflow:hidden;
+    white-space:nowrap;
+    padding:12px 0;
+    border-top:1px solid rgba(0,0,0,.2);
+    border-bottom:1px solid rgba(0,0,0,.2);
+  }
+  .strip-track{
+    display:inline-flex;
+    gap:40px;
+    animation:scroll 28s linear infinite;
+    font-family:'Markazi Text', serif;
+    font-size:1.2rem;
+  }
+  .strip-track span{opacity:.9;}
+  .strip-track span:before{content:"✦"; margin-left:10px; color:var(--brass-light);}
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
 
-    .login-heading { text-align: center; margin-bottom: 1.8rem; }
-    .login-heading h1 { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
-    .login-heading p { font-size: 0.83rem; color: #555; }
+  /* ---------- about ---------- */
+  .about{
+    max-width:1180px;
+    margin:0 auto;
+    padding:80px 28px;
+    display:grid;
+    grid-template-columns: .8fr 1.2fr;
+    gap:50px;
+    align-items:center;
+  }
+  .about-gallery{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:14px;
+  }
+  .about-gallery img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:var(--radius-card);
+    box-shadow:var(--shadow);
+  }
+  .about-gallery .tall{grid-row: span 2; height:100%;}
+  .about-gallery div img{height:150px;}
+  .about-gallery .tall img{height:100%;}
 
-    .field { margin-bottom: 1.2rem; position: relative; }
+  .about-copy h2{
+    font-size:2.3rem;
+    margin:0 0 18px;
+  }
+  .about-copy p{
+    font-size:1.08rem;
+    line-height:1.95;
+    color:#4a463c;
+    margin:0 0 16px;
+  }
+  .stats{
+    display:flex;
+    gap:34px;
+    margin-top:30px;
+    flex-wrap:wrap;
+  }
+  .stat b{
+    display:block;
+    font-family:'Aref Ruqaa', serif;
+    font-size:2rem;
+    color:var(--burgundy);
+  }
+  .stat span{
+    font-size:.92rem;
+    color:#5c574b;
+  }
 
-    .field label { display: block; font-size: 0.78rem; font-weight: 600; color: #888; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+  /* ---------- menu ---------- */
+  .menu-section{
+    max-width:1180px;
+    margin:0 auto;
+    padding:40px 28px 100px;
+  }
+  .menu-head{
+    text-align:center;
+    margin-bottom:50px;
+  }
+  .menu-head h2{
+    font-size:2.6rem;
+    margin:10px 0 12px;
+  }
+  .menu-head p{
+    color:#5c574b;
+    font-size:1.05rem;
+    max-width:60ch;
+    margin:0 auto;
+  }
 
-    .field input {
-      width: 100%;
-      padding: 0.85rem 1rem;
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 0.95rem;
-      font-family: inherit;
-      direction: ltr;
-      text-align: right;
-      outline: none;
-      transition: border-color 0.25s, box-shadow 0.25s;
-    }
+  .cat-tabs{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:46px;
+  }
+  .cat-tab{
+    padding:10px 22px;
+    border-radius:100px;
+    border:1.5px solid var(--olive-dark);
+    background:transparent;
+    color:var(--olive-dark);
+    font-family:'Cairo',sans-serif;
+    font-weight:600;
+    font-size:.95rem;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .cat-tab.active, .cat-tab:hover{
+    background:var(--olive-dark);
+    color:var(--milk);
+  }
 
-    .field input::placeholder { color: #333; direction: ltr; text-align: left; }
+  .category-block{
+    margin-bottom:60px;
+  }
+  .category-title{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:28px;
+  }
+  .category-title h3{
+    font-size:1.8rem;
+    margin:0;
+    white-space:nowrap;
+  }
+  .category-title .rule{
+    flex:1;
+    height:1px;
+    background:repeating-linear-gradient(to left, var(--brass) 0 6px, transparent 6px 12px);
+  }
 
-    .field input:focus { border-color: #c9a84c; box-shadow: 0 0 0 3px rgba(201,168,76,0.08); background: #131313; }
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap:26px;
+  }
 
-    .field input.error { border-color: #e05555 !important; box-shadow: 0 0 0 3px rgba(224,85,85,0.1) !important; }
-    .field input.success { border-color: #4caf73 !important; box-shadow: 0 0 0 3px rgba(76,175,115,0.08) !important; }
+  .card{
+    background:var(--milk);
+    border-radius:var(--radius-card);
+    overflow:hidden;
+    box-shadow: 0 6px 18px rgba(42,38,32,0.08);
+    border:1px solid var(--line);
+    transition: transform .3s ease, box-shadow .3s ease;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow: var(--shadow);
+  }
+  .card-img{
+    position:relative;
+    aspect-ratio:1/1;
+    overflow:hidden;
+    background:#eee5cd;
+  }
+  .card-img img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .5s ease;
+  }
+  .card:hover .card-img img{transform:scale(1.07);}
+  .price-seal{
+    position:absolute;
+    bottom:10px;
+    left:10px;
+    background:var(--olive-dark);
+    color:var(--milk);
+    border-radius:50%;
+    width:58px;height:58px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    font-family:'Aref Ruqaa', serif;
+    border:2px solid var(--brass-light);
+    box-shadow:0 4px 10px rgba(0,0,0,.25);
+  }
+  .price-seal b{font-size:1.05rem; line-height:1;}
+  .price-seal small{font-size:.6rem; opacity:.85;}
+  .price-seal-ask{background:var(--burgundy);}
+  .price-seal-ask b{font-size:1.3rem;}
 
-    .field-msg {
-      font-size: 0.73rem;
-      margin-top: 0.4rem;
-      min-height: 1rem;
-      display: none;
-    }
-    .field-msg.show { display: block; }
-    .field-msg.err { color: #e05555; }
-    .field-msg.ok  { color: #4caf73; }
+  .no-photo{
+    width:100%;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg, #eee5cd 0%, #e3d7b4 100%);
+  }
+  .no-photo span{
+    font-family:'Aref Ruqaa', serif;
+    font-size:3rem;
+    color:var(--brass);
+    opacity:.6;
+  }
 
-    .forgot { text-align: left; margin-top: 0.4rem; }
-    .forgot a { font-size: 0.75rem; color: #c9a84c88; text-decoration: none; transition: color 0.2s; }
-    .forgot a:hover { color: #c9a84c; }
+  .extra-note{
+    text-align:center;
+    color:#8a6d3b;
+    background:#fbf4e0;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 18px;
+    font-size:.9rem;
+    max-width:60ch;
+    margin:0 auto 26px;
+  }
 
-    /* رسالة خطأ عامة */
-    .alert-box {
-      display: none;
-      background: rgba(224,85,85,0.1);
-      border: 1px solid #e0555544;
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1rem;
-      font-size: 0.82rem;
-      color: #e07777;
-      text-align: center;
-    }
-    .alert-box.show { display: block; }
-    .alert-box.success-box {
-      background: rgba(76,175,115,0.1);
-      border-color: #4caf7344;
-      color: #4caf73;
-    }
+  .card-body{
+    padding:16px 18px 20px;
+  }
+  .card-body h4{
+    margin:0 0 6px;
+    font-family:'Cairo', sans-serif;
+    font-weight:700;
+    font-size:1.08rem;
+    color:var(--ink);
+  }
+  .card-body p{
+    margin:0;
+    font-size:.86rem;
+    color:#6b6656;
+    line-height:1.6;
+  }
 
-    .btn-enter {
-      display: block; width: 100%; padding: 0.9rem; margin-top: 1.5rem;
-      background: #c9a84c; color: #0a0a0a; border: none; border-radius: 8px;
-      font-size: 1rem; font-weight: 700; font-family: inherit; letter-spacing: 1px;
-      cursor: pointer; text-align: center; text-decoration: none;
-      transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
-    }
-    .btn-enter:hover { background: #d4b55a; box-shadow: 0 6px 20px rgba(201,168,76,0.3); transform: translateY(-1px); }
-    .btn-enter:active { transform: translateY(0); }
-    .btn-enter:disabled { background: #555; cursor: not-allowed; transform: none; box-shadow: none; }
+  /* ---------- footer cta ---------- */
+  .cta-band{
+    background:var(--burgundy);
+    color:var(--milk);
+    padding:70px 28px;
+    text-align:center;
+  }
+  .cta-band h2{
+    color:var(--milk);
+    font-size:2.4rem;
+    margin:0 0 16px;
+  }
+  .cta-band p{
+    font-size:1.05rem;
+    max-width:52ch;
+    margin:0 auto 30px;
+    opacity:.92;
+  }
+  .cta-band .btn-primary{
+    background:var(--brass-light);
+    color:var(--ink);
+  }
+  .cta-band .btn-primary:hover{background:var(--milk);}
 
-    .form-foot { text-align: center; margin-top: 1.5rem; font-size: 0.82rem; color: #444; }
-    .form-foot a { color: #c9a84c; text-decoration: none; font-weight: 600; margin-right: 0.3rem; }
-    .form-foot a:hover { color: #d4b55a; }
+  footer{
+    background:var(--olive-dark);
+    color:var(--cream);
+    padding:50px 28px 26px;
+  }
+  .footer-wrap{
+    max-width:1180px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap:40px;
+  }
+  .footer-brand .brand-name{color:var(--cream);}
+  .footer-brand p{
+    color:#c9c8bd;
+    line-height:1.8;
+    font-size:.92rem;
+    max-width:38ch;
+    margin-top:14px;
+  }
+  footer h5{
+    font-family:'Cairo',sans-serif;
+    font-size:1rem;
+    margin:0 0 16px;
+    color:var(--brass-light);
+  }
+  footer ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;}
+  footer a{text-decoration:none; color:#dedcce; font-size:.92rem;}
+  footer a:hover{color:var(--brass-light);}
+  .footer-bottom{
+    max-width:1180px;
+    margin:40px auto 0;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,.12);
+    text-align:center;
+    font-size:.82rem;
+    color:#a9a999;
+  }
 
-    .copy { margin-top: 2rem; font-size: 0.7rem; color: #2a2a2a; letter-spacing: 1px; text-align: center; }
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px){
+    nav ul{display:none;}
+    .hero{grid-template-columns:1fr; padding-top:40px;}
+    .hero h1{font-size:2.5rem;}
+    .about{grid-template-columns:1fr;}
+    .footer-wrap{grid-template-columns:1fr; text-align:center;}
+    footer ul{align-items:center;}
+  }
 
-    @media (max-width: 500px) {
-      .login-side { width: 95%; padding: 2rem 1.3rem; }
-    }
-  </style>
+  @media (prefers-reduced-motion: reduce){
+    .strip-track{animation:none;}
+    *{transition:none !important;}
+  }
+
+  :focus-visible{
+    outline: 3px solid var(--brass);
+    outline-offset: 2px;
+  }
+</style>
 </head>
 <body>
+<div class="grain"></div>
 
-  <div class="login-side">
-
-    <div class="logo-area">
-      <div class="logo-img-wrap">
-        <img src="logo.png" alt="موسيقاتي">
-      </div>
-      <div class="logo-name">موسيقا<span>تي</span></div>
-      <div class="logo-tagline" data-ar="متجر الآلات الموسيقية" data-en="Music Instruments Store">متجر الآلات الموسيقية</div>
-    </div>
-
-    <div class="gold-sep"><span></span><i></i><span></span></div>
-
-    <div class="login-box">
-      <div class="login-heading">
-        <h1 data-ar="تسجيل الدخول" data-en="Sign In">تسجيل الدخول</h1>
-        <p data-ar="أدخل بياناتك للمتابعة" data-en="Enter your credentials to continue">أدخل بياناتك للمتابعة</p>
-      </div>
-
-      <div class="alert-box" id="alertBox"></div>
-
-      <div class="field">
-        <label data-ar="البريد الإلكتروني" data-en="Email Address">البريد الإلكتروني</label>
-        <input type="email" id="loginEmail" placeholder="example@email.com" oninput="validateLoginEmail()">
-        <div class="field-msg" id="emailMsg"></div>
-      </div>
-
-      <div class="field">
-        <label data-ar="كلمة المرور" data-en="Password">كلمة المرور</label>
-        <input type="password" id="loginPass" placeholder="••••••••" oninput="validateLoginPass()">
-        <div class="field-msg" id="passMsg"></div>
-        <div class="forgot"><a href="#" data-ar="نسيت كلمة المرور؟" data-en="Forgot password?">نسيت كلمة المرور؟</a></div>
-      </div>
-
-      <button class="btn-enter" onclick="submitLogin()" data-ar="دخول" data-en="Sign In">دخول</button>
-
-      <div class="form-foot">
-        <span data-ar="ليس لديك حساب؟" data-en="Don't have an account?">ليس لديك حساب؟</span> <a href="register.html" data-ar="سجّل الآن" data-en="Register Now">سجّل الآن</a>
+<header>
+  <div class="nav-wrap">
+    <div class="brand">
+      <div class="brand-seal"><img src="logo.jpeg" alt="نكهة زمان"></div>
+      <div class="brand-name">نكهة زمان
+        <small>ألبان ومشتقات حليب بلدية</small>
       </div>
     </div>
-
-    <div class="copy"><span data-ar="© 2026 موسيقاتي — جميع الحقوق محفوظة" data-en="© 2026 MOSIQATI — All Rights Reserved">© 2026 موسيقاتي — جميع الحقوق محفوظة</span></div>
-
+    <nav>
+      <ul>
+        <li><a href="#about">قصتنا</a></li>
+        <li><a href="#menu">القائمة</a></li>
+        <li><a href="#contact">تواصل معنا</a></li>
+      </ul>
+    </nav>
   </div>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script src="script.js"></script>
+</header>
+
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">دكان بلدي، طعم أصيل</span>
+    <h1>ألبان بلدية <em>بنكهة</em><br>ما بتنسى</h1>
+    <p>من قلب المزرعة إلى طاولتك؛ أجبان طازجة، لبنة بلدية، سمنة وزبدة على الطريقة القديمة. كل قطعة عنّا محضّرة يوميًا بوصفات ما تغيرت من زمان.</p>
+    <div class="hero-ctas">
+      <a href="#menu" class="btn btn-primary">شوف القائمة</a>
+      <a href="#contact" class="btn btn-ghost">اطلب الآن</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-seal">
+      <img src="logo.jpeg" alt="نكهة زمان - ألبان ومشتقات حليب بلدية">
+    </div>
+    <div class="hero-badge">منتج<br>بلدي<br>100%</div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="strip-track">
+    <span>أجبان طازجة يوميًا</span>
+    <span>لبنة بلدية أصيلة</span>
+    <span>سمنة وزبدة بلدية</span>
+    <span>بدون مواد حافظة</span>
+    <span>توصيل لجميع المناطق</span>
+    <span>أجبان طازجة يوميًا</span>
+    <span>لبنة بلدية أصيلة</span>
+    <span>سمنة وزبدة بلدية</span>
+    <span>بدون مواد حافظة</span>
+    <span>توصيل لجميع المناطق</span>
+  </div>
+</div>
+
+<section class="about" id="about">
+  <div class="about-gallery">
+    <img class="tall" src="prod_065.jpg" alt="جبنة عكاوي بلدية">
+    <div><img src="prod_061.jpg" alt="جبنة قشقوان"></div>
+    <div><img src="prod_066.jpg" alt="لبنة جامدة بالزيت"></div>
+  </div>
+  <div class="about-copy">
+    <span class="eyebrow">قصتنا</span>
+    <h2>نكهة ما بتتكرر</h2>
+    <p>بدأت "نكهة زمان" من فكرة بسيطة: إرجاع طعم الألبان البلدية الأصيل يلي كنا ناكلوه بأيام زمان. نشتغل يوميًا على تحضير الأجبان واللبنة والسمنة بأسلوب تقليدي، من غير مواد حافظة، وبمكونات طازجة 100%.</p>
+    <p>كل منتج عنّا إلو قصة ونكهة مميزة، من الجبنة النابلسي واللبنة البلدية، للسمنة والزبدة المحضّرة على الطريقة القديمة.</p>
+    <div class="stats">
+      <div class="stat"><b>+150</b><span>صنف ومنتج متوفر</span></div>
+      <div class="stat"><b>يومي</b><span>تحضير طازج</span></div>
+      <div class="stat"><b>100%</b><span>مكونات بلدية</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="menu-section" id="menu">
+  <div class="menu-head">
+    <span class="eyebrow">قائمتنا</span>
+    <h2>تشكيلة منتجاتنا الكاملة</h2>
+    <p>الأسعار بالدينار الأردني للكيلو غرام الواحد وتختلف حسب الكمية المطلوبة، ما عدا المنتجات المعبأة يتم تحديد سعرها عند الطلب.</p>
+  </div>
+
+  <div class="cat-tabs">
+    <button class="cat-tab active" data-target="cat-dairy">الألبان والأجبان</button>
+    <button class="cat-tab" data-target="cat-meat">اللحوم والمقرمشات</button>
+    <button class="cat-tab" data-target="cat-salad">السلطات والمقبلات</button>
+    <button class="cat-tab" data-target="cat-pickles">المخللات والزيتون</button>
+    <button class="cat-tab" data-target="cat-misc">متفرقات ومؤونة</button>
+  </div>
+
+  <div class="category-block" id="cat-dairy">
+    <div class="category-title"><h3>الألبان والأجبان</h3><div class="rule"></div></div>
+    <div class="grid">
+      <article class="card">
+        <div class="card-img"><img src="prod_061.jpg" alt="قشقوان جونيون" loading="lazy"><div class="price-seal"><b>10.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>قشقوان جونيون</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_091.jpg" alt="لبنة جرشية  ابو غليون" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>لبنة جرشية  ابو غليون</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_090.jpg"  alt="لبن مخيض" loading="lazy"><div class="price-seal"><b>0.70</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4> لبن مخيض</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_063.jpg" alt="جبنة مغلية قزحة" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة مغلية قزحة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_064.jpg" alt="جبنة مبسترة" loading="lazy"><div class="price-seal"><b>5.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة مبسترة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_065.jpg" alt="جبنة عكاوي" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة عكاوي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_066.jpg" alt="لبنة جامدة بالزيت" loading="lazy"><div class="price-seal"><b>7.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>لبنة جامدة بالزيت</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_067.jpg" alt="جبنة شدر بولندي" loading="lazy"><div class="price-seal"><b>8.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة شدر بولندي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_068.jpg" alt="جبنة حلوم" loading="lazy"><div class="price-seal"><b>7.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة حلوم</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_105.jpeg" alt="جبنة سنابل" loading="lazy"><div class="price-seal"><b>7.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة سنابل</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_093.jpeg" alt="جبنة فيتا السعودية" loading="lazy"><div class="price-seal"><b>4.25</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة فيتا السعودية</h4></div>
+      </article>
+     
+      <article class="card">
+        <div class="card-img"><img src="prod_071.jpg" alt="لبنة حليبنا تركية" loading="lazy"><div class="price-seal"><b>4.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>لبنة حليبنا تركية</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_072.jpg" alt="جبنة موزريلا حليبنا" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة موزريلا حليبنا</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_073.jpg" alt="جبنة موزريلا بوك" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة موزريلا بوك</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_074.jpg" alt="جبنة ايدام فريكو" loading="lazy"><div class="price-seal"><b>13.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة ايدام فريكو</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_075.jpg" alt="جبنة قودا هولندي" loading="lazy"><div class="price-seal"><b>8.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة قودا هولندي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_075.jpg" alt="جبنة ايدام هولندي" loading="lazy"><div class="price-seal"><b>8.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة ايدام هولندي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_094.jpeg" alt="موزريلا ارجنتيني" loading="lazy"><div class="price-seal"><b>5.75</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>موزريلا ارجنتيني</h4></div>
+      </article>
+
+  
+      <article class="card">
+        <div class="card-img"><img src="prod_092" alt="جبنة اريش" loading="lazy"><div class="price-seal"><b>6.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>مكس اجبان</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_076.jpg" alt="لبنة طرية" loading="lazy"><div class="price-seal"><b>3.25</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>لبنة طرية</h4></div>
+      </article>
+      
+      
+      <article class="card">
+        <div class="card-img"><img src="prod_063.jpg" alt="جبنة مغلية محلب" loading="lazy"><div class="price-seal"><b>6.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة مغلية محلب</h4></div>
+      </article>
+
+      <article class="card">
+        <div class="card-img"><img src="prod_063.jpg" alt="جبنة مغلية مستكة" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جبنة مغلية مستكة</h4></div>
+      </article>
+    </div>
+  </div>
+
+  <div class="category-block" id="cat-meat">
+    <div class="category-title"><h3>اللحوم والمقرمشات</h3><div class="rule"></div></div>
+    <div class="grid">
+      <article class="card">
+        <div class="card-img"><img src="prod_008.jpg" alt="روست حبش نعمة مدخن" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>روست حبش نعمة مدخن</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_095.jpeg" alt="روست حبش نعمة مدخن" loading="lazy"><div class="price-seal"><b>15.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>بسطرمة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_009.jpg" alt="سنيورة بقري سادة" loading="lazy"><div class="price-seal"><b>3.75</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سنيورة بقري سادة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_010.jpg" alt="سنيورة بقري فلفل" loading="lazy"><div class="price-seal"><b>3.75</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سنيورة بقري فلفل</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_011.jpg" alt="سنيورة بقري زيتون" loading="lazy"><div class="price-seal"><b>3.75</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سنيورة بقري زيتون</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_096.jpeg" alt="سنيورة بقري زيتون" loading="lazy"><div class="price-seal"><b>7.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سلامي مدخن بقري</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_012.jpg" alt="روست حبش جاجة" loading="lazy"><div class="price-seal"><b>10.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>روست حبش جاجة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_097.jpeg" alt="حبش مدخن طول كرم سادة" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>حبش مدخن طول كرم سادة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_097.jpeg" alt="حبش مدخن فلفل طول كرم" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>حبش مدخن فلفل طول كرم</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_097.jpeg" alt="حبش مدخن طولكرم زيتون" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>حبش مدخن طولكرم زيتون</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_013.jpg" alt="اسلامية سادة" loading="lazy"><div class="price-seal"><b>4.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>اسلامية سادة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_098.jpeg" alt="اسلامية زيتون" loading="lazy"><div class="price-seal"><b>4.75</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>اسلامية زيتون</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_013.jpg" alt="اسلامية فلفل" loading="lazy"><div class="price-seal"><b>4.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>اسلامية فلفل</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_014.jpg" alt="روست اسلامية" loading="lazy"><div class="price-seal"><b>8.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>روست اسلامية</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_015.jpg" alt="تيركي كنز" loading="lazy"><div class="price-seal"><b>5.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>تيركي كنز</h4></div>
+      </article>
+    </div>
+  </div>
+
+  <div class="category-block" id="cat-salad">
+    <div class="category-title"><h3>السلطات والمقبلات</h3><div class="rule"></div></div>
+    <div class="grid">
+      <article class="card">
+        <div class="card-img"><img src="prod_001.jpg" alt="سلطة ايدام" loading="lazy"><div class="price-seal"><b>8.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سلطة ايدام</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_002.jpg" alt="محمرة" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>محمرة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_108.jpeg" alt="سلطة مقدوس" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سلطة مقدوس</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_004.jpg" alt="سلطة فلفل" loading="lazy"><div class="price-seal"><b>3.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سلطة فلفل</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_005.jpg" alt="يلنجي" loading="lazy"><div class="price-seal"><b>5.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>يلنجي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_006.jpg" alt="سلطة زيتون سوبر" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سلطة زيتون سوبر</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_107.png" alt="سلطة فيتا" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سلطة فيتا</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_007.jpg" alt="سلطة زيتون" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سلطة زيتون</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_001.jpg" alt="سلطة قودا" loading="lazy"><div class="price-seal"><b>8.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سلطة قودا</h4></div>
+      </article>
+    </div>
+  </div>
+
+  <div class="category-block" id="cat-pickles">
+    <div class="category-title"><h3>المخللات والزيتون</h3><div class="rule"></div></div>
+    <div class="grid">
+      <article class="card">
+        <div class="card-img"><img src="prod_043.jpg" alt="خيار بيبي" loading="lazy"><div class="price-seal"><b>2.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>خيار بيبي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_044.jpg" alt="مخلل مشكل" loading="lazy"><div class="price-seal"><b>1.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>مخلل مشكل</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_045.jpg" alt="خيار امريكي" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>خيار امريكي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_046.jpg" alt="فلفل مكسيكي" loading="lazy"><div class="price-seal"><b>1.75</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>فلفل مكسيكي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_047.jpg" alt="لفت" loading="lazy"><div class="price-seal"><b>1.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>لفت</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_003.jpg" alt="مقدوس سوبر" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>مقدوس سوبر</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_003.jpg" alt="مقدوس سوبر نكهة زمان" loading="lazy"><div class="price-seal"><b>5.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>مقدوس سوبر نكهة زمان</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_048.jpg" alt="زيتون نبالي" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زيتون نبالي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_048.jpg" alt="زيتون نصوحي" loading="lazy"><div class="price-seal"><b>3.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زيتون نصوحي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_049.jpg" alt="هلبينو" loading="lazy"><div class="price-seal"><b>2.75</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>هلبينو</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_050.jpg" alt="زيتون جرجيري" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زيتون جرجيري</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_055.jpg" alt="زيتون اسباني حب" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زيتون اسباني حب</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_052.jpg" alt="ثوم" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>ثوم</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_053.jpg" alt="شطة" loading="lazy"><div class="price-seal"><b>2.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>شطة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_054.jpg" alt="زيتون اسود كلمتا" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زيتون اسود كلمتا</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_051.jpg" alt="زيتون شرائح اسباني" loading="lazy"><div class="price-seal"><b>5.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زيتون شرائح اسباني</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_056.jpg" alt="بندورة مجففة" loading="lazy"><div class="price-seal"><b>8.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>بندورة مجففة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_057.jpg" alt="زهرة" loading="lazy"><div class="price-seal"><b>2.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زهرة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_058.jpg" alt="فقوس" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>فقوس</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_059.jpg" alt="ملفوف احمر" loading="lazy"><div class="price-seal"><b>2.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>ملفوف احمر</h4></div>
+      </article>
+
+    </div>
+  </div>
+
+  <div class="category-block" id="cat-misc">
+    <div class="category-title"><h3>متفرقات ومؤونة</h3><div class="rule"></div></div>
+    <div class="grid">
+
+      
+      <article class="card">
+        <div class="card-img"><img src="prod_019.jpg" alt="قزحة حب" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>قزحة حب</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_020.jpg" alt="سمسم" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سمسم</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_021.jpg" alt="صنوبر" loading="lazy"><div class="price-seal"><b>35.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>صنوبر</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_022.jpg" alt="بهارات منسف" loading="lazy"><div class="price-seal"><b>9.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>بهارات منسف</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_023.jpg" alt="جميد كركي  عادي .محوج" loading="lazy"><div class="price-seal"><b>12.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جميد كركي  عادي .محوج</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_109.jpeg" alt="سمنة غنم بلدي" loading="lazy"><div class="price-seal"><b>12.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>سمنة غنم بلدي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_025.jpg" alt="زيت زيتون" loading="lazy"><div class="price-seal"><b>9.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زيت زيتون</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_026.jpg" alt="دبس تمر" loading="lazy"><div class="price-seal"><b>3.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>دبس تمر</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_100.jpeg" alt="دبس تمر" loading="lazy"><div class="price-seal"><b>10.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>اوريغانو</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_027.jpg" alt="حلاوة قوقا فستق" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>حلاوة قوقا فستق</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_028.jpg" alt="حلاوة قوقا شو كولاتة" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>حلاوة قوقا شو كولاتة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_027.jpg" alt="حلاوة قوقا زيرو" loading="lazy"><div class="price-seal"><b>10.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>حلاوة قوقا زيرو</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_101.jpeg" alt="حلاوة سرور فستق" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>حلاوة سرور فستق</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_029.jpg" alt="مربى مشمش" loading="lazy"><div class="price-seal"><b>3.25</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>مربى مشمش</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_030.jpg" alt="مربى فرولة" loading="lazy"><div class="price-seal"><b>3.25</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>مربى فرولة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_106.jpeg" alt="مربى تين" loading="lazy"><div class="price-seal"><b>3.25</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>مربى تين</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_031.jpg" alt="مربى توت" loading="lazy"><div class="price-seal"><b>3.25</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>مربى توت</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_032.jpg" alt="مربى كرز" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>مربى كرز</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_033.jpg" alt="دبس رمان" loading="lazy"><div class="price-seal"><b>3.25</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>دبس رمان</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_034.jpg" alt="شوكولاتة دهن شو كوليك" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>شوكولاتة دهن شو كوليك</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_102.jpeg" alt="شوكولاتة دهن شو كوليك" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>لوتس دهن</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_035.jpg" alt="بستاشيو دهن" loading="lazy"><div class="price-seal"><b>9.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>بستاشيو دهن</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_035.jpg" alt="بستاشيو كنافة" loading="lazy"><div class="price-seal"><b>10.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>بستاشيو كنافة</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_103.jpeg" alt="بستاشيو كنافة" loading="lazy"><div class="price-seal"><b>3.25</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>طحينية الكسيح</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_024.jpg" alt="زبدة جولدينا" loading="lazy"><div class="price-seal"><b>3.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زبدة جولدينا</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_036.jpg" alt="زبدة غنم بلدي" loading="lazy"><div class="price-seal"><b>7.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زبدة غنم بلدي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="pord_104.jpeg" alt="زبدة غنم بلدي" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>دبس فليفلة بلدي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_037.jpg" alt="جميد باشا" loading="lazy"><div class="price-seal"><b>5.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جميد باشا</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_105.jpg.jpeg" alt="زبدة غنم بلدي" loading="lazy"><div class="price-seal"><b>5.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>عمبة بودر عراقي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_038.jpg" alt="لوز نصاص" loading="lazy"><div class="price-seal"><b>8.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>لوز نصاص</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_039.jpg" alt="لوز رباع" loading="lazy"><div class="price-seal"><b>8.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>لوز ارباع</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_040.jpg" alt="جوز هند" loading="lazy"><div class="price-seal"><b>4.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جوز هند</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_041.jpg" alt="زبيب" loading="lazy"><div class="price-seal"><b>4.50</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زبيب</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_025.jpg" alt="زيت زيتون تونسي" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>زيت زيتون تونسي</h4></div>
+      </article>
+      <article class="card">
+        <div class="card-img"><img src="prod_042.jpg" alt="جميد سوري" loading="lazy"><div class="price-seal"><b>6.00</b><small>د.أ/كغ</small></div></div>
+        <div class="card-body"><h4>جميد سوري</h4></div>
+      </article>
+    </div>
+  </div>
+
+  
+<section class="cta-band" id="contact">
+  <h2>جاهزين لطلبك</h2>
+  <p>تواصل معنا عبر الهاتف أو واتساب وخلي طلبك يوصلك طازج لباب البيت.</p>
+  <a href="tel:0789598299" class="btn btn-primary">اتصل الآن</a>
+</section>
+
+<footer>
+  <div class="footer-wrap">
+    <div class="footer-brand">
+      <div class="brand-name">نكهة زمان</div>
+      <p>دكان ألبان ومشتقات حليب بلدية، بنكهة أصيلة ما بتتغير من زمان لهلق.</p>
+    </div>
+    <div>
+      <h5>روابط سريعة</h5>
+      <ul>
+        <li><a href="#about">قصتنا</a></li>
+        <li><a href="#menu">القائمة</a></li>
+        <li><a href="#contact">تواصل معنا</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>تواصل معنا</h5>
+      <ul>
+        <li>هاتف:0789598299</li>
+      
+        <li>واتساب:0789598299</li>
+        <li><a href="https://maps.app.goo.gl/VtVppjY5Rxrx6kyc6">الأردن عمان ماركا الشمالية نزول دير لاتين مقابل الجدع</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© نكهة زمان — جميع الحقوق محفوظة</div>
+</footer>
+
 <script>
-    function setFieldState(inputId, msgId, isOk, msg) {
-      const input = document.getElementById(inputId);
-      const msgEl = document.getElementById(msgId);
-      input.classList.toggle('error', !isOk);
-      input.classList.toggle('success', isOk);
-      msgEl.textContent = msg;
-      msgEl.className = 'field-msg show ' + (isOk ? 'ok' : 'err');
-    }
+  const tabs = document.querySelectorAll('.cat-tab');
+  const blocks = document.querySelectorAll('.category-block');
+  tabs.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      tabs.forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = document.getElementById(tab.dataset.target);
+      target.scrollIntoView({behavior:'smooth', block:'start', inline:'nearest'});
+    });
+  });
 
-    function clearField(inputId, msgId) {
-      const input = document.getElementById(inputId);
-      const msgEl = document.getElementById(msgId);
-      input.classList.remove('error', 'success');
-      msgEl.className = 'field-msg';
-      msgEl.textContent = '';
-    }
-
-    function validateLoginEmail() {
-      const val = document.getElementById('loginEmail').value.trim();
-      if (!val) { clearField('loginEmail','emailMsg'); return false; }
-      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-      setFieldState('loginEmail','emailMsg', ok, ok ? (getLang()==='en'?'Valid email ✓':'بريد إلكتروني صحيح ✓') : (getLang()==='en'?'Invalid email format':'صيغة البريد الإلكتروني غير صحيحة'));
-      return ok;
-    }
-
-    function validateLoginPass() {
-      const val = document.getElementById('loginPass').value;
-      if (!val) { clearField('loginPass','passMsg'); return false; }
-      const ok = val.length >= 6;
-      setFieldState('loginPass','passMsg', ok, ok ? (getLang()==='en'?'Password accepted ✓':'كلمة المرور مقبولة ✓') : (getLang()==='en'?'Password must be at least 6 characters':'كلمة المرور يجب أن تكون 6 أحرف على الأقل'));
-      return ok;
-    }
-
-    function showAlert(msg, isSuccess) {
-      const box = document.getElementById('alertBox');
-      box.textContent = msg;
-      box.className = 'alert-box show' + (isSuccess ? ' success-box' : '');
-    }
-
-    function hideAlert() {
-      document.getElementById('alertBox').className = 'alert-box';
-    }
-
-    async function submitLogin() {
-      hideAlert();
-      const emailOk = validateLoginEmail();
-      const passOk  = validateLoginPass();
-
-      const emailVal = document.getElementById('loginEmail').value.trim();
-      const passVal  = document.getElementById('loginPass').value;
-
-      if (!emailVal && !passVal) {
-        showAlert(getLang()==='en'?'Please fill in all required fields':'يرجى ملء جميع الحقول المطلوبة');
-        playSound('error');
-        return;
+  // highlight active tab on scroll
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        tabs.forEach(t=>t.classList.remove('active'));
+        const activeTab = document.querySelector(`.cat-tab[data-target="${entry.target.id}"]`);
+        if(activeTab) activeTab.classList.add('active');
       }
-      if (!emailOk || !passOk) {
-        showAlert(getLang()==='en'?'Please fix the errors before continuing':'يرجى تصحيح الأخطاء الموجودة قبل المتابعة');
-        playSound('error');
-        return;
-      }
-
-      if (!db) {
-        showAlert(getLang()==='en'?'Could not connect to Firebase, please try again':'تعذّر الاتصال بـ Firebase، حاول مجدداً');
-        return;
-      }
-
-      const btn = document.querySelector('.btn-enter');
-      btn.disabled = true;
-      btn.textContent = getLang()==='en' ? 'Checking...' : 'جارٍ التحقق...';
-
-      try {
-        // تشفير كلمة المرور بنفس طريقة التسجيل (SHA-256)
-        const encoder    = new TextEncoder();
-        const hashBuf    = await crypto.subtle.digest('SHA-256', encoder.encode(passVal));
-        const hashArr    = Array.from(new Uint8Array(hashBuf));
-        const hashedPass = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
-
-        // البحث عن المستخدم بالإيميل
-        const snapshot = await db.ref('users').orderByChild('email').equalTo(emailVal).once('value');
-
-        if (!snapshot.exists()) {
-          showAlert('⚠️ البريد الإلكتروني غير مسجل');
-          playSound('error');
-          btn.disabled = false;
-          btn.textContent = getLang()==='en' ? 'Sign In' : 'دخول';
-          return;
-        }
-
-        // التحقق من كلمة المرور
-        let matched  = false;
-        let userData = null;
-        let userId   = null;
-        snapshot.forEach(child => {
-          if (child.val().password === hashedPass) {
-            matched  = true;
-            userData = child.val();
-            userId   = child.key;
-          }
-        });
-
-        if (!matched) {
-          showAlert('⚠️ كلمة المرور غير صحيحة');
-          playSound('error');
-          btn.disabled = false;
-          btn.textContent = getLang()==='en' ? 'Sign In' : 'دخول';
-          return;
-        }
-
-        // حفظ بيانات الجلسة
-        localStorage.setItem('mosiqati-user', JSON.stringify({ id: userId, name: userData.full_name, email: userData.email, phone: userData.phone || '' }));
-
-        showAlert('✅ تم تسجيل الدخول بنجاح', true);
-        setTimeout(() => { window.location.href = 'home.html'; }, 1200);
-
-      } catch (err) {
-        console.error(err);
-        showAlert(getLang()==='en'?'An error occurred, please try again':'حدث خطأ، حاول مجدداً');
-        btn.disabled = false;
-        btn.textContent = getLang()==='en' ? 'Sign In' : 'دخول';
-      }
-    }
-  </script>
-
-<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
-
-<script>
-document.addEventListener('DOMContentLoaded',function(){
- const bar=document.querySelector('.top-bar');
- if(!bar) return;
- const observer=new MutationObserver(function(){
-   if(bar.style.display==='none' || bar.classList.contains('hidden')){
-      document.querySelector('.navbar')?.style.setProperty('top','0px');
-   }
- });
- observer.observe(bar,{attributes:true,attributeFilter:['style','class']});
-});
+    });
+  }, {rootMargin:"-40% 0px -50% 0px"});
+  blocks.forEach(b=>observer.observe(b));
 </script>
 
 </body>
