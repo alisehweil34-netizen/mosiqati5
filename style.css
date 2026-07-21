@@ -79,7 +79,7 @@ img {
   align-items: center;
   justify-content: center;
 
-  position: sticky;
+  position: fixed;
   top: 40px;
 
   left: 0;
