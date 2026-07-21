@@ -728,24 +728,25 @@ document.addEventListener('click', clickToStartBg);
 
     popup = document.createElement('button');
     popup.id = 'tts-popup';
-    popup.textContent = '🔊 اقرأ';
+    var _lang = (typeof getLang === 'function') ? getLang() : 'en';
+    popup.textContent = _lang === 'ar' ? '🔊 اقرأ' : '🔊 Read';
     popup.style.cssText = [
       'position:fixed',
       'left:' + Math.min(x, window.innerWidth - 120) + 'px',
       'top:' + Math.max(y - 50, 10) + 'px',
       'background:#c9a84c',
-      'color:#0a0a0a',
-      'padding:7px 16px',
+      'color:#000000',
+      'padding:8px 18px',
       'border-radius:20px',
-      'font-size:13px',
-      'font-weight:700',
+      'font-size:14px',
+      'font-weight:800',
       'cursor:pointer',
       'z-index:999999',
-      'box-shadow:0 4px 16px rgba(0,0,0,0.5)',
+      'box-shadow:0 4px 16px rgba(0,0,0,0.5), 0 0 0 2px #000000',
       'user-select:none',
       'font-family:Cairo,sans-serif',
       'white-space:nowrap',
-      'border:none',
+      'border:2px solid #000000',
       'outline:none',
       'pointer-events:auto',
     ].join(';');
