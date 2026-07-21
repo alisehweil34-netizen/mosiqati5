@@ -63,6 +63,12 @@ try {
       document.documentElement.style.setProperty('--color-dark',  s.bgDark  || '#111111');
       
       document.documentElement.style.setProperty('--color-card',  s.bgCard  || '#1a1a1a');
+
+      // نغمّق لون الخطوط (النص) والإطارات تلقائياً عند اختيار خلفية فاتحة كالأبيض
+      // حتى تبقى واضحة ومقروءة بدل الألوان الفاتحة المصممة أصلاً لخلفية داكنة
+      document.documentElement.style.setProperty('--color-white',  s.bgText   || '#c8c2b0');
+      document.documentElement.style.setProperty('--color-border', s.bgBorder || '#2a2a2a');
+      document.documentElement.style.setProperty('--color-gray',   s.bgGray   || '#888888');
       
       document.body && (document.body.style.backgroundColor = s.bgColor);
       

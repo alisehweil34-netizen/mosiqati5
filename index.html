@@ -291,6 +291,16 @@
     .btn-enter:active { transform: translateY(0); }
     .btn-enter:disabled { background: #555; cursor: not-allowed; transform: none; box-shadow: none; color: #ccc; }
 
+    .btn-guest {
+      display: block; width: 100%; padding: 0.8rem; margin-top: 0.8rem;
+      background: transparent;
+      color: #d8d2be; border: 1px solid rgba(201,168,76,0.35); border-radius: 10px;
+      font-size: 0.9rem; font-weight: 600; font-family: inherit; letter-spacing: 0.5px;
+      cursor: pointer; text-align: center; text-decoration: none;
+      transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.15s;
+    }
+    .btn-guest:hover { background: rgba(201,168,76,0.08); border-color: #c9a84c; color: #f4e9c8; transform: translateY(-1px); }
+
     .form-foot { text-align: center; margin-top: 1.4rem; font-size: 0.82rem; color: #7a7462; }
     .form-foot a { color: #c9a84c; text-decoration: none; font-weight: 600; margin-right: 0.3rem; }
     .form-foot a:hover { color: #d4b55a; }
@@ -358,6 +368,8 @@
       <div class="form-foot">
         <span data-ar="ليس لديك حساب؟" data-en="Don't have an account?">ليس لديك حساب؟</span> <a href="register.html" data-ar="سجّل الآن" data-en="Register Now">سجّل الآن</a>
       </div>
+
+      <a class="btn-guest" href="home.html" data-ar="🚪 المتابعة كضيف" data-en="🚪 Continue as Guest">🚪 المتابعة كضيف</a>
 
       <div class="copy"><span data-ar="© 2026 موسيقاتي — جميع الحقوق محفوظة" data-en="© 2026 MOSIQATI — All Rights Reserved">© 2026 موسيقاتي — جميع الحقوق محفوظة</span></div>
 

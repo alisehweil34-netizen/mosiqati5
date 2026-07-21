@@ -614,7 +614,19 @@
     });
 
     // إرسال النموذج
+    function getCurrentUser() {
+      try { return JSON.parse(localStorage.getItem('mosiqati-user') || 'null'); }
+      catch (e) { return null; }
+    }
+
     function submitForm() {
+      const user = getCurrentUser();
+      if (!user || !user.id) {
+        alert(getLang()==='en'?'Please log in first to send a message':'يرجى تسجيل الدخول أولاً لإرسال رسالة');
+        window.location.href = 'index.html';
+        return;
+      }
+
       const fields = ['fname', 'email', 'subject', 'message'];
       let valid = true;
       fields.forEach(id => {

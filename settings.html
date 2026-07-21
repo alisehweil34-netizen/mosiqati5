@@ -644,17 +644,17 @@
 
 <div class="bg-options">
 
-<button class="bg-btn active" data-ar="أسود" data-en="Black" onclick="setBg(this,'#0a0a0a','#111111','#1a1a1a')" style="background:#0a0a0a; color:#888;">أسود</button>
+<button class="bg-btn active" data-ar="أسود" data-en="Black" onclick="setBg(this,'#0a0a0a','#111111','#1a1a1a','#c8c2b0','#2a2a2a','#888888')" style="background:#0a0a0a; color:#888;">أسود</button>
 
-<button class="bg-btn" data-ar="ليلي" data-en="Night" onclick="setBg(this,'#0d1117','#161b22','#21262d')" style="background:#0d1117; color:#888;">ليلي</button>
+<button class="bg-btn" data-ar="ليلي" data-en="Night" onclick="setBg(this,'#0d1117','#161b22','#21262d','#c8c2b0','#2a2a2a','#888888')" style="background:#0d1117; color:#888;">ليلي</button>
 
-<button class="bg-btn" data-ar="نيلي" data-en="Navy" onclick="setBg(this,'#0a0a1a','#12121f','#1c1c2e')" style="background:#0a0a1a; color:#888;">نيلي</button>
+<button class="bg-btn" data-ar="نيلي" data-en="Navy" onclick="setBg(this,'#0a0a1a','#12121f','#1c1c2e','#c8c2b0','#2a2a2a','#888888')" style="background:#0a0a1a; color:#888;">نيلي</button>
 
-<button class="bg-btn" data-ar="بني" data-en="Brown" onclick="setBg(this,'#1a0a00','#220d00','#2a1200')" style="background:#1a0a00; color:#888;">بني</button>
+<button class="bg-btn" data-ar="بني" data-en="Brown" onclick="setBg(this,'#1a0a00','#220d00','#2a1200','#c8c2b0','#2a2a2a','#888888')" style="background:#1a0a00; color:#888;">بني</button>
 
-<button class="bg-btn" data-ar="رمادي" data-en="Gray" onclick="setBg(this,'#1f1f1f','#282828','#333333')" style="background:#1f1f1f; color:#888;">رمادي</button>
+<button class="bg-btn" data-ar="رمادي" data-en="Gray" onclick="setBg(this,'#1f1f1f','#282828','#333333','#c8c2b0','#2a2a2a','#888888')" style="background:#1f1f1f; color:#888;">رمادي</button>
 
-<button class="bg-btn" data-ar="أبيض" data-en="White" onclick="setBg(this,'#ffffff','#f0f0f0','#f7f7f7')" style="background:#ffffff; color:#333; border:1px solid #ccc;">أبيض</button>
+<button class="bg-btn" data-ar="أبيض" data-en="White" onclick="setBg(this,'#ffffff','#f0f0f0','#f7f7f7','#1a1a1a','#3d3d3d','#555555')" style="background:#ffffff; color:#333; border:1px solid #ccc;">أبيض</button>
 
 </div>
 
@@ -940,7 +940,7 @@
     var s = getSaved();
     applyFontSize(s.fontSize || 16);
     applyAccent(s.accentColor || '#c9a84c', s.accentLight || '#e8c96a', s.accentDark || '#a07830');
-    applyBg(s.bgColor || '#0a0a0a', s.bgDark || '#111111', s.bgCard || '#1a1a1a');
+    applyBg(s.bgColor || '#0a0a0a', s.bgDark || '#111111', s.bgCard || '#1a1a1a', s.bgText || '#c8c2b0', s.bgBorder || '#2a2a2a', s.bgGray || '#888888');
     applyLang(s.lang || 'ar');
     if (s.compact) applyCompact(true);
     if (s.noAnim)  applyNoAnim(true);
@@ -1043,20 +1043,36 @@
   // ===================================
   // الخلفية
   // ===================================
-  function applyBg(bg, dark, card) {
-    document.documentElement.style.setProperty('--color-black', bg);
-    document.documentElement.style.setProperty('--color-dark',  dark);
-    document.documentElement.style.setProperty('--color-card',  card);
+  function applyBg(bg, dark, card, text, border, gray) {
+    text   = text   || '#c8c2b0';
+    border = border || '#2a2a2a';
+    gray   = gray   || '#888888';
+
+    document.documentElement.style.setProperty('--color-black',  bg);
+    document.documentElement.style.setProperty('--color-dark',   dark);
+    document.documentElement.style.setProperty('--color-card',   card);
+    // نغمّق لون الخطوط (النص) والإطارات تلقائياً كلما كانت الخلفية فاتحة (مثل الأبيض)
+    // حتى تبقى قابلة للقراءة بدل النص والإطارات الفاتحة التي كانت مصممة لخلفية داكنة
+    document.documentElement.style.setProperty('--color-white',  text);
+    document.documentElement.style.setProperty('--color-border', border);
+    document.documentElement.style.setProperty('--color-gray',   gray);
+
     document.body.style.backgroundColor = bg;
+
     var prev = document.getElementById('bg-preview-inner');
     if (prev) prev.style.background = bg;
+
+    var prevTitle = document.getElementById('bg-preview-title');
+    var prevText  = document.getElementById('bg-preview-text');
+    if (prevTitle) prevTitle.style.color = text;
+    if (prevText)  prevText.style.color  = gray;
   }
 
-  function setBg(btn, bg, dark, card) {
+  function setBg(btn, bg, dark, card, text, border, gray) {
     document.querySelectorAll('.bg-btn').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
-    applyBg(bg, dark, card);
-    setSaved({ bgColor: bg, bgDark: dark, bgCard: card });
+    applyBg(bg, dark, card, text, border, gray);
+    setSaved({ bgColor: bg, bgDark: dark, bgCard: card, bgText: text || '#c8c2b0', bgBorder: border || '#2a2a2a', bgGray: gray || '#888888' });
   }
 
   // ===================================
@@ -1151,7 +1167,10 @@
       accentDark:  computedStyle.getPropertyValue('--color-gold-dark').trim() || getSaved().accentDark || '#a07830',
       bgColor:     computedStyle.getPropertyValue('--color-black').trim() || getSaved().bgColor || '#0a0a0a',
       bgDark:      computedStyle.getPropertyValue('--color-dark').trim() || getSaved().bgDark || '#111111',
-      bgCard:      computedStyle.getPropertyValue('--color-card').trim() || getSaved().bgCard || '#1a1a1a'
+      bgCard:      computedStyle.getPropertyValue('--color-card').trim() || getSaved().bgCard || '#1a1a1a',
+      bgText:      computedStyle.getPropertyValue('--color-white').trim() || getSaved().bgText || '#c8c2b0',
+      bgBorder:    computedStyle.getPropertyValue('--color-border').trim() || getSaved().bgBorder || '#2a2a2a',
+      bgGray:      computedStyle.getPropertyValue('--color-gray').trim() || getSaved().bgGray || '#888888'
     };
     setSaved(s);
 
