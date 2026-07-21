@@ -1126,6 +1126,8 @@
     
     var tb = document.querySelector('.top-bar');
     if (tb) tb.style.display = hide ? 'none' : '';
+    var nb = document.querySelector('.navbar');
+    if (nb) nb.style.top = hide ? '0px' : '';
   }
 
   function toggleTopBar(show) {

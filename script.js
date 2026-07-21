@@ -584,6 +584,8 @@ function applyAllSettings() {
 
   var topBar = document.querySelector('.top-bar');
   if (topBar) topBar.style.display = s.hideTopBar ? 'none' : '';
+  var navBarEl = document.querySelector('.navbar');
+  if (navBarEl) navBarEl.style.top = s.hideTopBar ? '0px' : '';
 
 }
 

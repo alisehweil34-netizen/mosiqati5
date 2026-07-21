@@ -48,7 +48,7 @@ body {
   direction: rtl;
   line-height: 1.7;
   font-size: 26px;
-  padding-top: 50px;
+  padding-top: 98px;
 }
 
 a {
@@ -68,22 +68,24 @@ img {
 }
 
 .navbar {
-  background-color: #0a0a0a !important;
-  border-bottom: 1px solid var(--color-gold-dark);
+  background: linear-gradient(180deg, #121212 0%, #0a0a0a 100%) !important;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, transparent, var(--color-gold-dark) 20%, var(--color-gold) 50%, var(--color-gold-dark) 80%, transparent) 1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
   padding: 0 5%;
   display: flex;
   align-items: center;
   justify-content: center;
 
   position: sticky;
-  top: 0;
+  top: 40px;
 
   left: 0;
   right: 0;
   width: 100%;
 
   z-index: 1000;
-  height: 50px;
+  height: 58px;
 
   backdrop-filter: blur(10px);
 }
@@ -98,6 +100,16 @@ img {
   letter-spacing: 2px;
   
   font-family: 'Playfair Display', serif;
+
+  text-shadow: 0 0 18px rgba(201, 168, 76, 0.35);
+
+  transition: text-shadow var(--transition);
+
+}
+
+.navbar-logo:hover {
+
+  text-shadow: 0 0 26px rgba(232, 201, 106, 0.55);
 
 }
 
@@ -127,9 +139,9 @@ img {
   
   font-weight: 600;
   
-  padding: 6px 12px;
+  padding: 8px 14px;
   
-  border-radius: 6px;
+  border-radius: 8px;
   
   transition: color var(--transition), background var(--transition);
   
@@ -141,6 +153,14 @@ img {
 .navbar-links a.active {
   
   color: var(--color-gold);
+
+  background: rgba(201, 168, 76, 0.08);
+
+}
+
+.navbar-links a.active {
+
+  background: rgba(201, 168, 76, 0.14);
 
 }
 
@@ -1516,12 +1536,14 @@ footer {
 }
 
 .top-bar {
-  background: #c9a84c;
+  background: linear-gradient(90deg, var(--color-gold-dark), var(--color-gold) 45%, var(--color-gold-light) 55%, var(--color-gold-dark));
+  background-size: 200% 100%;
   color: #000;
   text-align: center;
   padding: 8px 5%;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: 0.3px;
   height: 40px;
   position: fixed;
   top: 0;
@@ -1529,6 +1551,13 @@ footer {
   right: 0;
   width: 100%;
   z-index: 1001;
+  box-shadow: 0 2px 12px rgba(201, 168, 76, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .section-dark {
