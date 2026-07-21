@@ -18,6 +18,8 @@
   
   --color-white: #c8c2b0;
   
+  --color-nav-text: #c8c2b0;
+  
   --color-gray: #888888;
   
   --color-border: #2a2a2a;
@@ -115,7 +117,7 @@ img {
 
 .navbar-logo span {
   
-  color: var(--color-white);
+  color: var(--color-nav-text);
 
 }
 
@@ -133,7 +135,7 @@ img {
 
 .navbar-links a {
   
-  color: var(--color-white);
+  color: var(--color-nav-text);
   
   font-size: 0.95rem;
   
@@ -644,7 +646,6 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     background-color: #0a0a0a !important;
 }
 
@@ -1885,7 +1886,7 @@ footer {
   
   font-weight: 700;
   
-  color: var(--color-white);
+  color: var(--color-nav-text);
   
   letter-spacing: 1px;
 
