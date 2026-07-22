@@ -427,6 +427,17 @@
 </head>
 
 <body>
+<div class="splash-screen" id="splashScreen">
+<div class="splash-logo-wrap">
+<span class="splash-ring"></span>
+<span class="splash-ring" style="animation-delay:0.85s"></span>
+<span class="splash-ring" style="animation-delay:1.7s"></span>
+<img alt="موسيقاتي" class="splash-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'" src="logo.png"/>
+<div class="splash-logo-text" style="display:none">MOSIQA<span class="gold-text">TI</span></div>
+</div>
+<div class="splash-title">MOSIQATI</div>
+<div class="splash-tagline" data-ar="متجرك الموسيقي الأول في الأردن" data-en="Jordan's #1 Music Store">متجرك الموسيقي الأول في الأردن</div>
+</div>
 
 <div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 DJO | Exclusive deals this week" id="top-bar-text">
     🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع
@@ -900,11 +911,11 @@
 
 <ul class="footer-links">
 
-<li><a href="#">📍 <span data-ar="الشميساني، عمان" data-en="Shmeisani, Amman">الشميساني، عمان</span></a></li>
+<li><a href="#">📍 <span data-ar="جبل عمان، عمان" data-en="Jabal Amman, Amman">جبل عمان، عمان</span></a></li>
 
 <li><a href="#">📞 +962 79 000 0000</a></li>
 
-<li><a href="#">✉️ info@mosiqati.jo</a></li>
+<li><a href="mailto:mosiqati@gmail.com"> mosiqati@gmail.com</a></li>
 
 </ul>
 
@@ -995,7 +1006,6 @@
     document.getElementById('font-size-val').textContent = val + 'px';
     applyFontSize(val);
     syncFontPresetActive(val);
-    setSaved({ fontSize: val });
   }
 
   function setFontPreset(val, btn) {
@@ -1003,7 +1013,6 @@
     document.getElementById('font-slider').value = val;
     document.getElementById('font-size-val').textContent = val + 'px';
     applyFontSize(val);
-    setSaved({ fontSize: val });
 
     document.querySelectorAll('#font-presets .btn').forEach(function(b){
       b.classList.remove('btn-gold');
@@ -1037,7 +1046,6 @@
     document.querySelectorAll('.theme-btn').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
     applyAccent(color, light, dark);
-    setSaved({ accentColor: color, accentLight: light, accentDark: dark });
   }
 
   // ===================================
@@ -1072,7 +1080,6 @@
     document.querySelectorAll('.bg-btn').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
     applyBg(bg, dark, card, text, border, gray);
-    setSaved({ bgColor: bg, bgDark: dark, bgCard: card, bgText: text || '#c8c2b0', bgBorder: border || '#2a2a2a', bgGray: gray || '#888888' });
   }
 
   // ===================================
@@ -1099,7 +1106,6 @@
 
   function setLang(lang) {
     applyLang(lang);
-    setSaved({ lang: lang });
   }
 
   // ===================================
@@ -1119,7 +1125,6 @@
 
   function toggleAnimations(on) {
     applyNoAnim(!on);
-    setSaved({ noAnim: !on });
   }
 
   function applyHideTopBar(hide) {
@@ -1132,7 +1137,6 @@
 
   function toggleTopBar(show) {
     applyHideTopBar(!show);
-    setSaved({ hideTopBar: !show });
   }
 
   function applyCompact(on) {
@@ -1150,7 +1154,6 @@
 
   function toggleCompact(on) {
     applyCompact(on);
-    setSaved({ compact: on });
   }
 
   // ===================================

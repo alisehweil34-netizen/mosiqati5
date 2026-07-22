@@ -106,6 +106,17 @@
 </head>
 
 <body>
+<div class="splash-screen" id="splashScreen">
+<div class="splash-logo-wrap">
+<span class="splash-ring"></span>
+<span class="splash-ring" style="animation-delay:0.85s"></span>
+<span class="splash-ring" style="animation-delay:1.7s"></span>
+<img alt="موسيقاتي" class="splash-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'" src="logo.png"/>
+<div class="splash-logo-text" style="display:none">MOSIQA<span class="gold-text">TI</span></div>
+</div>
+<div class="splash-title">MOSIQATI</div>
+<div class="splash-tagline" data-ar="متجرك الموسيقي الأول في الأردن" data-en="Jordan's #1 Music Store">متجرك الموسيقي الأول في الأردن</div>
+</div>
 
 <div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 DJO | Exclusive deals this week">
     🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع
@@ -502,6 +513,47 @@ Ideal for music lovers and producers.">
 
 </section>
 
+<section id="gift-card-generator">
+
+<h2 class="section-title" data-ar="🎨 صمّم بطاقة هديتك الخاصة" data-en="🎨 Design Your Own Gift Card">🎨 صمّم بطاقة هديتك الخاصة</h2>
+
+<p class="section-subtitle" data-ar="اكتب اسم الشخص ورسالتك، وحمّل بطاقة هدية جاهزة بثوانٍ" data-en="Write a name and your message, and download a ready gift card in seconds">اكتب اسم الشخص ورسالتك، وحمّل بطاقة هدية جاهزة بثوانٍ</p>
+
+<div class="gold-divider"></div>
+
+<div class="gift-generator-wrap">
+
+<div class="gift-generator-form">
+
+<label data-ar="اسم المستلم" data-en="Recipient Name">اسم المستلم</label>
+<input id="giftToName" maxlength="30" placeholder="مثال: سارة" type="text" data-ar-placeholder="مثال: سارة" data-en-placeholder="e.g. Sara"/>
+
+<label data-ar="اسمك (اختياري)" data-en="Your Name (optional)">اسمك (اختياري)</label>
+<input id="giftFromName" maxlength="30" placeholder="مثال: أحمد" type="text" data-ar-placeholder="مثال: أحمد" data-en-placeholder="e.g. Ahmad"/>
+
+<label data-ar="رسالتك" data-en="Your Message">رسالتك</label>
+<textarea id="giftMessage" maxlength="140" placeholder="اكتب أمنياتك هنا..." data-ar-placeholder="اكتب أمنياتك هنا..." data-en-placeholder="Write your wishes here..."></textarea>
+
+<label data-ar="اختر تصميم البطاقة" data-en="Choose Card Design">اختر تصميم البطاقة</label>
+<div class="gift-theme-options">
+<button class="gift-theme-btn active" data-theme="gold" data-ar="🟡 ذهبي كلاسيكي" data-en="🟡 Classic Gold" type="button">🟡 ذهبي كلاسيكي</button>
+<button class="gift-theme-btn" data-theme="red" data-ar="🔴 احتفالي" data-en="🔴 Festive" type="button">🔴 احتفالي</button>
+<button class="gift-theme-btn" data-theme="elegant" data-ar="🔵 أنيق" data-en="🔵 Elegant" type="button">🔵 أنيق</button>
+</div>
+
+<button class="btn btn-gold" id="giftDownloadBtn" data-ar="⬇️ تحميل البطاقة كصورة" data-en="⬇️ Download Card as Image" style="width:100%; margin-top:10px;" type="button">⬇️ تحميل البطاقة كصورة</button>
+
+</div>
+
+<div class="gift-generator-preview">
+<canvas height="550" id="giftCardCanvas" width="900"></canvas>
+<p style="color:var(--color-gray); font-size:0.8rem; text-align:center;" data-ar="✨ المعاينة تتحدث مباشرة أثناء الكتابة" data-en="✨ The preview updates live as you type">✨ المعاينة تتحدث مباشرة أثناء الكتابة</p>
+</div>
+
+</div>
+
+</section>
+
 <section class="section-dark" style="text-align: center;">
 
 <h2 class="section-title" data-ar="خدمة تغليف الهدايا" data-en="Gift Wrapping Service">خدمة تغليف الهدايا</h2>
@@ -585,11 +637,11 @@ and direct delivery to the recipient anywhere in Jordan." style="color: var(--co
 
 <ul class="footer-links">
 
-<li><a data-ar="📍 عمان، الأردن" data-en="📍 Amman, Jordan" href="#">📍 عمان، الأردن</a></li>
+<li><a href="#">📍 <span data-ar="جبل عمان، عمان" data-en="Jabal Amman, Amman">جبل عمان، عمان</span></a></li>
 
 <li><a href="#">📞 +962 79 000 0000</a></li>
 
-<li><a href="#">📧 info@mosiqati.jo</a></li>
+<li><a href="mailto:mosiqati@gmail.com"> mosiqati@gmail.com</a></li>
 
 </ul>
 

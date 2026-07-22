@@ -50,7 +50,7 @@ body {
   direction: rtl;
   line-height: 1.7;
   font-size: 26px;
-  padding-top: 30px;
+  padding-top: 98px;
 }
 
 a {
@@ -2089,4 +2089,210 @@ footer {
 }
 .top-bar.hidden + .navbar{
   top:0 !important;
+}
+
+/* ===================== شاشة التحميل الافتتاحية (Splash Screen) ===================== */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: radial-gradient(circle at 50% 42%, #1c1710 0%, #100d08 55%, #060605 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+.splash-screen.splash-hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.splash-logo-wrap {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.splash-logo-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.5) 0%, rgba(201,168,76,0.12) 45%, transparent 72%);
+  animation: splashGlow 1.8s ease-in-out infinite;
+  z-index: 0;
+}
+.splash-logo-wrap::after {
+  content: "";
+  position: absolute;
+  inset: -55px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(232,201,106,0.65) 55deg, transparent 130deg, transparent 230deg, rgba(201,168,76,0.45) 290deg, transparent 360deg);
+  filter: blur(9px);
+  animation: splashRotate 3.2s linear infinite;
+  z-index: 0;
+}
+.splash-ring {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  opacity: 0;
+  z-index: 0;
+  animation: splashRing 2.6s ease-out infinite;
+}
+.splash-logo {
+  position: relative;
+  z-index: 2;
+  width: 118px;
+  height: 118px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 26px rgba(201,168,76,0.55));
+  animation: splashPulse 1.8s ease-in-out infinite;
+}
+.splash-logo-text {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-arabic);
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: var(--color-white);
+  letter-spacing: 2px;
+}
+.splash-title {
+  font-family: var(--font-arabic);
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--color-gold);
+  opacity: 0;
+  animation: splashFadeIn 0.7s ease forwards 0.25s;
+}
+.splash-tagline {
+  font-size: 0.85rem;
+  color: var(--color-gray);
+  letter-spacing: 1px;
+  opacity: 0;
+  animation: splashFadeIn 0.7s ease forwards 0.5s;
+}
+@keyframes splashPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.22); }
+}
+@keyframes splashGlow {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+@keyframes splashRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes splashRing {
+  0% { transform: scale(0.55); opacity: 0.75; }
+  70% { opacity: 0.15; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+@keyframes splashFadeIn {
+  to { opacity: 1; }
+}
+@media (max-width: 600px) {
+  .splash-logo-wrap { width: 155px; height: 155px; }
+  .splash-logo { width: 92px; height: 92px; }
+  .splash-ring { width: 92px; height: 92px; }
+  .splash-title { font-size: 1.4rem; letter-spacing: 3px; }
+}
+
+/* ===================== مولّد بطاقة الهدية ===================== */
+.gift-generator-wrap {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.gift-generator-form {
+  flex: 1 1 320px;
+  max-width: 380px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.gift-generator-form label {
+  font-size: 0.85rem;
+  color: var(--color-gold);
+  font-weight: 700;
+  margin-bottom: -6px;
+}
+.gift-generator-form input[type="text"],
+.gift-generator-form textarea,
+.gift-generator-form select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: #111;
+  color: var(--color-white);
+  font-family: var(--font-arabic);
+  font-size: 0.9rem;
+  resize: vertical;
+}
+.gift-generator-form textarea { min-height: 90px; }
+.gift-theme-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.gift-theme-btn {
+  flex: 1 1 auto;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: #111;
+  color: var(--color-white);
+  font-family: var(--font-arabic);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+}
+.gift-theme-btn.active,
+.gift-theme-btn:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background: rgba(201,168,76,0.08);
+}
+.gift-generator-preview {
+  flex: 1 1 420px;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+#giftCardCanvas {
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--color-border);
+}
+@media (max-width: 700px) {
+  .gift-generator-wrap { flex-direction: column; align-items: stretch; }
+  .gift-generator-form, .gift-generator-preview { max-width: 100%; }
 }

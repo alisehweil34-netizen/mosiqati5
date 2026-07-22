@@ -105,6 +105,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   initMusicToggle();
 
+  initSplashScreen();
+
+  initGiftCardGenerator();
+
   
   
   
@@ -439,7 +443,7 @@ function getLang() {
   
   try {
     
-    return JSON.parse(localStorage.getItem('mosiqati-settings') || '{}').lang || 'en';
+    return JSON.parse(localStorage.getItem('mosiqati-settings') || '{}').lang || 'ar';
   
   } catch(e) { return 'ar'; }
 
@@ -486,7 +490,7 @@ function applyAllSettings() {
   var s = {};
   try { s = JSON.parse(localStorage.getItem('mosiqati-settings') || '{}'); } catch(e) {}
 
-  var lang = s.lang || 'en';
+  var lang = s.lang || 'ar';
   var isAr = lang === 'ar';
 
   document.documentElement.lang = lang;
@@ -597,7 +601,8 @@ function playSound(name) {
     var files = {
       addToCart   : 'add-to-cart.mp3',
       orderSuccess: 'order-success.mp3',
-      error       : 'error.mp3'
+      error       : 'error.mp3',
+      splash      : 'splash-chime.mp3'
     };
     if (!files[name]) return;
     if (!SFX[name]) SFX[name] = new Audio(files[name]);
@@ -792,3 +797,214 @@ document.addEventListener('click', clickToStartBg);
   });
 
 })();
+
+/* ================================================================
+   شاشة التحميل الافتتاحية (Splash Screen)
+   تظهر مرة واحدة فقط عند أول فتح للموقع في الجلسة (sessionStorage)
+   ================================================================ */
+function initSplashScreen() {
+  try {
+    var splash = document.getElementById('splashScreen');
+    if (!splash) return;
+
+    var alreadyShown = sessionStorage.getItem('mosiqati-splash-shown');
+    if (alreadyShown) {
+      splash.parentNode && splash.parentNode.removeChild(splash);
+      return;
+    }
+    sessionStorage.setItem('mosiqati-splash-shown', '1');
+
+    if (typeof playSound === 'function') playSound('splash');
+
+    var done = false;
+    var finish = function () {
+      if (done) return;
+      done = true;
+      setTimeout(function () {
+        splash.classList.add('splash-hide');
+        setTimeout(function () {
+          if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
+        }, 800);
+      }, 2200);
+    };
+
+    if (document.readyState === 'complete') {
+      finish();
+    } else {
+      window.addEventListener('load', finish);
+    }
+    // حد أقصى للانتظار حتى لو تأخر تحميل بعض الملفات (صوت/فيديو)
+    setTimeout(finish, 4000);
+  } catch (e) {}
+}
+
+/* ================================================================
+   مولّد بطاقة الهدية القابلة للتخصيص (Canvas)
+   يعمل فقط في الصفحات التي تحتوي على #giftCardCanvas (صفحة الهدايا)
+   ================================================================ */
+function initGiftCardGenerator() {
+  var canvas = document.getElementById('giftCardCanvas');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+
+  var toInput      = document.getElementById('giftToName');
+  var fromInput    = document.getElementById('giftFromName');
+  var msgInput     = document.getElementById('giftMessage');
+  var themeBtns    = document.querySelectorAll('.gift-theme-btn');
+  var downloadBtn  = document.getElementById('giftDownloadBtn');
+
+  var themes = {
+    gold: {
+      bgTop: '#1c1710', bgBottom: '#0a0908',
+      border: '#c9a84c', accent: '#e8c96a',
+      text: '#f3ead9', sub: '#c8c2b0'
+    },
+    red: {
+      bgTop: '#2a0f11', bgBottom: '#120607',
+      border: '#c9a84c', accent: '#e8c96a',
+      text: '#f3ead9', sub: '#e2c3c3'
+    },
+    elegant: {
+      bgTop: '#20232a', bgBottom: '#0d0f13',
+      border: '#c9a84c', accent: '#bcd6e0',
+      text: '#f2f4f6', sub: '#bfc9cf'
+    }
+  };
+
+  var currentTheme = 'gold';
+
+  function wrapText(context, text, x, y, maxWidth, lineHeight, maxLines) {
+    var words = String(text).split(/\s+/).filter(Boolean);
+    var lines = [];
+    var line = '';
+    words.forEach(function (word) {
+      var testLine = line ? line + ' ' + word : word;
+      if (context.measureText(testLine).width > maxWidth && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = testLine;
+      }
+    });
+    if (line) lines.push(line);
+    if (maxLines && lines.length > maxLines) {
+      lines = lines.slice(0, maxLines);
+      lines[maxLines - 1] = lines[maxLines - 1].replace(/\s*$/, '') + '…';
+    }
+    lines.forEach(function (l, i) {
+      context.fillText(l, x, y + i * lineHeight);
+    });
+  }
+
+  function drawCard() {
+    var W = canvas.width, H = canvas.height;
+    var t = themes[currentTheme] || themes.gold;
+    var lang = (typeof getLang === 'function') ? getLang() : 'ar';
+
+    var toName   = (toInput   && toInput.value.trim())   || (lang === 'en' ? 'Someone Special' : 'شخص عزيز');
+    var fromName = (fromInput && fromInput.value.trim()) || '';
+    var message  = (msgInput  && msgInput.value.trim())  || (lang === 'en'
+      ? 'Wishing you wonderful musical moments.'
+      : 'أتمنى لك لحظات موسيقية رائعة مليئة بالفرح.');
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    // خلفية متدرجة فاخرة
+    var grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, t.bgTop);
+    grad.addColorStop(1, t.bgBottom);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // إطار ذهبي مزدوج
+    ctx.strokeStyle = t.border;
+    ctx.lineWidth = 5;
+    ctx.strokeRect(18, 18, W - 36, H - 36);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(201,168,76,0.55)';
+    ctx.strokeRect(32, 32, W - 64, H - 64);
+
+    // زخرفة نوتة موسيقية شفافة بالخلفية
+    ctx.save();
+    ctx.globalAlpha = 0.07;
+    ctx.font = '190px Arial';
+    ctx.fillStyle = t.accent;
+    ctx.textAlign = 'center';
+    ctx.fillText('♪', W / 2, H / 2 + 65);
+    ctx.restore();
+
+    ctx.textAlign = 'center';
+
+    // شعار المتجر
+    ctx.font = '900 28px Tahoma, Arial';
+    ctx.fillStyle = t.accent;
+    ctx.fillText('MOSIQATI', W / 2, 88);
+
+    ctx.font = '15px Tahoma, Arial';
+    ctx.fillStyle = t.sub;
+    ctx.fillText(lang === 'en' ? '🎁  Musical Gift Card  🎁' : '🎁  بطاقة هدية موسيقية  🎁', W / 2, 114);
+
+    ctx.strokeStyle = t.border;
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 80, 134);
+    ctx.lineTo(W / 2 + 80, 134);
+    ctx.stroke();
+
+    // إلى:
+    ctx.direction = lang === 'en' ? 'ltr' : 'rtl';
+    ctx.font = '900 32px "Cairo", Tahoma, Arial';
+    ctx.fillStyle = t.text;
+    ctx.fillText((lang === 'en' ? 'To: ' : 'إلى: ') + toName, W / 2, 205);
+
+    // نص الرسالة
+    ctx.font = '21px "Cairo", Tahoma, Arial';
+    ctx.fillStyle = t.sub;
+    wrapText(ctx, message, W / 2, 265, W - 170, 34, 5);
+
+    // من:
+    if (fromName) {
+      ctx.font = 'italic 21px "Cairo", Tahoma, Arial';
+      ctx.fillStyle = t.accent;
+      ctx.fillText((lang === 'en' ? '— From ' : '— من ') + fromName, W / 2, H - 92);
+    }
+
+    ctx.direction = 'ltr';
+    ctx.font = '13px Tahoma, Arial';
+    ctx.fillStyle = t.sub;
+    ctx.fillText(lang === 'en' ? 'mosiqati.com  •  Amman, Jordan' : 'موسيقاتي  •  عمّان، الأردن', W / 2, H - 45);
+  }
+
+  themeBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      themeBtns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentTheme = btn.getAttribute('data-theme') || 'gold';
+      drawCard();
+    });
+  });
+
+  [toInput, fromInput, msgInput].forEach(function (el) {
+    if (el) el.addEventListener('input', drawCard);
+  });
+
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', function () {
+      try {
+        var link = document.createElement('a');
+        var rawName = (toInput && toInput.value.trim()) || 'gift-card';
+        var safeName = rawName.replace(/[^a-zA-Z0-9\u0600-\u06FF ]/g, '').trim() || 'gift-card';
+        link.download = 'موسيقاتي-بطاقة-' + safeName + '.png';
+        link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        if (typeof playSound === 'function') playSound('addToCart');
+      } catch (e) {}
+    });
+  }
+
+  drawCard();
+
+  document.addEventListener('mosiqati-lang-changed', drawCard);
+}
