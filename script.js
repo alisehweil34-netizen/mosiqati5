@@ -780,23 +780,115 @@ document.addEventListener('click', clickToStartBg);
 /* DIAGNOSTIC PATCH: language system inspected. applyAllSettings() only translates elements that have data-ar and data-en attributes. Any hard-coded Arabic text in pages will remain Arabic when English is selected. Review pages for missing data-en attributes. */
 
 // ===== قارئ النص عند التحديد (Text-to-Speech) =====
+// يستخدم محرك نطق مرفق داخل ملفات الموقع نفسه (tts-engine/) بحيث تعمل
+// القراءة الصوتية بالعربية دائماً، بغض النظر عن وجود صوت عربي مثبت على
+// جهاز الزائر أو عدمه. صوت النظام (speechSynthesis) يُستخدم فقط كبديل
+// احتياطي أخير إن تعذّر تحميل المحرك المرفق.
 (function() {
-  if (!window.speechSynthesis) return;
 
   var popup = null;
   var readTimeout = null;
   var savedText = '';
 
-  function speak(text) {
+  // ---- محرك النطق المرفق (eSpeak-ng عبر Web Worker، يعمل دون إنترنت) ----
+  var bundledTTS = null;      // نسخة SimpleTTS بعد تحميلها
+  var bundledReady = false;
+  var bundledFailed = false;
+  var bundledArabicVoiceId = 'ar'; // معرّف الصوت العربي في eSpeak-ng
+
+  function loadScriptOnce(src, cb) {
+    var existing = document.querySelector('script[data-tts-engine]');
+    if (existing) { cb(); return; }
+    var s = document.createElement('script');
+    s.src = src;
+    s.setAttribute('data-tts-engine', '1');
+    s.onload = cb;
+    s.onerror = function() { bundledFailed = true; cb(); };
+    document.head.appendChild(s);
+  }
+
+  function initBundledTTS() {
+    if (bundledTTS || bundledFailed) return;
+    loadScriptOnce('tts-engine/espeakng-simple.js', function() {
+      if (typeof SimpleTTS === 'undefined') { bundledFailed = true; return; }
+      try {
+        bundledTTS = new SimpleTTS({ workerPath: 'tts-engine/espeakng.worker.js' });
+        bundledTTS.onReady(function(err) {
+          if (err) { bundledFailed = true; return; }
+          bundledReady = true;
+          // نتأكد من معرّف الصوت العربي الفعلي المتوفر داخل بيانات المحرك
+          bundledTTS.getVoices(function(voices) {
+            if (!voices || !voices.length) return;
+            var exact = voices.find(function(v) { return v.identifier === 'ar' || v.identifier === 'ar-x' || (v.languages && v.languages.indexOf('ar') !== -1); });
+            var partial = exact || voices.find(function(v) {
+              return (v.identifier && v.identifier.toLowerCase().indexOf('ar') === 0) ||
+                     (v.name && /arabic/i.test(v.name));
+            });
+            if (partial) bundledArabicVoiceId = partial.identifier;
+          });
+        });
+      } catch (e) {
+        bundledFailed = true;
+      }
+    });
+  }
+  // نبدأ التحميل مبكراً (بمجرد فتح الصفحة) حتى يكون المحرك جاهزاً وقت الحاجة
+  initBundledTTS();
+
+  var currentPlayback = null; // مقبض التشغيل الحالي من المحرك المرفق (لإيقافه عند الحاجة)
+
+  function stopAllSpeech() {
+    if (currentPlayback && currentPlayback.stop) { currentPlayback.stop(); currentPlayback = null; }
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+  }
+
+  function speakBundled(text, lang) {
+    var voiceId = lang === 'ar' ? bundledArabicVoiceId : 'en';
+    bundledTTS.speak(text, { voice: voiceId, rate: 175, pitch: 50 }, function(audioData, sampleRate) {
+      if (audioData) {
+        currentPlayback = SimpleTTS.playAudioData(audioData, sampleRate);
+      } else {
+        // فشل التوليد داخل المحرك المرفق نفسه -> نجرّب صوت النظام كحل أخير
+        speakSystem(text, lang);
+      }
+    });
+  }
+
+  // ---- صوت النظام (fallback أخير فقط) ----
+  function speakSystem(text, lang) {
+    if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
-    // استخدام دالة getLang العامة من script.js
-    var lang = (typeof getLang === 'function') ? getLang() : 'en';
     var utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = lang === 'ar' ? 'ar-SA' : 'en-US';
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
     window.speechSynthesis.speak(utterance);
+  }
+
+  function speak(text) {
+    var lang = (typeof getLang === 'function') ? getLang() : 'en';
+
+    if (bundledReady) {
+      speakBundled(text, lang);
+      return;
+    }
+    if (bundledFailed) {
+      speakSystem(text, lang);
+      return;
+    }
+    // المحرك لا يزال قيد التحميل: ننتظره قليلاً ثم نستخدمه، وإلا نتراجع لصوت النظام
+    var waited = 0;
+    var waitInterval = setInterval(function() {
+      waited += 100;
+      if (bundledReady) {
+        clearInterval(waitInterval);
+        speakBundled(text, lang);
+      } else if (bundledFailed || waited >= 3000) {
+        clearInterval(waitInterval);
+        speakSystem(text, lang);
+      }
+    }, 100);
   }
 
   function removePopup() {
@@ -866,7 +958,7 @@ document.addEventListener('click', clickToStartBg);
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      window.speechSynthesis.cancel();
+      stopAllSpeech();
       removePopup();
     }
   });

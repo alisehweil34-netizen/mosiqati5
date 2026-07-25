@@ -1,27 +1,993 @@
-<?php
-/**
- * config.php
- * إعداد الاتصال بقاعدة بيانات MySQL على Railway.
- * Railway يضبط هذه المتغيرات تلقائياً عند إضافة خدمة MySQL للمشروع،
- * لذلك لا حاجة لتعديل هذا الملف يدوياً (راجع DEPLOY_GUIDE.md).
- */
 
-$DB_HOST = getenv('MYSQLHOST')     ?: 'localhost';
-$DB_PORT = getenv('MYSQLPORT')     ?: '3306';
-$DB_USER = getenv('MYSQLUSER')     ?: 'root';
-$DB_PASS = getenv('MYSQLPASSWORD') ?: '';
-$DB_NAME = getenv('MYSQLDATABASE') ?: 'mosiqati_db';
+<!DOCTYPE html>
 
-$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, (int) $DB_PORT);
+<html dir="rtl" lang="ar">
 
-if ($conn->connect_error) {
-    http_response_code(500);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode([
-        'success' => false,
-        'message' => 'تعذّر الاتصال بقاعدة البيانات: ' . $conn->connect_error
-    ]);
-    exit;
+<head>
+
+<meta charset="utf-8"/>
+
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+<title>سلة التسوق – موسيقاتي</title>
+
+<link href="style.css" rel="stylesheet"/>
+
+<style>
+    /* ===================================
+       تنسيقات خاصة بصفحة السلة
+    =================================== */
+
+    /* --- عنوان الصفحة --- */
+    .cart-page-header {
+      padding: 30px 5% 10px;
+    }
+
+    .breadcrumb {
+      font-size: 0.82rem;
+      color: var(--color-gray);
+      margin-bottom: 10px;
+    }
+
+    .breadcrumb a {
+      color: var(--color-gold);
+      text-decoration: none;
+    }
+
+    /* --- تخطيط السلة --- */
+    
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 25px;
+      padding: 0 5% 80px;
+    }
+
+    /* --- شريط أدوات السلة --- */
+    .cart-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+
+    .clear-btn {
+      background: none;
+      border: 1px solid var(--color-border);
+      color: var(--color-gray);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-family: var(--font-arabic);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .clear-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+
+    .continue-link {
+      color: var(--color-gold);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .continue-link:hover { text-decoration: underline; }
+
+    /* --- السلة الفارغة --- */
+    .empty-cart {
+      text-align: center;
+      padding: 70px 30px;
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .empty-cart .icon { font-size: 4rem; margin-bottom: 15px; display: block; }
+    .empty-cart h3 { font-size: 1.3rem; margin-bottom: 8px; }
+    .empty-cart p { color: var(--color-gray); margin-bottom: 20px; }
+
+    /* --- بطاقة منتج في السلة --- */
+    
+    .cart-item {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      transition: border-color var(--transition);
+      animation: fadeIn 0.4s ease;
+      margin-bottom: 12px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    
+    .cart-item:hover { border-color: var(--color-gold-dark); }
+
+    .item-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1a1a1a, #2a1f00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      flex-shrink: 0;
+      border: 1px solid var(--color-border);
+    }
+
+    .item-info { flex: 1; }
+
+    .item-name {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 4px;
+      color: var(--color-white);
+    }
+
+    .item-desc {
+      font-size: 0.82rem;
+      color: var(--color-gray);
+      margin-bottom: 8px;
+    }
+
+    .item-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: rgba(201,168,76,0.12);
+      color: var(--color-gold);
+      border: 1px solid rgba(201,168,76,0.25);
+    }
+
+    .item-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .item-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .item-price-total {
+      font-size: 0.78rem;
+      color: var(--color-gray);
+    }
+
+    /* --- التحكم بالكمية --- */
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--color-dark);
+      border: 1px solid var(--color-border);
+      color: var(--color-white);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .qty-btn:hover {
+      background: var(--color-gold);
+      color: var(--color-black);
+      border-color: var(--color-gold);
+    }
+
+    .qty-display {
+      min-width: 36px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: var(--color-gray);
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: color var(--transition);
+      padding: 0;
+      font-family: var(--font-arabic);
+    }
+
+    .remove-btn:hover { color: #e74c3c; }
+
+    /* --- ملخص الطلب --- */
+    
+    .cart-summary {
+      position: sticky;
+      top: 90px;
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      height: fit-content;
+    }
+
+    
+    .cart-summary h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+    .summary-row.total {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .summary-row .label { color: var(--color-gray); }
+    .summary-row.total .label { color: var(--color-gold); }
+
+    /* --- حقل الكوبون --- */
+    .promo-row {
+      display: flex;
+      gap: 8px;
+      margin: 18px 0;
+    }
+
+    .promo-input {
+      flex: 1;
+      background: var(--color-dark);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: var(--color-white);
+      font-family: var(--font-arabic);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .promo-input:focus { border-color: var(--color-gold); }
+
+    .promo-btn {
+      background: var(--color-dark);
+      border: 1px solid var(--color-border);
+      color: var(--color-gold);
+      padding: 9px 15px;
+      border-radius: 8px;
+      font-family: var(--font-arabic);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .promo-btn:hover {
+      background: var(--color-gold);
+      color: var(--color-black);
+      border-color: var(--color-gold);
+    }
+
+    .promo-msg {
+      font-size: 0.8rem;
+      min-height: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    .promo-msg.success { color: #2ecc71; }
+    .promo-msg.error   { color: #e74c3c; }
+
+    /* --- أيقونات الدفع --- */
+    .payment-icons {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .p-icon {
+      background: var(--color-dark);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      color: var(--color-gray);
+      letter-spacing: 0.5px;
+    }
+
+    .secure-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--color-gray);
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+
+    /* --- مودال الطلب --- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 40px;
+      max-width: 460px;
+      width: 90%;
+      text-align: center;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .modal .icon { font-size: 4rem; margin-bottom: 15px; display: block; }
+    .modal h2 { font-size: 1.5rem; margin-bottom: 8px; }
+    .modal p { color: var(--color-gray); margin-bottom: 25px; line-height: 1.7; }
+
+    .modal-actions { display: flex; gap: 12px; }
+
+    .modal-close {
+      flex: 1;
+      padding: 12px;
+      background: var(--color-dark);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      color: var(--color-white);
+      font-family: var(--font-arabic);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .modal-close:hover { background: #222; }
+
+    .modal-confirm {
+      flex: 1;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--color-gold), var(--color-gold-light));
+      border: none;
+      border-radius: 8px;
+      color: var(--color-black);
+      font-family: var(--font-arabic);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity var(--transition);
+    }
+
+    .modal-confirm:hover { opacity: 0.9; }
+
+    .order-num {
+      display: inline-block;
+      margin: 12px 0;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 8px 25px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-gold);
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 900px) {
+      
+      .cart-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .cart-summary { position: static; }
+    }
+
+    @media (max-width: 500px) {
+      
+      .cart-item { flex-wrap: wrap; }
+      .item-actions {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  
+  </style>
+
+</head>
+
+<body>
+<div class="splash-screen" id="splashScreen">
+<div class="splash-logo-wrap">
+<span class="splash-ring"></span>
+<span class="splash-ring" style="animation-delay:0.85s"></span>
+<span class="splash-ring" style="animation-delay:1.7s"></span>
+<img alt="موسيقاتي" class="splash-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'" src="logo.png"/>
+<div class="splash-logo-text" style="display:none">MOSIQA<span class="gold-text">TI</span></div>
+</div>
+<div class="splash-title">MOSIQATI</div>
+<div class="splash-tagline" data-ar="متجرك الموسيقي الأول في الأردن" data-en="Jordan's #1 Music Store">متجرك الموسيقي الأول في الأردن</div>
+</div>
+
+<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 JOD | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">
+    🎵 شحن مجاني على الطلبات فوق 50 JOD | عروض حصرية هذا الأسبوع
+  
+  </div>
+
+<nav class="navbar">
+
+<a class="navbar-logo" href="home.html"><img alt="موسيقاتي" class="navbar-logo-img" src="logo.png"/></a>
+
+<ul class="navbar-links" id="nav-links">
+
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
+
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
+
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
+
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
+
+<li><a data-ar="من نحن" data-en="About Us" href="about.html">من نحن</a></li>
+
+<li><a data-ar="تواصل معنا" data-en="Contact Us" href="Contact.html">تواصل معنا</a></li>
+
+<li><a data-ar="🏅 نقاطي" data-en="🏅 My Points" href="points.html">🏅 نقاطي</a></li>
+
+<li><a data-ar="الإعدادات" data-en="Settings" href="settings.html">الإعدادات </a></li>
+
+</ul>
+
+<button aria-label="فتح القائمة" class="hamburger" id="hamburger">
+
+<span></span><span></span><span></span>
+
+</button>
+
+
+
+</nav>
+
+<div class="cart-page-header" style="padding-top: 90px;">
+
+<div class="breadcrumb">
+
+<a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a> ← <a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a> <A data-ar="← سلة التسوق" data-en="← Shopping cart"></A> 
+    
+    </div>
+
+<h1 style="font-size: 2rem; font-weight: 900; font-family: 'Playfair Display', serif;">
+      <span data-ar="سلة التسوق" data-en="Shopping Cart">سلة <span style="color: var(--color-gold);">التسوق</span></span>
+
+</h1>
+
+<p id="itemCountText" style="color: var(--color-gray); margin-top: 5px; font-size: 0.9rem;"></p>
+
+</div>
+
+<div class="cart-layout">
+
+<div>
+
+<div class="cart-toolbar">
+
+<button class="clear-btn" data-ar="🗑 Empty the basket" data-en="🗑 Empty Cart" onclick="clearCart()">🗑 إفراغ السلة</button>
+
+<a class="continue-link" data-ar="← متابعة التسوق" data-en="← Continue Shopping" href="store.html">← متابعة التسوق</a>
+
+</div>
+
+<div id="cartItems"></div>
+
+</div>
+
+<div class="cart-summary">
+
+<h3 data-ar="📋 ملخص الطلب" data-en="📋 Order Summary">📋 ملخص الطلب</h3>
+
+<div class="summary-row">
+
+<span class="label" data-ar="المجموع الجزئي" data-en="Subtotal">المجموع الجزئي</span>
+
+<span id="subtotalVal" >0 JOD</span>
+
+</div>
+
+<div class="summary-row">
+
+<span class="label" data-ar="الشحن" data-en="Shipping">الشحن</span>
+
+<span id="shippingVal">—</span>
+
+</div>
+
+<div class="summary-row">
+
+<span class="label" data-ar="ضريبة المبيعات (16%)" data-en="Sales Tax (16%)">ضريبة المبيعات (16%)</span>
+
+<span id="taxVal">0 JOD</span>
+
+</div>
+
+<div class="summary-row" id="discountRow" style="display:none; color: #2ecc71;">
+
+<span class="label" style="color: #2ecc71;" data-ar="🎉 خصم الكوبون" data-en="🎉 Coupon Discount">🎉 خصم الكوبون</span>
+
+<span id="discountVal" data-ar="0 JOD" data-en="0 JOD">0 JOD</span>
+
+</div>
+
+<div class="summary-row total">
+
+<span class="label" data-ar="الإجمالي" data-en="Total">الإجمالي</span>
+
+<span id="totalVal">0 JOD</span>
+
+</div>
+
+<div class="promo-row">
+
+<input class="promo-input" dir="ltr" id="promoInput"  data-ar-placeholder=" Discount code..." data-en-placecholder=""/>
+
+<button class="promo-btn" data-ar="تطبيق" data-en="Apply" onclick="applyPromo()" data-ar="تطبيق" data-en="Apply">تطبيق</button>
+
+</div>
+
+<div class="promo-msg" id="promoMsg"></div>
+
+<button class="btn btn-gold" data-ar="إتمام الشراء ←" data-en="Checkout ←" id="checkoutBtn" onclick="openCheckout()" style="width: 100%;">
+        إتمام الشراء ←
+      
+      </button>
+
+<p class="secure-note" data-ar="🔒 الدفع آمن ومشفر بالكامل" data-en="🔒 Payment is fully secure and encrypted">🔒 الدفع آمن ومشفر بالكامل</p>
+
+<div class="payment-icons">
+
+<span class="p-icon">VISA</span>
+
+<span class="p-icon">Mastercard</span>
+
+<span class="p-icon">Cash</span>
+
+<span class="p-icon">Bank</span>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+<div class="footer-grid">
+
+<div>
+
+<div class="footer-brand-name">MOSIQATI</div>
+
+<p class="footer-brand-desc" data-ar="متجرك الموسيقي الأول في الأردن منذ عام 2014." data-en="Jordan's #1 music store since 2014.">متجرك الموسيقي الأول في الأردن منذ عام 2014.</p>
+
+<div class="social-links">
+
+<div class="social-link" title="فيسبوك">📘</div>
+
+<div class="social-link" title="إنستغرام">📷</div>
+
+<div class="social-link" title="يوتيوب">▶️</div>
+
+<div class="social-link" title="واتساب">💬</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
+
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
+
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
+
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="الفئات" data-en="Categories">الفئات</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="قيثارات" data-en="Guitars" href="store.html">قيثارات</a></li>
+
+<li><a data-ar="بيانو" data-en="Piano" href="store.html">بيانو</a></li>
+
+<li><a data-ar="عود" data-en="Oud" href="store.html">عود</a></li>
+
+<li><a data-ar="معدات استوديو" data-en="Studio Gear" href="store.html">معدات استوديو</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</div>
+
+<ul class="footer-links">
+
+<li><a href="#">📍 <span data-ar="جبل عمان، عمان" data-en="Jabal Amman, Amman">جبل عمان، عمان</span></a></li>
+
+<li><a href="#">📞 +962 79 000 0000</a></li>
+
+<li><a href="mailto:mosiqati@gmail.com"> mosiqati@gmail.com</a></li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+<p data-ar="© 2026 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2026 MOSIQATI - All Rights Reserved">© 2026 موسيقاتي - جميع الحقوق محفوظة</p>
+
+<div class="footer-bottom-links">
+
+<a data-ar="سياسة الخصوصية" data-en="Privacy Policy" href="#">سياسة الخصوصية</a>
+
+<a data-ar="شروط الاستخدام" data-en="Terms of Use" href="#">شروط الاستخدام</a>
+
+</div>
+
+</div>
+
+</footer>
+
+<div class="modal-overlay" id="checkoutModal">
+
+<div class="modal" id="modalContent">
+
+<span class="icon">🎵</span>
+
+<h2 data-ar="تأكيد الطلب" data-en="Confirm Order">تأكيد الطلب</h2>
+
+<p data-ar="هل أنت متأكد من إتمام الطلب؟ سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل." data-en="Are you sure you want to complete the order? We will contact you on your phone number to confirm the details.">هل أنت متأكد من إتمام الطلب؟<br/>سيتم التواصل معك على رقم هاتفك لتأكيد التفاصيل.</p>
+
+<div class="modal-actions">
+
+<button class="modal-close" onclick="closeModal()" data-ar="إلغاء" data-en="Cancel">إلغاء</button>
+
+<button class="modal-confirm" onclick="confirmOrder()" data-ar="تأكيد الطلب ✓" data-en="Confirm Order ✓">تأكيد الطلب ✓</button>
+
+</div>
+
+</div>
+
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="script.js"></script>
+<script>
+    const CART_KEY = 'mosiqati-cart';
+    const PROMOS = { 'MOSIQATI10': 10, 'MUSIC20': 20, 'JORDAN15': 15 };
+    // دمج أكواد الخصم السرية (متجر النقاط) حتى تعمل عند إدخالها في خانة الكوبون
+    if (typeof REWARD_CODES !== 'undefined') {
+      REWARD_CODES.forEach(function(r) { PROMOS[r.code] = r.discount; });
+    }
+    let discount = 0;
+    let promoApplied = false;
+
+    function getCart() {
+      try {
+        const raw = localStorage.getItem(CART_KEY);
+        const cart = raw ? JSON.parse(raw) : [];
+        // تنقية العناصر الفاسدة (السعر 0 أو الاسم مثل JOD)
+        return cart.filter(i => i && i.name && i.name !== 'JOD' && i.price > 0);
+      } catch { return []; }
+    }
+
+    function saveCart(cart) { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+
+    function renderCart() {
+      const cart = getCart();
+      const container = document.getElementById('cartItems');
+      const totalQty = cart.reduce((s,i) => s + i.qty, 0);
+
+      document.getElementById('itemCountText').textContent =
+        cart.length ? `${totalQty} item${totalQty !== 1 ? "s" : ""} in your cart` : '';
+
+      if (!cart.length) {
+        container.innerHTML = `
+          
+          <div class="empty-cart">
+            
+            <span class="icon">🛒</span>
+            
+            <h3 data-ar="سلتك فارغة!" data-en="Your Cart is Empty!">سلتك فارغة!</h3>
+            
+            <p data-ar="أضف بعض الآلات الموسيقية الرائعة إلى سلتك" data-en="Add some amazing musical instruments to your cart">أضف بعض الآلات الموسيقية الرائعة إلى سلتك</p>
+            
+            <a href="store.html" class="btn btn-gold" data-ar="🎵 تسوق الآن" data-en="🎵 Shop Now">🎵 تسوق الآن</a>
+          </div>`;
+        document.getElementById('checkoutBtn').disabled = true;
+        document.getElementById('checkoutBtn').style.opacity = '0.4';
+        updateSummary([], 0);
+        // إعادة ترجمة الرسالة المُدرجة حديثاً فوراً حسب اللغة الحالية (بدون الحاجة لتحديث الصفحة)
+        var isAr = getLang() !== 'en';
+        container.querySelectorAll('[data-ar][data-en]').forEach(function(el){
+          el.innerHTML = isAr ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+        });
+        return;
+      }
+
+      document.getElementById('checkoutBtn').disabled = false;
+      document.getElementById('checkoutBtn').style.opacity = '1';
+
+      container.innerHTML = cart.map(item => `
+        
+        <div class="cart-item" id="item-${item.id}">
+          
+          <div class="item-img">${item.emoji || '🎵'}</div>
+          
+          <div class="item-info">
+            
+            <div class="item-name">${item.name}</div>
+            
+            <div class="item-desc">${item.desc || ''}</div>
+            ${item.badge ? `<span class="item-badge">${item.badge}</span>` : ''}
+          
+          </div>
+          
+          <div class="item-actions">
+            
+            <div>
+              
+              <div class="item-price">${item.price} ${getLang()==='en'?'JOD':'JOD'}</div>
+              
+              <div class="item-price-total">Total: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'JOD'}</div>
+            
+            </div>
+            
+            <div class="qty-control">
+              
+              <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
+              
+              <span class="qty-display">${item.qty}</span>
+              
+              <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+            
+            </div>
+            
+            <button class="remove-btn" onclick="removeItem('${item.id}')">${getLang()==='en'?'✕ Remove':'✕ حذف'}</button>
+          
+          </div>
+        
+        </div>
+      `).join('');
+
+      updateSummary(cart, discount);
+    }
+
+    function updateSummary(cart, disc) {
+      const sub = cart.reduce((s,i) => s + i.price * i.qty, 0);
+      const shipping = sub === 0 ? 0 : sub >= 100 ? 0 : 5;
+      const tax = sub * 0.16;
+      const discAmt = sub * (disc / 100);
+      let total = sub + shipping + tax - discAmt;
+      if (total < 0) total = 0;
+
+      document.getElementById('subtotalVal').textContent = sub.toFixed(2) + ' JOD';
+      document.getElementById('shippingVal').textContent = sub === 0 ? '—' : shipping === 0 ? '🎁 Free' : shipping + ' JOD';
+      document.getElementById('taxVal').textContent = tax.toFixed(2) + ' JOD';
+      document.getElementById('totalVal').textContent = total.toFixed(2) + ' JOD';
+
+      const dr = document.getElementById('discountRow');
+      if (discAmt > 0) {
+        dr.style.display = 'flex';
+        document.getElementById('discountVal').textContent = '-' + discAmt.toFixed(2) + ' JOD';
+      } else { dr.style.display = 'none'; }
+    }
+
+    function changeQty(id, delta) {
+      let cart = getCart();
+      const idx = cart.findIndex(i => String(i.id) === String(id));
+      if (idx === -1) return;
+      cart[idx].qty = Math.max(1, cart[idx].qty + delta);
+      saveCart(cart);
+      renderCart();
+    }
+
+    function removeItem(id) {
+      const el = document.getElementById('item-' + id);
+      if (el) { el.style.opacity = '0'; el.style.transform = 'translateX(30px)'; el.style.transition = 'all 0.3s'; }
+      setTimeout(() => {
+        let cart = getCart().filter(i => String(i.id) !== String(id));
+        saveCart(cart);
+        renderCart();
+      }, 300);
+    }
+
+    function clearCart() {
+      if (!confirm(getLang()==='en'?'Are you sure you want to clear the cart?':'هل تريد إفراغ السلة؟')) return;
+      saveCart([]);
+      renderCart();
+    }
+
+    function applyPromo() {
+      if (promoApplied) { showPromoMsg(getLang()==='en'?'A coupon has already been applied':'تم تطبيق كوبون بالفعل', 'error'); return; }
+      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+      if (PROMOS[code]) {
+        discount = PROMOS[code];
+        promoApplied = true;
+        showPromoMsg(getLang()==='en' ? `🎉 ${discount}% discount applied successfully!` : `🎉 تم تطبيق خصم ${discount}% بنجاح!`, 'success');
+        updateSummary(getCart(), discount);
+      } else {
+        showPromoMsg(getLang()==='en' ? '❌ Invalid coupon' : '❌ الكوبون غير صحيح', 'error');
+      }
+    }
+
+    function showPromoMsg(msg, type) {
+      const el = document.getElementById('promoMsg');
+      el.textContent = msg;
+      el.className = 'promo-msg ' + type;
+      setTimeout(() => { if (el.textContent === msg) el.textContent = ''; }, 4000);
+    }
+
+    function getCurrentUser() {
+      try {
+        return JSON.parse(localStorage.getItem('mosiqati-user') || 'null');
+      } catch (e) { return null; }
+    }
+
+    function openCheckout() {
+      const user = getCurrentUser();
+      if (!user || !user.id) {
+        alert(getLang()==='en'?'Please log in first to complete the order':'يرجى تسجيل الدخول أولاً لإتمام الطلب');
+        window.location.href = 'index.html';
+        return;
+      }
+      document.getElementById('checkoutModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('checkoutModal').classList.remove('active');
+    }
+
+    // ===== حفظ الطلبات عبر MySQL/PHP =====
+    // يتم الحفظ التلقائي فوراً عند تأكيد كل طلب
+
+async function saveOrderToServer(orderNum, cart, totalAmount, subtotal, discountAmount, promoCode, pointsEarned) {
+  try {
+    if (!db) {
+      console.warn('Firebase غير متاح، لم يتم حفظ الطلب');
+      return;
+    }
+    const user = getCurrentUser();
+    await db.ref('orders').push({
+      order_number   : orderNum,
+      user_id        : user ? user.id : null,
+      customer_name  : user ? user.name : null,
+      customer_email : user ? user.email : null,
+      customer_phone : user ? user.phone : null,
+      products       : cart,
+      subtotal       : subtotal,
+      discount       : discountAmount,
+      points_earned  : pointsEarned || 0,
+      total          : Number(totalAmount),
+      promo_code     : promoCode || null,
+      createdAt      : new Date().toISOString()
+    });
+  } catch(e){ console.error('فشل حفظ الطلب في Firebase:', e); }
 }
 
-$conn->set_charset('utf8mb4');
+function confirmOrder() {
+      const orderNum = 'MQ-' + Math.floor(Math.random() * 90000 + 10000);
+      const cart = getCart();
+      const sub    = cart.reduce((s,i) => s + i.price * i.qty, 0);
+      const shipping = sub >= 100 ? 0 : 5;
+      const tax    = sub * 0.16;
+      const discAmt = sub * (discount / 100);
+      let totalNum = sub + shipping + tax - discAmt;
+      if (totalNum < 0) totalNum = 0;
+      const total  = totalNum.toFixed(2);
+
+      const user = getCurrentUser();
+
+      saveOrderToServer(orderNum, cart, total, sub.toFixed(2), discAmt.toFixed(2), promoApplied ? document.getElementById('promoInput').value.trim().toUpperCase() : null, POINTS_PER_ORDER);
+
+      // إضافة نقاط الطلب الجديد للعميل
+      if (user && user.id) {
+        awardOrderPoints(user.id, orderNum);
+      }
+
+      playSound('orderSuccess');
+
+      const isAr = getLang() === 'ar';
+      document.getElementById('modalContent').innerHTML = `
+        
+        <span class="icon">🎉</span>
+        
+        <h2 style="color: var(--color-gold)">${isAr ? 'تم تأكيد طلبك!' : 'Your order is confirmed!'}</h2>
+        
+        <div class="order-num">${orderNum}</div>
+        
+        <p><span>${isAr ? 'شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل.' : 'Thank you! We will contact you soon to confirm delivery details.'}</span><br>
+           
+           <span style="color:var(--color-gold);font-size:0.85rem;">${isAr ? '✅ تم حفظ الطلب في قاعدة البيانات' : '✅ Order saved to database'}</span><br>
+
+           <span style="color:var(--color-gold);font-size:0.85rem;">${isAr ? `🏅 حصلت على ${POINTS_PER_ORDER} نقطة على هذا الطلب!` : `🏅 You earned ${POINTS_PER_ORDER} points on this order!`}</span>
+        
+        </p>
+        
+        <div class="modal-actions">
+          
+          <button class="modal-close" onclick="window.location='home.html'">${isAr ? 'الرئيسية' : 'Home'}</button>
+          
+          <button class="modal-confirm" onclick="closeModal(); saveCart([]); renderCart();">${isAr ? 'عرض السلة' : 'View Cart'}</button>
+        </div>`;
+      saveCart([]);
+    }
+
+    document.getElementById('checkoutModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    renderCart();
+  
+  </script>
+
+<button class="cart-float" onclick="window.location='cart.html'" style="display:none!important">
+  🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
+</button>
+<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+</body>
+
+</html>
