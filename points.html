@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نقاطي - موسيقاتي</title>
+<link href="style.css" rel="stylesheet"/>
+<style>
+    /* ===================================
+       تنسيقات خاصة بصفحة نقاطي
+    =================================== */
+
+    .points-layout {
+      padding: 40px 5% 80px;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    /* --- بطاقة الرصيد --- */
+    .points-balance-card {
+      background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.02));
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: var(--radius);
+      padding: 40px 30px;
+      text-align: center;
+    }
+
+    .points-balance-icon { font-size: 2.5rem; margin-bottom: 8px; }
+
+    .points-balance-number {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: var(--color-gold);
+      font-family: 'Playfair Display', serif;
+      line-height: 1.1;
+    }
+
+    .points-balance-label {
+      font-size: 0.95rem;
+      color: var(--color-white);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .points-balance-sub {
+      font-size: 0.8rem;
+      color: var(--color-gray);
+      margin-top: 10px;
+    }
+
+    /* --- بطاقات عامة (تعريف / سجل) --- */
+    .settings-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 30px;
+      transition: border-color var(--transition);
+    }
+
+    .settings-card:hover { border-color: rgba(201,168,76,0.25); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .card-header-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .card-header-text h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-white);
+      margin-bottom: 2px;
+    }
+
+    .card-header-text p {
+      font-size: 0.8rem;
+      color: var(--color-gray);
+    }
+
+    /* --- كيف تعمل النقاط --- */
+    .how-it-works { display: flex; flex-direction: column; gap: 16px; }
+
+    .how-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .how-row .num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.25);
+      color: var(--color-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .how-row .txt { font-size: 0.9rem; color: var(--color-white); line-height: 1.6; }
+    .how-row .txt strong { color: var(--color-gold); }
+
+    /* --- متجر النقاط: أكواد سرية --- */
+    .rewards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .reward-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+
+    .reward-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-2px); }
+
+    .reward-card.unlocked { border-color: rgba(46,204,113,0.35); background: rgba(46,204,113,0.05); }
+
+    .reward-icon { font-size: 2rem; margin-bottom: 8px; }
+
+    .reward-discount {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--color-gold);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .reward-cost {
+      font-size: 0.8rem;
+      color: var(--color-gray);
+      margin: 6px 0 14px;
+    }
+
+    .reward-cost strong { color: var(--color-white); }
+
+    .reward-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-arabic);
+    }
+
+    .reward-btn.buy {
+      background: var(--color-gold);
+      color: var(--color-black);
+    }
+
+    .reward-btn.buy:hover { background: var(--color-gold-light); }
+
+    .reward-btn.buy:disabled {
+      background: rgba(255,255,255,0.06);
+      color: var(--color-gray);
+      cursor: not-allowed;
+    }
+
+    .reward-code-box {
+      background: rgba(46,204,113,0.1);
+      border: 1px dashed rgba(46,204,113,0.5);
+      border-radius: 8px;
+      padding: 10px;
+      font-family: 'Courier New', monospace;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #2ecc71;
+      margin-bottom: 10px;
+      cursor: pointer;
+      user-select: all;
+    }
+
+    /* --- سجل النقاط --- */
+    .history-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .history-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+    }
+
+    .history-info { display: flex; align-items: center; gap: 12px; }
+
+    .history-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .history-icon.earn   { background: rgba(46,204,113,0.12); border: 1px solid rgba(46,204,113,0.25); }
+    .history-icon.redeem { background: rgba(231,76,60,0.12);  border: 1px solid rgba(231,76,60,0.25); }
+
+    .history-title { font-size: 0.88rem; font-weight: 600; color: var(--color-white); }
+    .history-date  { font-size: 0.75rem; color: var(--color-gray); margin-top: 2px; }
+
+    .history-amount { font-size: 0.95rem; font-weight: 800; white-space: nowrap; }
+    .history-amount.earn   { color: #2ecc71; }
+    .history-amount.redeem { color: #e74c3c; }
+
+    .empty-history {
+      text-align: center;
+      padding: 30px 10px;
+      color: var(--color-gray);
+      font-size: 0.9rem;
+    }
+
+    /* --- حالة غير مسجل الدخول --- */
+    .points-guest {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .points-guest .icon { font-size: 2.5rem; margin-bottom: 14px; display: block; }
+    .points-guest p { color: var(--color-gray); margin-bottom: 20px; font-size: 0.95rem; }
+
+    @media (max-width: 768px) {
+      .points-layout { padding: 20px 4% 60px; }
+      .points-balance-number { font-size: 2.4rem; }
+      .settings-card { padding: 18px; }
+    }
+</style>
+</head>
+
+<body>
+<div class="splash-screen" id="splashScreen">
+<div class="splash-logo-wrap">
+<span class="splash-ring"></span>
+<span class="splash-ring" style="animation-delay:0.85s"></span>
+<span class="splash-ring" style="animation-delay:1.7s"></span>
+<img alt="موسيقاتي" class="splash-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'" src="logo.png"/>
+<div class="splash-logo-text" style="display:none">MOSIQA<span class="gold-text">TI</span></div>
+</div>
+<div class="splash-title">MOSIQATI</div>
+<div class="splash-tagline" data-ar="متجرك الموسيقي الأول في الأردن" data-en="Jordan's #1 Music Store">متجرك الموسيقي الأول في الأردن</div>
+</div>
+
+<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 JOD | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">
+    🎵 شحن مجاني على الطلبات فوق 50 JOD | عروض حصرية هذا الأسبوع
+  </div>
+
+<nav class="navbar">
+<a class="navbar-logo" href="home.html"><img alt="موسيقاتي" class="navbar-logo-img" src="logo.png"/></a>
+<ul class="navbar-links" id="nav-links">
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
+<li><a data-ar="من نحن" data-en="About Us" href="about.html">من نحن</a></li>
+<li><a data-ar="تواصل معنا" data-en="Contact Us" href="Contact.html">تواصل معنا</a></li>
+<li><a class="active" data-ar="🏅 نقاطي" data-en="🏅 My Points" href="points.html">🏅 نقاطي</a></li>
+<li><a data-ar="الإعدادات" data-en="Settings" href="settings.html">الإعدادات</a></li>
+</ul>
+<button class="hamburger" id="hamburger">
+<span></span><span></span><span></span>
+</button>
+</nav>
+
+<div class="page-hero">
+<h1>🏅 <span data-ar="نقاطي" data-en="My Points">نقاطي</span></h1>
+<p data-ar="اكسب النقاط مع كل عملية شراء واستبدلها بخصومات نقدية" data-en="Earn points with every purchase and redeem them for cash discounts">اكسب النقاط مع كل عملية شراء واستبدلها بخصومات نقدية</p>
+</div>
+
+<!-- محتوى للمستخدم المسجل -->
+<div class="points-layout" id="pointsLoggedIn" style="display:none;">
+
+  <div class="points-balance-card">
+    <div class="points-balance-icon">🏅</div>
+    <div class="points-balance-number" id="balanceNumber">0</div>
+    <div class="points-balance-label" data-ar="نقطة متاحة" data-en="points available">نقطة متاحة</div>
+    <a class="btn btn-gold" href="store.html" style="margin-top:18px; display:inline-block;" data-ar="🛍️ الذهاب إلى المتجر" data-en="🛍️ Go to Store">🛍️ الذهاب إلى المتجر</a>
+  </div>
+
+  <div class="settings-card">
+    <div class="card-header">
+      <div class="card-header-icon">❓</div>
+      <div class="card-header-text">
+        <h3 data-ar="كيف يعمل نظام النقاط؟" data-en="How do points work?">كيف يعمل نظام النقاط؟</h3>
+        <p data-ar="اكسب واستبدل نقاطك بكل سهولة" data-en="Earn and redeem your points easily">اكسب واستبدل نقاطك بكل سهولة</p>
+      </div>
+    </div>
+    <div class="how-it-works">
+      <div class="how-row">
+        <div class="num">1</div>
+        <div class="txt" data-ar="تحصل على <strong>100 نقطة</strong> تلقائياً مع كل عملية شراء ناجحة، بغض النظر عن قيمة الطلب." data-en="You automatically earn <strong>100 points</strong> with every successful purchase, regardless of order value.">تحصل على <strong>100 نقطة</strong> تلقائياً مع كل عملية شراء ناجحة، بغض النظر عن قيمة الطلب.</div>
+      </div>
+      <div class="how-row">
+        <div class="num">2</div>
+        <div class="txt" data-ar="استبدل نقاطك بأكواد خصم <strong>سرية حصرية</strong> من متجر النقاط أدناه 👇" data-en="Trade your points for <strong>exclusive secret</strong> discount codes in the points shop below 👇">استبدل نقاطك بأكواد خصم <strong>سرية حصرية</strong> من متجر النقاط أدناه 👇</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-card">
+    <div class="card-header">
+      <div class="card-header-icon">🎁</div>
+      <div class="card-header-text">
+        <h3 data-ar="متجر النقاط — أكواد سرية" data-en="Points Shop — Secret Codes">متجر النقاط — أكواد سرية</h3>
+        <p data-ar="استبدل نقاطك بأكواد خصم حصرية لا تظهر لأحد إلا لك" data-en="Trade your points for exclusive discount codes only you can see">استبدل نقاطك بأكواد خصم حصرية لا تظهر لأحد إلا لك</p>
+      </div>
+    </div>
+    <div class="rewards-grid" id="rewardsGrid">
+      <div class="empty-history" data-ar="جارٍ التحميل..." data-en="Loading...">جارٍ التحميل...</div>
+    </div>
+  </div>
+
+  <div class="settings-card">
+    <div class="card-header">
+      <div class="card-header-icon">📜</div>
+      <div class="card-header-text">
+        <h3 data-ar="سجل النقاط" data-en="Points History">سجل النقاط</h3>
+        <p data-ar="جميع النقاط المكتسبة والمستخدمة" data-en="All earned and redeemed points">جميع النقاط المكتسبة والمستخدمة</p>
+      </div>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="empty-history" data-ar="جارٍ التحميل..." data-en="Loading...">جارٍ التحميل...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- محتوى للزائر غير المسجل -->
+<div class="points-layout" id="pointsGuest" style="display:none;">
+  <div class="points-guest">
+    <span class="icon">🔒</span>
+    <p data-ar="يرجى تسجيل الدخول لعرض رصيد نقاطك وسجلك" data-en="Please log in to view your points balance and history">يرجى تسجيل الدخول لعرض رصيد نقاطك وسجلك</p>
+    <a class="btn btn-gold" href="index.html" data-ar="تسجيل الدخول" data-en="Log In">تسجيل الدخول</a>
+  </div>
+</div>
+
+<footer>
+
+<div class="footer-grid">
+
+<div>
+
+<div class="footer-brand-name">MOSIQATI</div>
+
+<p class="footer-brand-desc" data-ar="متجرك الموسيقي الأول في الأردن منذ عام 2014." data-en="Jordan's premier music store since 2014.">متجرك الموسيقي الأول في الأردن منذ عام 2014.</p>
+
+<div class="social-links">
+
+<div class="social-link">📘</div>
+
+<div class="social-link">📷</div>
+
+<div class="social-link">▶️</div>
+
+<div class="social-link">💬</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="الرئيسية" data-en="Home" href="home.html">الرئيسية</a></li>
+
+<li><a data-ar="المتجر" data-en="Store" href="store.html">المتجر</a></li>
+
+<li><a data-ar="الهدايا" data-en="Gifts" href="gifts.html">الهدايا</a></li>
+
+<li><a data-ar="العروض" data-en="Offers" href="offers.html">العروض</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="الفئات" data-en="Categories">الفئات</div>
+
+<ul class="footer-links">
+
+<li><a data-ar="قيثارات" data-en="Guitars" href="store.html">قيثارات</a></li>
+
+<li><a data-ar="بيانو" data-en="Piano" href="store.html">بيانو</a></li>
+
+<li><a data-ar="عود" data-en="Oud" href="store.html">عود</a></li>
+
+<li><a data-ar="معدات استوديو" data-en="Studio Gear" href="store.html">معدات استوديو</a></li>
+
+</ul>
+
+</div>
+
+<div>
+
+<div class="footer-heading" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</div>
+
+<ul class="footer-links">
+
+<li><a href="#">📍 <span data-ar="جبل عمان، عمان" data-en="Jabal Amman, Amman">جبل عمان، عمان</span></a></li>
+
+<li><a href="#">📞 +962 79 000 0000</a></li>
+
+<li><a href="mailto:mosiqati@gmail.com"> mosiqati@gmail.com</a></li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+<p data-ar="© 2026 موسيقاتي - جميع الحقوق محفوظة" data-en="© 2026 MOSIQATI - All Rights Reserved">© 2026 موسيقاتي - جميع الحقوق محفوظة</p>
+
+<div class="footer-bottom-links">
+
+<a data-ar="سياسة الخصوصية" data-en="Privacy Policy" href="#">سياسة الخصوصية</a>
+
+<a data-ar="شروط الاستخدام" data-en="Terms of Use" href="#">شروط الاستخدام</a>
+
+</div>
+
+</div>
+
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="script.js"></script>
+<script>
+  function getCurrentUser() {
+    try { return JSON.parse(localStorage.getItem('mosiqati-user') || 'null'); }
+    catch (e) { return null; }
+  }
+
+  function formatDate(iso) {
+    try {
+      var d = new Date(iso);
+      var isAr = getLang() !== 'en';
+      return d.toLocaleString(isAr ? 'ar-JO' : 'en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    } catch (e) { return ''; }
+  }
+
+  function renderHistory(items) {
+    var list = document.getElementById('historyList');
+    var isAr = getLang() !== 'en';
+
+    if (!items.length) {
+      list.innerHTML = '<div class="empty-history" data-ar="لا توجد حركات نقاط بعد" data-en="No points activity yet">' +
+        (isAr ? 'لا توجد حركات نقاط بعد' : 'No points activity yet') + '</div>';
+      return;
+    }
+
+    list.innerHTML = items.map(function(item) {
+      var isEarn = item.type === 'earn';
+      var isUnlock = !isEarn && item.note && item.note.indexOf('unlock_code:') === 0;
+      var unlockedCode = isUnlock ? item.note.split(':')[1] : null;
+      var icon = isEarn ? '➕' : (isUnlock ? '🎁' : '➖');
+
+      var titleAr, titleEn;
+      if (isEarn) {
+        titleAr = 'نقاط مكتسبة' + (item.orderNumber ? ' — طلب ' + item.orderNumber : '');
+        titleEn = 'Points earned' + (item.orderNumber ? ' — order ' + item.orderNumber : '');
+      } else if (isUnlock) {
+        titleAr = 'فتح كود خصم سري — ' + unlockedCode;
+        titleEn = 'Unlocked secret code — ' + unlockedCode;
+      } else {
+        titleAr = 'نقاط مستخدمة' + (item.orderNumber ? ' — طلب ' + item.orderNumber : '');
+        titleEn = 'Points redeemed' + (item.orderNumber ? ' — order ' + item.orderNumber : '');
+      }
+
+      return '' +
+        '<div class="history-row">' +
+          '<div class="history-info">' +
+            '<div class="history-icon ' + (isEarn ? 'earn' : 'redeem') + '">' + icon + '</div>' +
+            '<div>' +
+              '<div class="history-title">' + (isAr ? titleAr : titleEn) + '</div>' +
+              '<div class="history-date">' + formatDate(item.createdAt) + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="history-amount ' + (isEarn ? 'earn' : 'redeem') + '">' + (isEarn ? '+' : '-') + item.amount + ' ' + (isAr ? 'نقطة' : 'pts') + '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderRewards(balance, unlockedCodes) {
+    var grid = document.getElementById('rewardsGrid');
+    var isAr = getLang() !== 'en';
+
+    grid.innerHTML = REWARD_CODES.map(function(r) {
+      var isUnlocked = !!unlockedCodes[r.code];
+      if (isUnlocked) {
+        return '' +
+          '<div class="reward-card unlocked">' +
+            '<div class="reward-icon">' + r.icon + '</div>' +
+            '<div class="reward-discount">' + r.discount + '%</div>' +
+            '<div class="reward-code-box" onclick="copyRewardCode(this)" title="' + (isAr ? 'اضغط للنسخ' : 'Click to copy') + '">' + r.code + '</div>' +
+            '<div style="font-size:0.72rem;color:var(--color-gray);">' + (isAr ? '✅ مفتوح — استخدمه في السلة' : '✅ Unlocked — use it at checkout') + '</div>' +
+          '</div>';
+      }
+      var canAfford = balance >= r.cost;
+      return '' +
+        '<div class="reward-card">' +
+          '<div class="reward-icon">' + r.icon + '</div>' +
+          '<div class="reward-discount">' + r.discount + '%</div>' +
+          '<div class="reward-cost">' + (isAr ? 'التكلفة: ' : 'Cost: ') + '<strong>' + r.cost + '</strong> ' + (isAr ? 'نقطة' : 'pts') + '</div>' +
+          '<button class="reward-btn buy" ' + (canAfford ? '' : 'disabled') + ' onclick="purchaseCode(\'' + r.code + '\', ' + r.cost + ', this)">' +
+            (canAfford ? (isAr ? '🔓 فتح الكود' : '🔓 Unlock') : (isAr ? 'رصيد غير كافٍ' : 'Not enough points')) +
+          '</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function copyRewardCode(el) {
+    var code = el.textContent.trim();
+    navigator.clipboard && navigator.clipboard.writeText(code);
+    var original = el.textContent;
+    el.textContent = getLang()==='en' ? 'Copied ✓' : 'تم النسخ ✓';
+    setTimeout(function(){ el.textContent = original; }, 1200);
+  }
+
+  async function purchaseCode(code, cost, btn) {
+    var user = getCurrentUser();
+    if (!user || !user.id) return;
+
+    var isAr = getLang() !== 'en';
+    btn.disabled = true;
+    btn.textContent = isAr ? 'جارٍ الفتح...' : 'Unlocking...';
+
+    var ok = await unlockRewardCode(user.id, code, cost);
+    if (!ok) {
+      btn.disabled = false;
+      btn.textContent = isAr ? 'حدث خطأ، حاول مجدداً' : 'Error, try again';
+      return;
+    }
+    await loadPointsPage();
+  }
+
+  async function loadPointsPage() {
+    var user = getCurrentUser();
+
+    if (!user || !user.id) {
+      document.getElementById('pointsGuest').style.display = 'flex';
+      document.getElementById('pointsLoggedIn').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('pointsGuest').style.display = 'none';
+    document.getElementById('pointsLoggedIn').style.display = 'flex';
+
+    var balance = await fetchUserPoints(user.id);
+    document.getElementById('balanceNumber').textContent = balance;
+
+    var unlockedCodes = await fetchUnlockedCodes(user.id);
+    renderRewards(balance, unlockedCodes);
+
+    try {
+      if (db) {
+        var snap = await db.ref('points_history/' + user.id).once('value');
+        var items = [];
+        if (snap.exists()) {
+          snap.forEach(function(child) { items.push(child.val()); });
+        }
+        items.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+        renderHistory(items);
+      } else {
+        renderHistory([]);
+      }
+    } catch (e) {
+      console.error('فشل جلب سجل النقاط:', e);
+      renderHistory([]);
+    }
+  }
+
+  loadPointsPage();
+</script>
+
+<button class="cart-float" onclick="window.location='cart.html'">
+  🛒 <span id="cart-count" style="display:none;position:absolute;top:-6px;left:-6px;background:#c9a84c;color:#0a0a0a;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
+</button>
+<button class="music-toggle" id="musicToggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+</body>
+</html>

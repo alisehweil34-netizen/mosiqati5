@@ -448,8 +448,8 @@
 <div class="splash-tagline" data-ar="متجرك الموسيقي الأول في الأردن" data-en="Jordan's #1 Music Store">متجرك الموسيقي الأول في الأردن</div>
 </div>
 
-<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 DJO | Exclusive deals this week">
-    🎵 شحن مجاني على الطلبات فوق 50 DJO | عروض حصرية هذا الأسبوع
+<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 JOD | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">
+    🎵 شحن مجاني على الطلبات فوق 50 JOD | عروض حصرية هذا الأسبوع
   
   </div>
 
@@ -471,7 +471,9 @@
 
 <li><a data-ar="تواصل معنا" data-en="Contact Us" href="Contact.html">تواصل معنا</a></li>
 
-<li><a data-ar="الاعدادات" data-en="Settings" href="settings.html">الاعدادات </a></li>
+<li><a data-ar="🏅 نقاطي" data-en="🏅 My Points" href="points.html">🏅 نقاطي</a></li>
+
+<li><a data-ar="الإعدادات" data-en="Settings" href="settings.html">الإعدادات </a></li>
 
 </ul>
 
@@ -526,7 +528,7 @@
 
 <span class="label" data-ar="المجموع الجزئي" data-en="Subtotal">المجموع الجزئي</span>
 
-<span id="subtotalVal" >0 DJO</span>
+<span id="subtotalVal" >0 JOD</span>
 
 </div>
 
@@ -542,7 +544,7 @@
 
 <span class="label" data-ar="ضريبة المبيعات (16%)" data-en="Sales Tax (16%)">ضريبة المبيعات (16%)</span>
 
-<span id="taxVal">0 DJO</span>
+<span id="taxVal">0 JOD</span>
 
 </div>
 
@@ -550,7 +552,7 @@
 
 <span class="label" style="color: #2ecc71;" data-ar="🎉 خصم الكوبون" data-en="🎉 Coupon Discount">🎉 خصم الكوبون</span>
 
-<span id="discountVal" data-ar="0 DJO" data-en="0 DJO">0 DJO</span>
+<span id="discountVal" data-ar="0 JOD" data-en="0 JOD">0 JOD</span>
 
 </div>
 
@@ -558,7 +560,7 @@
 
 <span class="label" data-ar="الإجمالي" data-en="Total">الإجمالي</span>
 
-<span id="totalVal">0 DJO</span>
+<span id="totalVal">0 JOD</span>
 
 </div>
 
@@ -716,6 +718,10 @@
 <script>
     const CART_KEY = 'mosiqati-cart';
     const PROMOS = { 'MOSIQATI10': 10, 'MUSIC20': 20, 'JORDAN15': 15 };
+    // دمج أكواد الخصم السرية (متجر النقاط) حتى تعمل عند إدخالها في خانة الكوبون
+    if (typeof REWARD_CODES !== 'undefined') {
+      REWARD_CODES.forEach(function(r) { PROMOS[r.code] = r.discount; });
+    }
     let discount = 0;
     let promoApplied = false;
 
@@ -723,8 +729,8 @@
       try {
         const raw = localStorage.getItem(CART_KEY);
         const cart = raw ? JSON.parse(raw) : [];
-        // تنقية العناصر الفاسدة (السعر 0 أو الاسم مثل DJO)
-        return cart.filter(i => i && i.name && i.name !== 'DJO' && i.price > 0);
+        // تنقية العناصر الفاسدة (السعر 0 أو الاسم مثل JOD)
+        return cart.filter(i => i && i.name && i.name !== 'JOD' && i.price > 0);
       } catch { return []; }
     }
 
@@ -784,9 +790,9 @@
             
             <div>
               
-              <div class="item-price">${item.price} ${getLang()==='en'?'DJO':'DJO'}</div>
+              <div class="item-price">${item.price} ${getLang()==='en'?'JOD':'JOD'}</div>
               
-              <div class="item-price-total">Total: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'DJO':'DJO'}</div>
+              <div class="item-price-total">Total: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'JOD'}</div>
             
             </div>
             
@@ -815,17 +821,18 @@
       const shipping = sub === 0 ? 0 : sub >= 100 ? 0 : 5;
       const tax = sub * 0.16;
       const discAmt = sub * (disc / 100);
-      const total = sub + shipping + tax - discAmt;
+      let total = sub + shipping + tax - discAmt;
+      if (total < 0) total = 0;
 
-      document.getElementById('subtotalVal').textContent = sub.toFixed(2) + ' DJO';
-      document.getElementById('shippingVal').textContent = sub === 0 ? '—' : shipping === 0 ? '🎁 Free' : shipping + ' DJO';
-      document.getElementById('taxVal').textContent = tax.toFixed(2) + ' DJO';
-      document.getElementById('totalVal').textContent = total.toFixed(2) + ' DJO';
+      document.getElementById('subtotalVal').textContent = sub.toFixed(2) + ' JOD';
+      document.getElementById('shippingVal').textContent = sub === 0 ? '—' : shipping === 0 ? '🎁 Free' : shipping + ' JOD';
+      document.getElementById('taxVal').textContent = tax.toFixed(2) + ' JOD';
+      document.getElementById('totalVal').textContent = total.toFixed(2) + ' JOD';
 
       const dr = document.getElementById('discountRow');
       if (discAmt > 0) {
         dr.style.display = 'flex';
-        document.getElementById('discountVal').textContent = '-' + discAmt.toFixed(2) + ' DJO';
+        document.getElementById('discountVal').textContent = '-' + discAmt.toFixed(2) + ' JOD';
       } else { dr.style.display = 'none'; }
     }
 
@@ -897,7 +904,7 @@
     // ===== حفظ الطلبات عبر MySQL/PHP =====
     // يتم الحفظ التلقائي فوراً عند تأكيد كل طلب
 
-async function saveOrderToServer(orderNum, cart, totalAmount, subtotal, discountAmount, promoCode) {
+async function saveOrderToServer(orderNum, cart, totalAmount, subtotal, discountAmount, promoCode, pointsEarned) {
   try {
     if (!db) {
       console.warn('Firebase غير متاح، لم يتم حفظ الطلب');
@@ -913,6 +920,7 @@ async function saveOrderToServer(orderNum, cart, totalAmount, subtotal, discount
       products       : cart,
       subtotal       : subtotal,
       discount       : discountAmount,
+      points_earned  : pointsEarned || 0,
       total          : Number(totalAmount),
       promo_code     : promoCode || null,
       createdAt      : new Date().toISOString()
@@ -927,9 +935,18 @@ function confirmOrder() {
       const shipping = sub >= 100 ? 0 : 5;
       const tax    = sub * 0.16;
       const discAmt = sub * (discount / 100);
-      const total  = (sub + shipping + tax - discAmt).toFixed(2);
+      let totalNum = sub + shipping + tax - discAmt;
+      if (totalNum < 0) totalNum = 0;
+      const total  = totalNum.toFixed(2);
 
-      saveOrderToServer(orderNum, cart, total, sub.toFixed(2), discAmt.toFixed(2), promoApplied ? document.getElementById('promoInput').value.trim().toUpperCase() : null);
+      const user = getCurrentUser();
+
+      saveOrderToServer(orderNum, cart, total, sub.toFixed(2), discAmt.toFixed(2), promoApplied ? document.getElementById('promoInput').value.trim().toUpperCase() : null, POINTS_PER_ORDER);
+
+      // إضافة نقاط الطلب الجديد للعميل
+      if (user && user.id) {
+        awardOrderPoints(user.id, orderNum);
+      }
 
       playSound('orderSuccess');
 
@@ -944,7 +961,9 @@ function confirmOrder() {
         
         <p><span>${isAr ? 'شكراً لك! سنتواصل معك قريباً لتأكيد تفاصيل التوصيل.' : 'Thank you! We will contact you soon to confirm delivery details.'}</span><br>
            
-           <span style="color:var(--color-gold);font-size:0.85rem;">${isAr ? '✅ تم حفظ الطلب في قاعدة البيانات' : '✅ Order saved to database'}</span>
+           <span style="color:var(--color-gold);font-size:0.85rem;">${isAr ? '✅ تم حفظ الطلب في قاعدة البيانات' : '✅ Order saved to database'}</span><br>
+
+           <span style="color:var(--color-gold);font-size:0.85rem;">${isAr ? `🏅 حصلت على ${POINTS_PER_ORDER} نقطة على هذا الطلب!` : `🏅 You earned ${POINTS_PER_ORDER} points on this order!`}</span>
         
         </p>
         

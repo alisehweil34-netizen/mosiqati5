@@ -1767,6 +1767,11 @@ footer {
   .hamburger {
     
     display: flex;
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
   
   }
 

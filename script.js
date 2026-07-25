@@ -24,6 +24,81 @@ try {
   console.error('فشل تهيئة Firebase:', e);
 }
 
+/* ===== نظام نقاط الولاء (Loyalty Points) =====
+   - يكسب العميل عدد نقاط ثابت (POINTS_PER_ORDER) عند إتمام كل طلب، بغض النظر عن قيمة الطلب.
+   - يستبدل العميل نقاطه بأكواد خصم سرية حصرية من متجر النقاط (صفحة نقاطي) فقط.
+   - يتم تخزين الرصيد في users/{id}/points وسجل الحركات في points_history/{id}. */
+var POINTS_PER_ORDER   = 100;  // النقاط المكتسبة عن كل طلب مكتمل
+
+/* ===== متجر النقاط: أكواد خصم سرية يمكن شراؤها بالنقاط =====
+   لا تُعرض هذه الأكواد في أي مكان علني؛ يتم "فتحها" فقط من صفحة نقاطي
+   بعد دفع تكلفتها من رصيد النقاط، ثم يمكن استخدامها في خانة الكوبون بالسلة. */
+var REWARD_CODES = [
+  { code: 'GOLD12',     cost: 300,  discount: 12, icon: '🥉' },
+  { code: 'PLATINUM20', cost: 600,  discount: 20, icon: '🥈' },
+  { code: 'DIAMOND30',  cost: 1000, discount: 30, icon: '💎' }
+];
+
+// فتح (شراء) كود خصم سري باستخدام النقاط
+async function unlockRewardCode(userId, code, cost) {
+  if (!db || !userId) return false;
+  try {
+    var current = await fetchUserPoints(userId);
+    if (current < cost) return false;
+    var updated = current - cost;
+    await db.ref('users/' + userId + '/points').set(updated);
+    await db.ref('unlocked_codes/' + userId + '/' + code).set({
+      unlockedAt: new Date().toISOString(),
+      cost: cost
+    });
+    await db.ref('points_history/' + userId).push({
+      type: 'redeem',
+      amount: cost,
+      orderNumber: null,
+      note: 'unlock_code:' + code,
+      createdAt: new Date().toISOString()
+    });
+    return true;
+  } catch (e) { console.error('فشل فتح الكود:', e); return false; }
+}
+
+// جلب الأكواد التي فتحها المستخدم مسبقاً
+async function fetchUnlockedCodes(userId) {
+  if (!db || !userId) return {};
+  try {
+    var snap = await db.ref('unlocked_codes/' + userId).once('value');
+    return snap.exists() ? snap.val() : {};
+  } catch (e) { console.error('فشل جلب الأكواد المفتوحة:', e); return {}; }
+}
+
+// جلب رصيد نقاط مستخدم معيّن من Firebase
+async function fetchUserPoints(userId) {
+  if (!db || !userId) return 0;
+  try {
+    var snap = await db.ref('users/' + userId + '/points').once('value');
+    return snap.exists() ? (Number(snap.val()) || 0) : 0;
+  } catch (e) {
+    console.error('فشل جلب رصيد النقاط:', e);
+    return 0;
+  }
+}
+
+// إضافة نقاط للعميل بعد إتمام طلب + تسجيل الحركة في السجل
+async function awardOrderPoints(userId, orderNumber) {
+  if (!db || !userId) return;
+  try {
+    var current = await fetchUserPoints(userId);
+    var updated = current + POINTS_PER_ORDER;
+    await db.ref('users/' + userId + '/points').set(updated);
+    await db.ref('points_history/' + userId).push({
+      type: 'earn',
+      amount: POINTS_PER_ORDER,
+      orderNumber: orderNumber || null,
+      createdAt: new Date().toISOString()
+    });
+  } catch (e) { console.error('فشل إضافة النقاط:', e); }
+}
+
 (function applySettingsImmediate() {
   
   try {
