@@ -448,8 +448,8 @@
 <div class="splash-tagline" data-ar="متجرك الموسيقي الأول في الأردن" data-en="Jordan's #1 Music Store">متجرك الموسيقي الأول في الأردن</div>
 </div>
 
-<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 JOD | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">
-    🎵 شحن مجاني على الطلبات فوق 50 JOD | عروض حصرية هذا الأسبوع
+<div class="top-bar" data-ar="🎵 شحن مجاني على الطلبات فوق 50 د.أ | عروض حصرية هذا الأسبوع" data-en="🎵 Free shipping on orders over 50 JOD | Exclusive deals this week">
+    🎵 شحن مجاني على الطلبات فوق 50 د.أ | عروض حصرية هذا الأسبوع
   
   </div>
 
@@ -510,7 +510,7 @@
 
 <div class="cart-toolbar">
 
-<button class="clear-btn" data-ar="🗑 Empty the basket" data-en="🗑 Empty Cart" onclick="clearCart()">🗑 إفراغ السلة</button>
+<button class="clear-btn" data-ar="🗑 إفراغ السلة" data-en="🗑 Empty Cart" onclick="clearCart()">🗑 إفراغ السلة</button>
 
 <a class="continue-link" data-ar="← متابعة التسوق" data-en="← Continue Shopping" href="store.html">← متابعة التسوق</a>
 
@@ -528,7 +528,7 @@
 
 <span class="label" data-ar="المجموع الجزئي" data-en="Subtotal">المجموع الجزئي</span>
 
-<span id="subtotalVal" >0 JOD</span>
+<span id="subtotalVal" >0 د.أ</span>
 
 </div>
 
@@ -544,7 +544,7 @@
 
 <span class="label" data-ar="ضريبة المبيعات (16%)" data-en="Sales Tax (16%)">ضريبة المبيعات (16%)</span>
 
-<span id="taxVal">0 JOD</span>
+<span id="taxVal">0 د.أ</span>
 
 </div>
 
@@ -552,7 +552,7 @@
 
 <span class="label" style="color: #2ecc71;" data-ar="🎉 خصم الكوبون" data-en="🎉 Coupon Discount">🎉 خصم الكوبون</span>
 
-<span id="discountVal" data-ar="0 JOD" data-en="0 JOD">0 JOD</span>
+<span id="discountVal" data-ar="0 د.أ" data-en="0 JOD">0 د.أ</span>
 
 </div>
 
@@ -560,7 +560,7 @@
 
 <span class="label" data-ar="الإجمالي" data-en="Total">الإجمالي</span>
 
-<span id="totalVal">0 JOD</span>
+<span id="totalVal">0 د.أ</span>
 
 </div>
 
@@ -725,6 +725,10 @@
     let discount = 0;
     let promoApplied = false;
 
+    function curr(amount) {
+      return getLang() === 'en' ? (amount + ' JOD') : (amount + ' د.أ');
+    }
+
     function getCart() {
       try {
         const raw = localStorage.getItem(CART_KEY);
@@ -742,7 +746,11 @@
       const totalQty = cart.reduce((s,i) => s + i.qty, 0);
 
       document.getElementById('itemCountText').textContent =
-        cart.length ? `${totalQty} item${totalQty !== 1 ? "s" : ""} in your cart` : '';
+        cart.length
+          ? (getLang() === 'en'
+              ? `${totalQty} item${totalQty !== 1 ? "s" : ""} in your cart`
+              : `${totalQty} ${totalQty === 1 ? 'قطعة' : 'قطع'} في سلتك`)
+          : '';
 
       if (!cart.length) {
         container.innerHTML = `
@@ -779,7 +787,7 @@
           
           <div class="item-info">
             
-            <div class="item-name">${item.name}</div>
+            <div class="item-name">${(getLang() === 'en' ? (item.nameEn || item.name) : (item.nameAr || item.name))}</div>
             
             <div class="item-desc">${item.desc || ''}</div>
             ${item.badge ? `<span class="item-badge">${item.badge}</span>` : ''}
@@ -790,9 +798,9 @@
             
             <div>
               
-              <div class="item-price">${item.price} ${getLang()==='en'?'JOD':'JOD'}</div>
+              <div class="item-price">${curr(item.price)}</div>
               
-              <div class="item-price-total">Total: ${(item.price * item.qty).toFixed(2)} ${getLang()==='en'?'JOD':'JOD'}</div>
+              <div class="item-price-total">${getLang()==='en'?'Total':'الإجمالي'}: ${curr((item.price * item.qty).toFixed(2))}</div>
             
             </div>
             
@@ -824,15 +832,15 @@
       let total = sub + shipping + tax - discAmt;
       if (total < 0) total = 0;
 
-      document.getElementById('subtotalVal').textContent = sub.toFixed(2) + ' JOD';
-      document.getElementById('shippingVal').textContent = sub === 0 ? '—' : shipping === 0 ? '🎁 Free' : shipping + ' JOD';
-      document.getElementById('taxVal').textContent = tax.toFixed(2) + ' JOD';
-      document.getElementById('totalVal').textContent = total.toFixed(2) + ' JOD';
+      document.getElementById('subtotalVal').textContent = curr(sub.toFixed(2));
+      document.getElementById('shippingVal').textContent = sub === 0 ? '—' : shipping === 0 ? (getLang()==='en' ? '🎁 Free' : '🎁 مجاني') : curr(shipping);
+      document.getElementById('taxVal').textContent = curr(tax.toFixed(2));
+      document.getElementById('totalVal').textContent = curr(total.toFixed(2));
 
       const dr = document.getElementById('discountRow');
       if (discAmt > 0) {
         dr.style.display = 'flex';
-        document.getElementById('discountVal').textContent = '-' + discAmt.toFixed(2) + ' JOD';
+        document.getElementById('discountVal').textContent = '-' + curr(discAmt.toFixed(2));
       } else { dr.style.display = 'none'; }
     }
 

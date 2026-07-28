@@ -248,13 +248,15 @@ document.addEventListener('DOMContentLoaded', function () {
       
       var lang = getLang();
       var nameEl = this.closest('.product-card,.product-info')?.querySelector('.product-name');
-      var name = (nameEl ? (lang === 'en' ? (nameEl.dataset.en || nameEl.textContent) : (nameEl.dataset.ar || nameEl.textContent)) : this.dataset.name) || 'Product';
+      var nameAr = (nameEl ? (nameEl.dataset.ar || nameEl.textContent) : this.dataset.name) || 'منتج';
+      var nameEn = (nameEl ? (nameEl.dataset.en || nameEl.textContent) : this.dataset.name) || 'Product';
+      var name = lang === 'en' ? nameEn : nameAr;
       
       var price = parseFloat(this.dataset.price) || 0;
       
       var emoji = this.dataset.emoji || '🎵';
 
-      addItemToCart({ id: id, name: name, price: price, emoji: emoji });
+      addItemToCart({ id: id, name: name, nameAr: nameAr, nameEn: nameEn, price: price, emoji: emoji });
       playSound('addToCart');
 
       
@@ -533,7 +535,7 @@ function addItemToCart(item) {
     if (existing) {
       existing.qty += 1;
     } else {
-      cart.push({ id: item.id, name: item.name, price: item.price, emoji: item.emoji, qty: 1 });
+      cart.push({ id: item.id, name: item.name, nameAr: item.nameAr || item.name, nameEn: item.nameEn || item.name, price: item.price, emoji: item.emoji, qty: 1 });
     }
 
     localStorage.setItem('mosiqati-cart', JSON.stringify(cart));
@@ -1101,10 +1103,10 @@ function initGiftCardGenerator() {
       ctx.fillText((lang === 'en' ? '— From ' : '— من ') + fromName, W / 2, H - 92);
     }
 
-    ctx.direction = 'ltr';
+    ctx.direction = lang === 'en' ? 'ltr' : 'rtl';
     ctx.font = '13px Tahoma, Arial';
     ctx.fillStyle = t.sub;
-    ctx.fillText(lang === 'en' ? 'mosiqati.com  •  Amman, Jordan' : 'موسيقاتي  •  عمّان، الأردن', W / 2, H - 45);
+    ctx.fillText(lang === 'en' ? 'Amman, Jordan' : 'عمّان، الأردن', W / 2, H - 45);
   }
 
   themeBtns.forEach(function (btn) {
